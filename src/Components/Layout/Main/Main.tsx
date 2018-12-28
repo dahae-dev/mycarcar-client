@@ -29,6 +29,7 @@ class Main extends React.Component<IProps, {}> {
           <RegisterForm handleClick={this.props.handleClick} />
         )}
         {this.props.clicked === "Edit" && this.props.isSignedIn && <EditForm handleClick={this.props.handleClick} />}
+        {this.props.clicked === "AfterEdit" && this.props.isSignedIn && <Home />}
       </div>
     );
   }
