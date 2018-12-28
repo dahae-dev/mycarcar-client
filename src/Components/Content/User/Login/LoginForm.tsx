@@ -1,24 +1,28 @@
 import * as React from "react";
+import axios from "axios";
 import logo from "../../../../assets/img/logo_basic.png";
 import "./LoginForm.css";
 
+interface ILoginProps {
+  handleLogin: (result: boolean) => void;
+  handleClick: (comp: string) => void;
+}
+
 interface ILoginState {
-  username: string;
+  userid: string;
   password: string;
-  submitted: boolean;
   loading: boolean;
   error: string;
   [key: string]: string | boolean;
 }
 
-class Login extends React.Component<{}, ILoginState> {
-  constructor(props: any) {
+class LoginForm extends React.Component<ILoginProps, ILoginState> {
+  constructor(props: ILoginProps) {
     super(props);
 
     this.state = {
-      username: "",
+      userid: "",
       password: "",
-      submitted: false,
       loading: false,
       error: ""
     };
@@ -30,25 +34,37 @@ class Login extends React.Component<{}, ILoginState> {
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-    console.log(e.currentTarget.value);
   }
 
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    this.setState({ submitted: true });
-    const { username, password } = this.state;
-
-    if (!(username && password)) {
-      return;
-    }
+    const id: string = this.state.userid;
+    const pw: string = this.state.password;
 
     this.setState({ loading: true });
-    // login handling
+
+    axios
+      .post(`http://localhost:5000/api/login`, { id, pw })
+      .then(res => {
+        if (res.data.isSignedIn) {
+          this.props.handleLogin(res.data.isSignedIn);
+          setTimeout(() => {
+            this.props.handleClick("AfterAuth");
+            // pre-loader
+          }, 500);
+
+          localStorage.setItem("x-access-token", res.headers["x-access-token"]);
+        } else {
+          alert("아이디 또는 패스워드가 일치하지 않습니다.");
+          this.setState({ loading: false });
+        }
+      })
+      .catch((err: Error) => this.setState({ loading: false, error: err.message }));
   }
 
   render() {
-    const { username, password, submitted, loading, error } = this.state;
+    const { userid, password, loading, error } = this.state;
 
     return (
       <div className="login-form-container">
@@ -62,14 +78,14 @@ class Login extends React.Component<{}, ILoginState> {
           </div>
           <hr />
           <form className="login-form-input" method="post" onSubmit={this.handleSubmit}>
-            <label htmlFor="username">USERNAME</label>
+            <label htmlFor="userid">USERNAME</label>
             <input
               type="text"
               name="u_id"
-              id="username"
+              id="userid"
               placeholder="회원아이디"
               required
-              value={username}
+              value={userid}
               onChange={this.handleChange}
             />
             <label htmlFor="password">PASSWORD</label>
@@ -90,4 +106,4 @@ class Login extends React.Component<{}, ILoginState> {
   }
 }
 
-export default Login;
+export default LoginForm;
