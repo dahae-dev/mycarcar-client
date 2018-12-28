@@ -45,7 +45,7 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
     this.setState({ loading: true });
 
     axios
-      .post(`http://localhost:5000/api/login`, { id, pw })
+      .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
       .then(res => {
         if (res.data.isSignedIn) {
           this.props.handleLogin(res.data.isSignedIn);
