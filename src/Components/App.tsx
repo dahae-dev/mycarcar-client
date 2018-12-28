@@ -11,37 +11,45 @@ class App extends React.Component<{}, IUserState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      isSignedIn: false,
+      isSignedIn: localStorage.getItem("x-access-token") ? true : false,
       clicked: "Home"
     };
 
-    this.clickLogin = this.clickLogin.bind(this);
-    this.clickRegister = this.clickRegister.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
-  clickLogin() {
-    this.setState({ clicked: "Login" });
+  handleClick(comp: string) {
+    this.setState({ clicked: comp });
+    console.log("clicked: ", this.state.clicked);
   }
 
-  clickLogout() {
-    this.setState({ clicked: "Logout" });
+  handleLogin(result: boolean) {
+    this.setState({ isSignedIn: result });
   }
 
-  clickRegister() {
-    this.setState({ clicked: "Register" });
+  handleLogout() {
+    this.setState({ isSignedIn: false });
   }
 
   render() {
+    console.log("isSignedIn: ", this.state.isSignedIn);
     return (
       <div className="grid-container">
-        <Header />
+        <Header handleClick={this.handleClick} />
         <SideBar
           isSignedIn={this.state.isSignedIn}
-          handleClickLogin={this.clickLogin}
-          handleClickLogout={this.clickLogout}
-          handleClickRegister={this.clickRegister}
+          handleClick={this.handleClick}
+          handleLogin={this.handleLogin}
+          handleLogout={this.handleLogout}
         />
-        <Main clicked={this.state.clicked} />
+        <Main
+          clicked={this.state.clicked}
+          isSignedIn={this.state.isSignedIn}
+          handleLogin={this.handleLogin}
+          handleClick={this.handleClick}
+        />
         <Footer />
       </div>
     );
