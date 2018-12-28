@@ -16,6 +16,13 @@
   cursor: pointer;
 }
 
+.btn-user:hover {
+  border: none;
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255, 0.5);
+  outline: none;
+}
+
 .btn-icon {
   margin: 0 4px;
 }
