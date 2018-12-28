@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Home, RegisterForm, LoginForm, EditForm } from "../../Content";
+import { Home, RegisterForm, LoginForm, EditForm, RegisterTerms } from "../../Content";
 import "./Main.css";
 
 interface IProps {
@@ -23,6 +23,9 @@ class Main extends React.Component<IProps, {}> {
         )}
         {this.props.clicked === "AfterAuth" && <Home />}
         {this.props.clicked === "Register" && !this.props.isSignedIn && (
+          <RegisterTerms handleClick={this.props.handleClick} />
+        )}
+        {this.props.clicked === "RegisterForm" && !this.props.isSignedIn && (
           <RegisterForm handleClick={this.props.handleClick} />
         )}
         {this.props.clicked === "Edit" && this.props.isSignedIn && <EditForm handleClick={this.props.handleClick} />}
