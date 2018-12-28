@@ -35,7 +35,7 @@
       auto /* Header */
       minmax(75px, auto) /* Sidebar */
       1fr /* Main */
-      auto; /* Footer */
+      40px; /* Footer */
   }
 
   .register-form-container,
