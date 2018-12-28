@@ -1,3 +1,7 @@
+.register-form-container {
+  margin: 30px auto;
+}
+
 .register-logo img {
   width: 200px;
   display: block;
@@ -28,7 +32,9 @@
 }
 
 .register-form-box input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -37,6 +43,11 @@ input[type="password"] {
   border-radius: 4px;
   box-sizing: border-box;
   font-size: 14px;
+}
+
+::placeholder {
+  color: grey;
+  opacity: 0.5;
 }
 
 .register-form-box input[type="submit"] {

@@ -1,6 +1,11 @@
 import * as React from "react";
+import axios from "axios";
 import logo from "../../../../assets/img/logo_basic.png";
 import "./RegisterForm.css";
+
+interface IRegisterProps {
+  handleClick: (comp: string) => void;
+}
 
 interface IRegisterState {
   userid: "";
@@ -9,14 +14,13 @@ interface IRegisterState {
   name: "";
   email: "";
   phone: "";
-  submitted: boolean;
   loading: boolean;
   error: "";
   [key: string]: string | boolean;
 }
 
-class RegisterForm extends React.Component<{}, IRegisterState> {
-  constructor(props: any) {
+class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
+  constructor(props: IRegisterProps) {
     super(props);
 
     this.state = {
@@ -26,7 +30,6 @@ class RegisterForm extends React.Component<{}, IRegisterState> {
       name: "",
       email: "",
       phone: "",
-      submitted: false,
       loading: false,
       error: ""
     };
@@ -44,16 +47,39 @@ class RegisterForm extends React.Component<{}, IRegisterState> {
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    this.setState({
-      submitted: true,
-      loading: true
-    });
+    const id = this.state.userid;
+    const pw = this.state.password;
+    const pwdcheck = this.state.pwdcheck;
+    const name = this.state.name;
+    const email = this.state.email;
+    const phone = this.state.phone;
 
-    // register handling
+    if (pw !== pwdcheck) {
+      alert("재입력한 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    this.setState({ loading: true });
+
+    axios
+      .post(`http://localhost:5000/api/register`, { id, pw, name, email, phone })
+      .then(res => {
+        if (res.data.isRegistered) {
+          alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
+          setTimeout(() => {
+            this.props.handleClick("Login");
+            // pre-loader
+          }, 1500);
+        } else {
+          alert("이미 가입된 회원입니다.");
+          this.setState({ loading: false });
+        }
+      })
+      .catch((err: Error) => console.log(err));
   }
 
   render() {
-    const { userid, password, pwdcheck, name, email, phone, submitted, loading, error } = this.state;
+    const { userid, password, pwdcheck, name, email, phone, loading, error } = this.state;
     return (
       <div className="register-form-container">
         <div className="register-logo">
@@ -107,25 +133,26 @@ class RegisterForm extends React.Component<{}, IRegisterState> {
             />
             <label htmlFor="email">이메일</label>
             <input
-              type="text"
+              type="email"
               name="u_email"
               id="email"
-              placeholder="이메일"
+              placeholder="email@email.com"
               required
               value={email}
               onChange={this.handleChange}
             />
             <label id="phone">휴대폰번호</label>
             <input
-              type="text"
+              type="tel"
+              pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
               name="u_phone"
               id="phone"
-              placeholder="휴대폰번호"
+              placeholder="000-0000-0000"
               required
               value={phone}
               onChange={this.handleChange}
             />
-            <input type="submit" id="btn-register" value="SIGN UP" />
+            <input type="submit" id="btn-register" value="SIGN UP" disabled={loading} />
           </form>
         </div>
       </div>
