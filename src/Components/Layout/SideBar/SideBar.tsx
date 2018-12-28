@@ -5,9 +5,9 @@ import "./SideBar.css";
 
 interface ISidebarProps {
   isSignedIn: boolean;
-  handleClickLogin: () => void;
-  handleClickLogout: () => void;
-  handleClickRegister: () => void;
+  handleClick: (comp: string) => void;
+  handleLogin: (result: boolean) => void;
+  handleLogout: () => void;
 }
 
 class SideBar extends React.Component<ISidebarProps, {}> {
@@ -20,9 +20,9 @@ class SideBar extends React.Component<ISidebarProps, {}> {
       <div className="my-sidebar">
         <Status
           isSignedIn={this.props.isSignedIn}
-          handleClickLogin={this.props.handleClickLogin}
-          handleClickLogout={this.props.handleClickLogout}
-          handleClickRegister={this.props.handleClickRegister}
+          handleClick={this.props.handleClick}
+          handleLogin={this.props.handleLogin}
+          handleLogout={this.props.handleLogout}
         />
         <MenuList />
       </div>
