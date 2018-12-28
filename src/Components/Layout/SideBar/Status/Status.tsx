@@ -22,7 +22,7 @@ class Status extends React.Component<IStatusProps, {}> {
 
   handleLogout() {
     axios
-      .get(`http://localhost:5000/api/logout`, config)
+      .get(`${process.env.REACT_APP_API_URL}/api/logout`, config)
       .then(res => {
         const result = res.data.isSignedOut;
         if (result) {

@@ -62,7 +62,7 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
     this.setState({ loading: true });
 
     axios
-      .post(`http://localhost:5000/api/register`, { id, pw, name, email, phone })
+      .post(`${process.env.REACT_APP_API_URL}/api/register`, { id, pw, name, email, phone })
       .then(res => {
         if (res.data.isRegistered) {
           alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
