@@ -1,0 +1,10 @@
+.my-main {
+  background-color: rgb(221, 229, 237);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.background {
+  width: 100%;
+}

@@ -1,0 +1,28 @@
+.status {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+}
+
+.btn-user {
+  width: 80px;
+  font-size: 14px;
+  padding: 3%;
+  border-radius: 4px;
+  border: 2px solid rgb(255, 255, 255, 0.5);
+  background-color: rgb(37, 40, 42);
+  color: rgb(255, 255, 255, 0.5);
+  margin: 0 16px;
+  cursor: pointer;
+}
+
+.btn-user:hover {
+  border: none;
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255, 0.5);
+  outline: none;
+}
+
+.btn-icon {
+  margin: 0 4px;
+}

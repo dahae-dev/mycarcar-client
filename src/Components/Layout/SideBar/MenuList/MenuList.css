@@ -1,0 +1,21 @@
+.menu-wrapper {
+  margin-top: 50px;
+}
+
+.menu-list {
+  list-style: none;
+  padding-inline-start: 20px;
+}
+
+.menu-list li {
+  padding: 10px 0;
+}
+
+.menu-list li a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+}
+
+.menu-icon {
+  margin-right: 8px;
+}
