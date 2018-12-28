@@ -83,7 +83,7 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
           alert("회원정보가 정상적으로 수정되었습니다.");
           this.props.handleClick("AfterEdit");
         } else {
-          alert("");
+          alert("에러 처리");
           this.setState({ loading: false });
         }
       })
