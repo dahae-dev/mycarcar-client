@@ -20,14 +20,14 @@ interface IAccountState {
   [key: string]: string | boolean;
 }
 
-interface IData {
-  u_email: string;
-  u_id: string;
-  u_name: string;
-  u_no: number;
-  u_password: string;
-  u_phone: string;
-}
+// interface IData {
+//   u_email: string;
+//   u_id: string;
+//   u_name: string;
+//   u_no: number;
+//   u_password: string;
+//   u_phone: string;
+// }
 
 const config: object = {
   headers: { "x-access-token": localStorage.getItem("x-access-token") }
@@ -55,20 +55,13 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
       .then(res => {
-        console.log(res.data);
-
-        const data: IData = res.data;
-        this.setState({
-          id: data.u_id,
-          pw: data.u_password,
-          name: data.u_name,
-          email: data.u_email,
-          phone: data.u_phone
-        });
+        const data = res.data;
+        this.setState({ ...data });
       })
       .catch((err: Error) => {
         alert("재로그인 한 후 사용 가능합니다.");
         this.props.handleLogout();
+        localStorage.removeItem("x-access-token");
         this.props.handleClick("AfterAuth");
         this.setState({ error: err.message });
       });
