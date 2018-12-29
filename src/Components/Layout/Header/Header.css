@@ -30,6 +30,12 @@
   background-color: #1e458e;
 }
 
+@media only screen and (max-width: 1280px) {
+  .logo-container {
+    width: 230px;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .my-header {
     background-color: #1e458e;
