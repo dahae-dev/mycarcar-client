@@ -4,7 +4,7 @@ import logo from "../../../../assets/img/logo_basic.png";
 import "./RegisterForm.css";
 
 interface IRegisterProps {
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
 }
 
 interface IRegisterState {
@@ -65,7 +65,7 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
       .then(res => {
         alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
         setTimeout(() => {
-          this.props.handleClick("Login");
+          this.props.handleState("Login");
         }, 1000);
       })
       .catch((err: Error) => {

@@ -3,7 +3,7 @@ import { Header, SideBar, Main, Footer } from "./Layout";
 import "./App.css";
 
 interface IUserState {
-  clicked: string;
+  currentState: string;
   isOpen: boolean;
   sidebarToggle: string;
   mainToggle: string;
@@ -15,7 +15,7 @@ class App extends React.Component<{}, IUserState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      clicked: "Home",
+      currentState: "Home",
       isOpen: false,
       sidebarToggle: "sidebar-open",
       mainToggle: "main-open",
@@ -23,14 +23,14 @@ class App extends React.Component<{}, IUserState> {
       isSignedIn: localStorage.getItem("x-access-token") ? true : false
     };
 
-    this.handleClick = this.handleClick.bind(this);
+    this.handleState = this.handleState.bind(this);
     this.handleSidebar = this.handleSidebar.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  handleClick(currentState: string) {
-    this.setState({ clicked: currentState });
+  handleState(changedState: string) {
+    this.setState({ currentState: changedState });
   }
 
   handleSidebar() {
@@ -54,23 +54,23 @@ class App extends React.Component<{}, IUserState> {
     // console.log("isSignedIn: ", this.state.isSignedIn);
     return (
       <div className="grid-container">
-        <Header handleClick={this.handleClick} handleSidebar={this.handleSidebar} />
+        <Header handleState={this.handleState} handleSidebar={this.handleSidebar} />
 
         <SideBar
           sidebarToggle={this.state.sidebarToggle}
           isSignedIn={this.state.isSignedIn}
-          handleClick={this.handleClick}
+          handleState={this.handleState}
           handleLogin={this.handleLogin}
           handleLogout={this.handleLogout}
         />
 
         <Main
           mainToggle={this.state.mainToggle}
-          clicked={this.state.clicked}
+          currentState={this.state.currentState}
           isSignedIn={this.state.isSignedIn}
           handleLogin={this.handleLogin}
           handleLogout={this.handleLogout}
-          handleClick={this.handleClick}
+          handleState={this.handleState}
         />
         <Footer footerToggle={this.state.footerToggle} />
       </div>

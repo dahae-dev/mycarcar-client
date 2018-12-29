@@ -5,7 +5,7 @@ import "./LoginForm.css";
 
 interface ILoginProps {
   handleLogin: (result: boolean) => void;
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
 }
 
 interface ILoginState {
@@ -51,7 +51,7 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
 
         setTimeout(() => {
-          this.props.handleClick("AfterAuth");
+          this.props.handleState("AfterAuth");
         }, 500);
       })
       .catch((err: Error) => {

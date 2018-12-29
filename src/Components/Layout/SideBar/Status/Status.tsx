@@ -4,7 +4,7 @@ import axios from "axios";
 
 interface IStatusProps {
   isSignedIn: boolean;
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
   handleLogin: (result: boolean) => void;
   handleLogout: () => void;
 }
@@ -24,7 +24,7 @@ class Status extends React.Component<IStatusProps, {}> {
     localStorage.removeItem("x-access-token");
     this.props.handleLogout();
     setTimeout(() => {
-      this.props.handleClick("AfterAuth");
+      this.props.handleState("AfterAuth");
     }, 500);
   }
 
@@ -33,7 +33,7 @@ class Status extends React.Component<IStatusProps, {}> {
       <div className="status">
         {!this.props.isSignedIn ? (
           <div className="btn-wrapper">
-            <button className="btn-user" type="button" onClick={() => this.props.handleClick("Login")}>
+            <button className="btn-user" type="button" onClick={() => this.props.handleState("Login")}>
               <i className="btn-icon fa fa-sign-in" />
               <span>로그인</span>
             </button>
@@ -48,14 +48,14 @@ class Status extends React.Component<IStatusProps, {}> {
         )}
         {!this.props.isSignedIn ? (
           <div className="btn-wrapper">
-            <button className="btn-user" type="button" onClick={() => this.props.handleClick("Register")}>
+            <button className="btn-user" type="button" onClick={() => this.props.handleState("Register")}>
               <i className="btn-icon fa fa-user" />
               <span>회원가입</span>
             </button>
           </div>
         ) : (
           <div className="btn-wrapper">
-            <button className="btn-user" type="button" onClick={() => this.props.handleClick("Edit")}>
+            <button className="btn-user" type="button" onClick={() => this.props.handleState("Edit")}>
               <i className="btn-icon fa fa-user" />
               <span>정보수정</span>
             </button>

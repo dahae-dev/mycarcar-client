@@ -3,7 +3,7 @@ import "./Header.css";
 import logo from "../../../assets/img/logo.png";
 
 interface IHeaderProps {
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
   handleSidebar: () => void;
 }
 
@@ -15,7 +15,7 @@ class Header extends React.Component<IHeaderProps, {}> {
   render() {
     return (
       <header className="my-header">
-        <a className="logo-container" onClick={() => this.props.handleClick("Home")}>
+        <a className="logo-container" onClick={() => this.props.handleState("Home")}>
           <img className="logo-image" src={logo} alt="mycarcar logo" />
         </a>
         <a className="toggle-btn" onClick={() => this.props.handleSidebar()}>

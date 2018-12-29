@@ -3,12 +3,12 @@ import { Home, RegisterForm, LoginForm, EditForm, RegisterTerms } from "../../Co
 import "./Main.css";
 
 interface IProps {
-  clicked: string;
+  currentState: string;
   mainToggle: string;
   isSignedIn: boolean;
   handleLogin: (result: boolean) => void;
   handleLogout: () => void;
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
 }
 
 class Main extends React.Component<IProps, {}> {
@@ -20,21 +20,21 @@ class Main extends React.Component<IProps, {}> {
     const { mainToggle } = this.props;
     return (
       <div className={`my-main ${mainToggle}`}>
-        {this.props.clicked === "Home" && <Home />}
-        {this.props.clicked === "Login" && !this.props.isSignedIn && (
-          <LoginForm handleLogin={this.props.handleLogin} handleClick={this.props.handleClick} />
+        {this.props.currentState === "Home" && <Home />}
+        {this.props.currentState === "Login" && !this.props.isSignedIn && (
+          <LoginForm handleLogin={this.props.handleLogin} handleState={this.props.handleState} />
         )}
-        {this.props.clicked === "AfterAuth" && <Home />}
-        {this.props.clicked === "Register" && !this.props.isSignedIn && (
-          <RegisterTerms handleClick={this.props.handleClick} />
+        {this.props.currentState === "AfterAuth" && <Home />}
+        {this.props.currentState === "Register" && !this.props.isSignedIn && (
+          <RegisterTerms handleState={this.props.handleState} />
         )}
-        {this.props.clicked === "RegisterForm" && !this.props.isSignedIn && (
-          <RegisterForm handleClick={this.props.handleClick} />
+        {this.props.currentState === "RegisterForm" && !this.props.isSignedIn && (
+          <RegisterForm handleState={this.props.handleState} />
         )}
-        {this.props.clicked === "Edit" && this.props.isSignedIn && (
-          <EditForm handleClick={this.props.handleClick} handleLogout={this.props.handleLogout} />
+        {this.props.currentState === "Edit" && this.props.isSignedIn && (
+          <EditForm handleState={this.props.handleState} handleLogout={this.props.handleLogout} />
         )}
-        {this.props.clicked === "AfterEdit" && this.props.isSignedIn && <Home />}
+        {this.props.currentState === "AfterEdit" && this.props.isSignedIn && <Home />}
       </div>
     );
   }

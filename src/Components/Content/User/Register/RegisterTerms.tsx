@@ -5,7 +5,7 @@ import "./RegisterTerms.css";
 import * as termsContent from "./terms";
 
 interface ITermsProps {
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
 }
 
 interface ITermsState {
@@ -42,7 +42,7 @@ class RegisterTerms extends React.Component<ITermsProps, ITermsState> {
       alert("회원가입약관 및 개인정보처리방침에 동의해야 회원가입이 가능합니다.");
       return;
     }
-    this.props.handleClick("RegisterForm");
+    this.props.handleState("RegisterForm");
   }
 
   render() {
