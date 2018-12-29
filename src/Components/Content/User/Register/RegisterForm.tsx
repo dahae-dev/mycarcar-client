@@ -41,7 +41,6 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-    console.log(e.currentTarget.value);
   }
 
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
