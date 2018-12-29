@@ -4,7 +4,7 @@ import logo from "../../../../assets/img/logo_basic.png";
 import "./EditAccount.css";
 
 interface IAccountProps {
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
   handleLogout: () => void;
 }
 
@@ -19,19 +19,6 @@ interface IAccountState {
   error: string;
   [key: string]: string | boolean;
 }
-
-// interface IData {
-//   u_email: string;
-//   u_id: string;
-//   u_name: string;
-//   u_no: number;
-//   u_password: string;
-//   u_phone: string;
-// }
-
-const config: object = {
-  headers: { "x-access-token": localStorage.getItem("x-access-token") }
-};
 
 class EditForm extends React.Component<IAccountProps, IAccountState> {
   constructor(props: IAccountProps) {
@@ -51,7 +38,12 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   componentDidMount() {
+    const config: object = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    };
+
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
       .then(res => {
@@ -62,7 +54,7 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
         alert("재로그인 한 후 사용 가능합니다.");
         this.props.handleLogout();
         localStorage.removeItem("x-access-token");
-        this.props.handleClick("AfterAuth");
+        this.props.handleState("AfterAuth");
         this.setState({ error: err.message });
       });
   }
@@ -85,11 +77,15 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
 
     this.setState({ loading: true });
 
+    const config: object = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    };
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/edit_account`, { id, pw, name, email, phone }, config)
       .then(res => {
         alert("회원정보가 정상적으로 수정되었습니다.");
-        this.props.handleClick("AfterEdit");
+        this.props.handleState("AfterEdit");
       })
       .catch((err: Error) => {
         this.setState({ loading: false, error: err.message });

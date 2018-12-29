@@ -29,9 +29,8 @@ class App extends React.Component<{}, IUserState> {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  handleClick(comp: string) {
-    this.setState({ clicked: comp });
-    console.log("clicked: ", this.state.clicked);
+  handleClick(currentState: string) {
+    this.setState({ clicked: currentState });
   }
 
   handleSidebar() {
@@ -52,7 +51,7 @@ class App extends React.Component<{}, IUserState> {
   }
 
   render() {
-    console.log("isSignedIn: ", this.state.isSignedIn);
+    // console.log("isSignedIn: ", this.state.isSignedIn);
     return (
       <div className="grid-container">
         <Header handleClick={this.handleClick} handleSidebar={this.handleSidebar} />
