@@ -13,8 +13,16 @@
   margin-left: -250px;
 }
 
-@media only screen and (max-width: 1280px) {
+@media only screen and (max-width: 768px) {
+  .footer-open {
+    margin-left: -300px;
+  }
+
   .footer-close {
     margin-left: 0px;
+  }
+
+  #ft-copy {
+    font-size: 12px;
   }
 }

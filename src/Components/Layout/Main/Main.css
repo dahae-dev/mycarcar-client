@@ -2,8 +2,12 @@
   background-color: rgb(221, 229, 237);
 }
 
-.background img {
+.background {
   width: 100%;
+}
+
+.background-bottom {
+  display: none;
 }
 
 .main-open {
@@ -15,6 +19,17 @@
 }
 
 @media only screen and (max-width: 1280px) {
+  .background-bottom {
+    display: inline-block;
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .main-open {
+    margin-left: -300px;
+  }
+
   .main-close {
     margin-left: 0px;
   }
