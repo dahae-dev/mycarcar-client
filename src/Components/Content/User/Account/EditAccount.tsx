@@ -5,11 +5,12 @@ import "./EditAccount.css";
 
 interface IAccountProps {
   handleClick: (comp: string) => void;
+  handleLogout: () => void;
 }
 
 interface IAccountState {
-  userid: string;
-  password: string;
+  id: string;
+  pw: string;
   pwdcheck: string;
   name: string;
   email: string;
@@ -18,6 +19,15 @@ interface IAccountState {
   error: string;
   [key: string]: string | boolean;
 }
+
+// interface IData {
+//   u_email: string;
+//   u_id: string;
+//   u_name: string;
+//   u_no: number;
+//   u_password: string;
+//   u_phone: string;
+// }
 
 const config: object = {
   headers: { "x-access-token": localStorage.getItem("x-access-token") }
@@ -28,8 +38,8 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     super(props);
 
     this.state = {
-      userid: "",
-      password: "",
+      id: "",
+      pw: "",
       pwdcheck: "",
       name: "",
       email: "",
@@ -41,15 +51,20 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
   componentDidMount() {
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
       .then(res => {
         const data = res.data;
-        this.setState({ data });
+        this.setState({ ...data });
       })
-      .catch((err: Error) => this.setState({ error: err.message }));
+      .catch((err: Error) => {
+        alert("재로그인 한 후 사용 가능합니다.");
+        this.props.handleLogout();
+        localStorage.removeItem("x-access-token");
+        this.props.handleClick("AfterAuth");
+        this.setState({ error: err.message });
+      });
   }
 
   handleChange(e: React.FormEvent<HTMLInputElement>) {
@@ -61,12 +76,7 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const id = this.state.userid;
-    const pw = this.state.password;
-    const pwdcheck = this.state.pwdcheck;
-    const name = this.state.name;
-    const email = this.state.email;
-    const phone = this.state.phone;
+    const { id, pw, pwdcheck, name, email, phone } = this.state;
 
     if (pw !== pwdcheck) {
       alert("재입력한 비밀번호가 일치하지 않습니다.");
@@ -78,20 +88,16 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/edit_account`, { id, pw, name, email, phone }, config)
       .then(res => {
-        console.log("res.data: ", res.data);
-        if (res.data.isEditted) {
-          alert("회원정보가 정상적으로 수정되었습니다.");
-          this.props.handleClick("AfterEdit");
-        } else {
-          alert("에러 처리");
-          this.setState({ loading: false });
-        }
+        alert("회원정보가 정상적으로 수정되었습니다.");
+        this.props.handleClick("AfterEdit");
       })
-      .catch((err: Error) => this.setState({ loading: false, error: err.message }));
+      .catch((err: Error) => {
+        this.setState({ loading: false, error: err.message });
+      });
   }
 
   render() {
-    const { userid, password, pwdcheck, name, email, phone, loading, error } = this.state;
+    const { id, pw, pwdcheck, name, email, phone, loading, error } = this.state;
 
     return (
       <div className="edit-form-container">
@@ -105,17 +111,10 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
           </div>
           <hr />
           <form className="edit-form-input" method="post" onSubmit={this.handleSubmit}>
-            <label htmlFor="userid">아이디</label>
-            <input type="text" name="u_id" id="userid" required value={userid} onChange={this.handleChange} />
-            <label htmlFor="password">비밀번호</label>
-            <input
-              type="password"
-              name="u_password"
-              id="password"
-              required
-              value={password}
-              onChange={this.handleChange}
-            />
+            <label htmlFor="id">아이디</label>
+            <input type="text" name="u_id" id="id" required value={id} onChange={this.handleChange} />
+            <label htmlFor="pw">비밀번호</label>
+            <input type="password" name="u_password" id="pw" required value={pw} onChange={this.handleChange} />
             <label htmlFor="pwdcheck">비밀번호 확인</label>
             <input type="password" id="pwdcheck" required value={pwdcheck} onChange={this.handleChange} />
             <label htmlFor="name">이름</label>

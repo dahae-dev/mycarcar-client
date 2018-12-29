@@ -1,14 +1,15 @@
-.menu-wrapper {
-  margin-top: 50px;
-}
-
 .menu-list {
   list-style: none;
-  padding-inline-start: 20px;
+  padding-inline-start: 0px;
 }
 
 .menu-list li {
-  padding: 10px 0;
+  padding: 16px 16px;
+}
+
+.menu-list li:hover {
+  border-left: 3px solid dodgerblue;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .menu-list li a {

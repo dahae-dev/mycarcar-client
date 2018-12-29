@@ -21,19 +21,11 @@ class Status extends React.Component<IStatusProps, {}> {
   }
 
   handleLogout() {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/api/logout`, config)
-      .then(res => {
-        const result = res.data.isSignedOut;
-        if (result) {
-          localStorage.removeItem("x-access-token");
-          this.props.handleLogout();
-          setTimeout(() => {
-            this.props.handleClick("AfterAuth");
-          }, 500);
-        }
-      })
-      .catch((err: Error) => console.log(err));
+    localStorage.removeItem("x-access-token");
+    this.props.handleLogout();
+    setTimeout(() => {
+      this.props.handleClick("AfterAuth");
+    }, 500);
   }
 
   render() {

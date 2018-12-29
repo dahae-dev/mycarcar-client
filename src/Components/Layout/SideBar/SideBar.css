@@ -1,3 +1,32 @@
 .my-sidebar {
   background-color: rgb(37, 40, 42);
+  overflow-x: hidden;
+}
+
+.sidebar-open {
+  width: 250px;
+}
+
+.sidebar-close {
+  width: 0px;
+}
+
+@media only screen and (max-width: 1280px) {
+  .sidebar-open {
+    width: 230px;
+    z-index: 1;
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .sidebar-open {
+    width: 230px;
+    z-index: 1;
+    position: relative;
+    top: 0;
+    left: 0;
+  }
 }

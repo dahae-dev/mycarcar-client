@@ -4,6 +4,7 @@ import MenuList from "./MenuList/MenuList";
 import "./SideBar.css";
 
 interface ISidebarProps {
+  sidebarToggle: string;
   isSignedIn: boolean;
   handleClick: (comp: string) => void;
   handleLogin: (result: boolean) => void;
@@ -16,8 +17,9 @@ class SideBar extends React.Component<ISidebarProps, {}> {
   }
 
   render() {
+    const { sidebarToggle } = this.props;
     return (
-      <div className="my-sidebar">
+      <div className={`my-sidebar ${sidebarToggle}`}>
         <Status
           isSignedIn={this.props.isSignedIn}
           handleClick={this.props.handleClick}
