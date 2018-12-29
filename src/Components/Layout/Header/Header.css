@@ -1,12 +1,31 @@
 .my-header {
-  background-color: rgb(36, 96, 167);
+  background-color: #1465b1;
 }
 
 .my-header a {
   cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+.logo-container {
+  line-height: 50px; /* 버그 */
+  width: 250px;
+  background-color: #1e458e;
 }
 
 .logo-image {
   width: 130px;
-  margin: 12px 0 12px 40px;
+  vertical-align: middle;
+}
+
+.toggle-btn {
+  line-height: 2;
+  width: 60px;
+  color: #fff;
+  font-size: 24px;
+}
+
+.toggle-btn:hover {
+  background-color: #1e458e;
 }

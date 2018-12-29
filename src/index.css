@@ -1,5 +1,6 @@
 body {
   font: 16px "Roboto", Helvetica, sans-serif;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }

@@ -4,8 +4,8 @@ import background from "../../../assets/img/slider1.jpg";
 class Home extends React.Component {
   render() {
     return (
-      <div>
-        <img className="background" src={background} />
+      <div className="background">
+        <img src={background} />
       </div>
     );
   }

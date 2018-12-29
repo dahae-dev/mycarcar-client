@@ -4,6 +4,7 @@ import "./Main.css";
 
 interface IProps {
   clicked: string;
+  mainToggle: string;
   isSignedIn: boolean;
   handleLogin: (result: boolean) => void;
   handleClick: (comp: string) => void;
@@ -15,8 +16,9 @@ class Main extends React.Component<IProps, {}> {
   }
 
   render() {
+    const { mainToggle } = this.props;
     return (
-      <div className="my-main">
+      <div className={`my-main ${mainToggle}`}>
         {this.props.clicked === "Home" && <Home />}
         {this.props.clicked === "Login" && !this.props.isSignedIn && (
           <LoginForm handleLogin={this.props.handleLogin} handleClick={this.props.handleClick} />

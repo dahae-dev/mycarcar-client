@@ -50,34 +50,36 @@ class RegisterTerms extends React.Component<ITermsProps, ITermsState> {
 
     return (
       <div className="terms-form-container">
-        <div className="terms-logo">
-          <img src={logo} />
-        </div>
-        <div className="terms-form-box">
-          <div className="terms-title">
-            <i className="fa fa-sign-in" />
-            회원가입약관
+        <div>
+          <div className="terms-logo">
+            <img src={logo} />
           </div>
-          <hr />
-          <form className="terms-form-input" method="post" onSubmit={this.handleSubmit}>
-            <div className="terms-container">
+          <div className="terms-form-box">
+            <div className="terms-title">
+              <i className="fa fa-sign-in" />
               회원가입약관
-              <textarea value={terms} rows={6} cols={54} disabled />
-              <label className="checkbox-container">
-                회원가입약관의 내용에 동의합니다.
-                <input type="checkbox" onChange={this.handleChangeFst} />
-              </label>
             </div>
-            <div className="terms-container bottom-container">
-              개인정보처리방침안내
-              <textarea value={privatePolicy} rows={6} cols={54} disabled />
-              <label className="checkbox-container">
-                개인정보처리방침안내의 내용에 동의합니다.
-                <input type="checkbox" onChange={this.handleChangeSnd} />
-              </label>
-            </div>
-            <input type="submit" id="btn-next" value="NEXT" />
-          </form>
+            <hr />
+            <form className="terms-form-input" method="post" onSubmit={this.handleSubmit}>
+              <div className="terms-container">
+                회원가입약관
+                <textarea value={terms} rows={6} cols={54} disabled />
+                <label className="checkbox-container">
+                  회원가입약관의 내용에 동의합니다.
+                  <input type="checkbox" onChange={this.handleChangeFst} />
+                </label>
+              </div>
+              <div className="terms-container bottom-container">
+                개인정보처리방침안내
+                <textarea value={privatePolicy} rows={6} cols={54} disabled />
+                <label className="checkbox-container">
+                  개인정보처리방침안내의 내용에 동의합니다.
+                  <input type="checkbox" onChange={this.handleChangeSnd} />
+                </label>
+              </div>
+              <input type="submit" id="btn-next" value="NEXT" />
+            </form>
+          </div>
         </div>
       </div>
     );
