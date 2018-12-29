@@ -7,6 +7,7 @@ interface IProps {
   mainToggle: string;
   isSignedIn: boolean;
   handleLogin: (result: boolean) => void;
+  handleLogout: () => void;
   handleClick: (comp: string) => void;
 }
 
@@ -30,7 +31,9 @@ class Main extends React.Component<IProps, {}> {
         {this.props.clicked === "RegisterForm" && !this.props.isSignedIn && (
           <RegisterForm handleClick={this.props.handleClick} />
         )}
-        {this.props.clicked === "Edit" && this.props.isSignedIn && <EditForm handleClick={this.props.handleClick} />}
+        {this.props.clicked === "Edit" && this.props.isSignedIn && (
+          <EditForm handleClick={this.props.handleClick} handleLogout={this.props.handleLogout} />
+        )}
         {this.props.clicked === "AfterEdit" && this.props.isSignedIn && <Home />}
       </div>
     );

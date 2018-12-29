@@ -70,6 +70,7 @@ class App extends React.Component<{}, IUserState> {
           clicked={this.state.clicked}
           isSignedIn={this.state.isSignedIn}
           handleLogin={this.handleLogin}
+          handleLogout={this.handleLogout}
           handleClick={this.handleClick}
         />
         <Footer footerToggle={this.state.footerToggle} />
