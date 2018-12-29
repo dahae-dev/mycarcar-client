@@ -47,20 +47,17 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
       .then(res => {
-        if (res.data.isSignedIn) {
-          this.props.handleLogin(res.data.isSignedIn);
-          setTimeout(() => {
-            this.props.handleClick("AfterAuth");
-            // pre-loader
-          }, 500);
+        this.props.handleLogin(true);
+        localStorage.setItem("x-access-token", res.headers["x-access-token"]);
 
-          localStorage.setItem("x-access-token", res.headers["x-access-token"]);
-        } else {
-          alert("아이디 또는 패스워드가 일치하지 않습니다.");
-          this.setState({ loading: false });
-        }
+        setTimeout(() => {
+          this.props.handleClick("AfterAuth");
+        }, 500);
       })
-      .catch((err: Error) => this.setState({ loading: false, error: err.message }));
+      .catch((err: Error) => {
+        alert("아이디 또는 패스워드가 일치하지 않습니다.");
+        this.setState({ loading: false, error: err.message });
+      });
   }
 
   render() {

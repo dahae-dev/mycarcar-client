@@ -8,14 +8,14 @@ interface IRegisterProps {
 }
 
 interface IRegisterState {
-  userid: "";
-  password: "";
-  pwdcheck: "";
-  name: "";
-  email: "";
-  phone: "";
+  userid: string;
+  password: string;
+  pwdcheck: string;
+  name: string;
+  email: string;
+  phone: string;
   loading: boolean;
-  error: "";
+  error: string;
   [key: string]: string | boolean;
 }
 
@@ -64,18 +64,15 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/register`, { id, pw, name, email, phone })
       .then(res => {
-        if (res.data.isRegistered) {
-          alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
-          setTimeout(() => {
-            this.props.handleClick("Login");
-            // pre-loader
-          }, 1500);
-        } else {
-          alert("이미 가입된 회원입니다.");
-          this.setState({ loading: false });
-        }
+        alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
+        setTimeout(() => {
+          this.props.handleClick("Login");
+        }, 1000);
       })
-      .catch((err: Error) => console.log(err));
+      .catch((err: Error) => {
+        alert("이미 가입된 회원입니다.");
+        this.setState({ loading: false, error: err.message });
+      });
   }
 
   render() {
