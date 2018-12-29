@@ -30,7 +30,7 @@
       "sidebar main"
       "footer";
 
-    grid-template-columns: auto;
+    grid-template-columns: 230px auto;
     grid-template-rows: 50px auto 80px;
   }
 }
