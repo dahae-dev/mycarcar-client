@@ -39,6 +39,11 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * 컴포넌트가 마운트된 직후 서버에 HTTP get request 요청
+   * localStorage에 저장된 JWT 토큰을 헤더에 실어 전달
+   * 인증된 사용자의 회원 정보를 모두 받아와 입력양식에 뿌려주기
+   */
   componentDidMount() {
     const config: object = {
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
@@ -59,12 +64,19 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
       });
   }
 
+  /**
+   * 사용자가 수정한 입력값 받아오기
+   */
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
     console.log(e.currentTarget.value);
   }
 
+  /**
+   * 사용자가 수정한 값과 함께 서버에 HTTP post request 요청
+   * 회원정보 수정 처리에 대한 응답을 받으면 페이지 이동
+   */
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 

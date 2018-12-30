@@ -29,10 +29,16 @@ class App extends React.Component<{}, IUserState> {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
+  /**
+   * 각 컴포넌트에서 발생된 이벤트에 따라 메인 컴포넌트의 컨텐츠 변경을 관리
+   */
   handleState(changedState: string) {
     this.setState({ currentState: changedState });
   }
 
+  /**
+   * 사이드바 토글버튼 클릭시 각각의 css 적용
+   */
   handleSidebar() {
     this.setState({
       isOpen: !this.state.isOpen,
@@ -42,14 +48,23 @@ class App extends React.Component<{}, IUserState> {
     });
   }
 
+  /**
+   * 로그인 상태 관리
+   */
   handleLogin(result: boolean) {
     this.setState({ isSignedIn: result });
   }
 
+  /**
+   * 로그아웃 상태 관리
+   */
   handleLogout() {
     this.setState({ isSignedIn: false });
   }
 
+  /**
+   * 레이아웃 컴포넌트 렌더링
+   */
   render() {
     // console.log("isSignedIn: ", this.state.isSignedIn);
     return (

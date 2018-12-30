@@ -9,10 +9,6 @@ interface IStatusProps {
   handleLogout: () => void;
 }
 
-const config: object = {
-  headers: { "x-access-token": localStorage.getItem("x-access-token") }
-};
-
 class Status extends React.Component<IStatusProps, {}> {
   constructor(props: IStatusProps) {
     super(props);
@@ -20,6 +16,9 @@ class Status extends React.Component<IStatusProps, {}> {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
+  /**
+   * 로그아웃 시 localStorage에 저장된 JWT 토큰 삭제 및 페이지 이동
+   */
   handleLogout() {
     localStorage.removeItem("x-access-token");
     this.props.handleLogout();

@@ -27,14 +27,19 @@ class RegisterTerms extends React.Component<ITermsProps, ITermsState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * 각 이용약관 체크박스 체크 여부 확인
+   */
   handleChangeFst(e: React.FormEvent<HTMLInputElement>) {
     this.setState({ isCheckedFst: e.currentTarget.checked });
   }
-
   handleChangeSnd(e: React.FormEvent<HTMLInputElement>) {
     this.setState({ isCheckedSnd: e.currentTarget.checked });
   }
 
+  /**
+   * 이용약관 동의 여부 확인 후 회원가입 양식으로 이동
+   */
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
