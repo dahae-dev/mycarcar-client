@@ -83,7 +83,7 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     const { id, pw, pwdcheck, name, email, phone } = this.state;
 
     if (pw !== pwdcheck) {
-      alert("재입력한 비밀번호가 일치하지 않습니다.");
+      this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
       return;
     }
 
@@ -131,6 +131,7 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
             <input type="email" name="u_email" id="email" required value={email} onChange={this.handleChange} />
             <label id="phone">휴대폰번호</label>
             <input type="tel" name="u_phone" id="phone" required value={phone} onChange={this.handleChange} />
+            <div className="edit-error-msg">{error}</div>
             <input type="submit" id="btn-edit" value="EDIT" disabled={loading} />
           </form>
         </div>

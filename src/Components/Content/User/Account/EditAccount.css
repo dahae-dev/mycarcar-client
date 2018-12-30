@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 30px 0;
 }
 
 .edit-logo img {
@@ -64,4 +65,10 @@ input[type="tel"] {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+}
+
+.edit-error-msg {
+  color: red;
+  font-weight: 600;
+  padding: 6px 0;
 }

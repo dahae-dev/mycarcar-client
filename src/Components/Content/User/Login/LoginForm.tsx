@@ -61,8 +61,8 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
         }, 500);
       })
       .catch((err: Error) => {
-        alert("아이디 또는 패스워드가 일치하지 않습니다.");
-        this.setState({ loading: false, error: err.message });
+        console.log(err.message);
+        this.setState({ loading: false, error: "아이디 또는 패스워드가 일치하지 않습니다." });
       });
   }
 
@@ -92,7 +92,7 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
                 value={id}
                 onChange={this.handleChange}
               />
-              <label htmlFor="pw">pw</label>
+              <label htmlFor="pw">PASSWORD</label>
               <input
                 type="password"
                 name="u_pw"
@@ -102,6 +102,7 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
                 value={pw}
                 onChange={this.handleChange}
               />
+              <div className="login-error-msg">{error}</div>
               <input type="submit" id="btn-login" value="SIGN IN" disabled={loading} />
             </form>
           </div>

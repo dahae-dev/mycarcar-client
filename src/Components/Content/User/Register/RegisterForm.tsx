@@ -57,7 +57,7 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
     const { id, pw, pwdcheck, name, email, phone } = this.state;
 
     if (pw !== pwdcheck) {
-      alert("재입력한 비밀번호가 일치하지 않습니다.");
+      this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
       return;
     }
 
@@ -72,8 +72,8 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
         }, 1000);
       })
       .catch((err: Error) => {
-        alert("이미 가입된 회원입니다.");
-        this.setState({ loading: false, error: err.message });
+        console.log(err.message);
+        this.setState({ loading: false, error: "이미 가입된 회원입니다." });
       });
   }
 
@@ -152,6 +152,7 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
                 value={phone}
                 onChange={this.handleChange}
               />
+              <div className="register-error-msg">{error}</div>
               <input type="submit" id="btn-register" value="SIGN UP" disabled={loading} />
             </form>
           </div>
