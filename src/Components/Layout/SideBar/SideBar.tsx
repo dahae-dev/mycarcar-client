@@ -6,7 +6,7 @@ import "./SideBar.css";
 interface ISidebarProps {
   sidebarToggle: string;
   isSignedIn: boolean;
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
   handleLogin: (result: boolean) => void;
   handleLogout: () => void;
 }
@@ -22,7 +22,7 @@ class SideBar extends React.Component<ISidebarProps, {}> {
       <div className={`my-sidebar ${sidebarToggle}`}>
         <Status
           isSignedIn={this.props.isSignedIn}
-          handleClick={this.props.handleClick}
+          handleState={this.props.handleState}
           handleLogin={this.props.handleLogin}
           handleLogout={this.props.handleLogout}
         />

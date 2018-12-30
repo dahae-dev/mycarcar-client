@@ -4,12 +4,12 @@ import logo from "../../../../assets/img/logo_basic.png";
 import "./RegisterForm.css";
 
 interface IRegisterProps {
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
 }
 
 interface IRegisterState {
-  userid: string;
-  password: string;
+  id: string;
+  pw: string;
   pwdcheck: string;
   name: string;
   email: string;
@@ -24,8 +24,8 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
     super(props);
 
     this.state = {
-      userid: "",
-      password: "",
+      id: "",
+      pw: "",
       pwdcheck: "",
       name: "",
       email: "",
@@ -38,20 +38,23 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * 사용자 입력값 받아오기
+   */
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
   }
 
+  /**
+   * 사용자로부터 입력받은 값으로 비밀번호 일치 여부 우선 확인
+   * 서버에 HTTP post request 요청하여 회원가입 처리 후, 로그인 페이지로 이동
+   * 이미 가입된 회원의 경우 에러 처리
+   */
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const id = this.state.userid;
-    const pw = this.state.password;
-    const pwdcheck = this.state.pwdcheck;
-    const name = this.state.name;
-    const email = this.state.email;
-    const phone = this.state.phone;
+    const { id, pw, pwdcheck, name, email, phone } = this.state;
 
     if (pw !== pwdcheck) {
       alert("재입력한 비밀번호가 일치하지 않습니다.");
@@ -65,7 +68,7 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
       .then(res => {
         alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
         setTimeout(() => {
-          this.props.handleClick("Login");
+          this.props.handleState("Login");
         }, 1000);
       })
       .catch((err: Error) => {
@@ -75,7 +78,7 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
   }
 
   render() {
-    const { userid, password, pwdcheck, name, email, phone, loading, error } = this.state;
+    const { id, pw, pwdcheck, name, email, phone, loading, error } = this.state;
     return (
       <div className="register-form-container">
         <div>
@@ -89,24 +92,24 @@ class RegisterForm extends React.Component<IRegisterProps, IRegisterState> {
             </div>
             <hr />
             <form className="register-form-input" method="post" onSubmit={this.handleSubmit}>
-              <label htmlFor="userid">아이디</label>
+              <label htmlFor="id">아이디</label>
               <input
                 type="text"
                 name="u_id"
-                id="userid"
+                id="id"
                 placeholder="아이디"
                 required
-                value={userid}
+                value={id}
                 onChange={this.handleChange}
               />
-              <label htmlFor="password">비밀번호</label>
+              <label htmlFor="pw">비밀번호</label>
               <input
                 type="password"
-                name="u_password"
-                id="password"
+                name="u_pw"
+                id="pw"
                 placeholder="비밀번호"
                 required
-                value={password}
+                value={pw}
                 onChange={this.handleChange}
               />
               <label htmlFor="pwdcheck">비밀번호 확인</label>

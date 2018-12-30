@@ -5,12 +5,12 @@ import "./LoginForm.css";
 
 interface ILoginProps {
   handleLogin: (result: boolean) => void;
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
 }
 
 interface ILoginState {
-  userid: string;
-  password: string;
+  id: string;
+  pw: string;
   loading: boolean;
   error: string;
   [key: string]: string | boolean;
@@ -21,8 +21,8 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
     super(props);
 
     this.state = {
-      userid: "",
-      password: "",
+      id: "",
+      pw: "",
       loading: false,
       error: ""
     };
@@ -31,16 +31,22 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * 사용자 입력값 받아오기
+   */
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
   }
 
+  /**
+   * 사용자의 입력값과 함께 서버에 HTTP post request로 인증 요청
+   * 서버로부터 응답받은 JWT 토큰을 localStorage에 저장 후 페이지 이동
+   */
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const id: string = this.state.userid;
-    const pw: string = this.state.password;
+    const { id, pw } = this.state;
 
     this.setState({ loading: true });
 
@@ -51,7 +57,7 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
 
         setTimeout(() => {
-          this.props.handleClick("AfterAuth");
+          this.props.handleState("AfterAuth");
         }, 500);
       })
       .catch((err: Error) => {
@@ -61,7 +67,7 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
   }
 
   render() {
-    const { userid, password, loading, error } = this.state;
+    const { id, pw, loading, error } = this.state;
 
     return (
       <div className="login-form-container">
@@ -76,24 +82,24 @@ class LoginForm extends React.Component<ILoginProps, ILoginState> {
             </div>
             <hr />
             <form className="login-form-input" method="post" onSubmit={this.handleSubmit}>
-              <label htmlFor="userid">USERNAME</label>
+              <label htmlFor="id">USERNAME</label>
               <input
                 type="text"
                 name="u_id"
-                id="userid"
+                id="id"
                 placeholder="회원아이디"
                 required
-                value={userid}
+                value={id}
                 onChange={this.handleChange}
               />
-              <label htmlFor="password">PASSWORD</label>
+              <label htmlFor="pw">pw</label>
               <input
                 type="password"
-                name="u_password"
-                id="password"
+                name="u_pw"
+                id="pw"
                 placeholder="비밀번호"
                 required
-                value={password}
+                value={pw}
                 onChange={this.handleChange}
               />
               <input type="submit" id="btn-login" value="SIGN IN" disabled={loading} />

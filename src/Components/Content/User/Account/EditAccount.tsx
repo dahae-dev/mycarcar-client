@@ -4,7 +4,7 @@ import logo from "../../../../assets/img/logo_basic.png";
 import "./EditAccount.css";
 
 interface IAccountProps {
-  handleClick: (comp: string) => void;
+  handleState: (changedState: string) => void;
   handleLogout: () => void;
 }
 
@@ -19,19 +19,6 @@ interface IAccountState {
   error: string;
   [key: string]: string | boolean;
 }
-
-// interface IData {
-//   u_email: string;
-//   u_id: string;
-//   u_name: string;
-//   u_no: number;
-//   u_password: string;
-//   u_phone: string;
-// }
-
-const config: object = {
-  headers: { "x-access-token": localStorage.getItem("x-access-token") }
-};
 
 class EditForm extends React.Component<IAccountProps, IAccountState> {
   constructor(props: IAccountProps) {
@@ -51,7 +38,17 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  /**
+   * 컴포넌트가 마운트된 직후 서버에 HTTP get request 요청
+   * localStorage에 저장된 JWT 토큰을 헤더에 실어 전달
+   * 인증된 사용자의 회원 정보를 모두 받아와 입력양식에 뿌려주기
+   */
   componentDidMount() {
+    const config: object = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    };
+
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
       .then(res => {
@@ -62,17 +59,24 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
         alert("재로그인 한 후 사용 가능합니다.");
         this.props.handleLogout();
         localStorage.removeItem("x-access-token");
-        this.props.handleClick("AfterAuth");
+        this.props.handleState("AfterAuth");
         this.setState({ error: err.message });
       });
   }
 
+  /**
+   * 사용자가 수정한 입력값 받아오기
+   */
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
     console.log(e.currentTarget.value);
   }
 
+  /**
+   * 사용자가 수정한 값과 함께 서버에 HTTP post request 요청
+   * 회원정보 수정 처리에 대한 응답을 받으면 페이지 이동
+   */
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -85,11 +89,15 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
 
     this.setState({ loading: true });
 
+    const config: object = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    };
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/edit_account`, { id, pw, name, email, phone }, config)
       .then(res => {
         alert("회원정보가 정상적으로 수정되었습니다.");
-        this.props.handleClick("AfterEdit");
+        this.props.handleState("AfterEdit");
       })
       .catch((err: Error) => {
         this.setState({ loading: false, error: err.message });
