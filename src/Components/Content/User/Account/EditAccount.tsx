@@ -1,6 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 import logo from "../../../../assets/img/logo_basic.png";
+import loader from "../../../../assets/preloader/Spinner.gif";
 import "./EditAccount.css";
 
 interface IAccountProps {
@@ -49,11 +50,13 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
+    this.setState({ loading: true });
+
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
       .then(res => {
         const data = res.data;
-        this.setState({ ...data });
+        this.setState({ ...data, loading: false });
       })
       .catch((err: Error) => {
         alert("재로그인 한 후 사용 가능합니다.");
@@ -70,7 +73,6 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-    console.log(e.currentTarget.value);
   }
 
   /**
@@ -83,7 +85,7 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
     const { id, pw, pwdcheck, name, email, phone } = this.state;
 
     if (pw !== pwdcheck) {
-      alert("재입력한 비밀번호가 일치하지 않습니다.");
+      this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
       return;
     }
 
@@ -109,31 +111,38 @@ class EditForm extends React.Component<IAccountProps, IAccountState> {
 
     return (
       <div className="edit-form-container">
-        <div className="edit-logo">
-          <img src={logo} />
-        </div>
-        <div className="edit-form-box">
-          <div className="edit-title">
-            <i className="fa fa-user" />
-            회원정보수정
+        {loading ? (
+          <img className="pre-loader" src={loader} />
+        ) : (
+          <div>
+            <div className="edit-logo">
+              <img src={logo} />
+            </div>
+            <div className="edit-form-box">
+              <div className="edit-title">
+                <i className="fa fa-user" />
+                회원정보수정
+              </div>
+              <hr />
+              <form className="edit-form-input" method="post" onSubmit={this.handleSubmit}>
+                <label htmlFor="id">아이디</label>
+                <input type="text" name="u_id" id="id" required value={id} onChange={this.handleChange} />
+                <label htmlFor="pw">비밀번호</label>
+                <input type="password" name="u_password" id="pw" required value={pw} onChange={this.handleChange} />
+                <label htmlFor="pwdcheck">비밀번호 확인</label>
+                <input type="password" id="pwdcheck" required value={pwdcheck} onChange={this.handleChange} />
+                <label htmlFor="name">이름</label>
+                <input type="text" name="u_name" id="name" required value={name} onChange={this.handleChange} />
+                <label htmlFor="email">이메일</label>
+                <input type="email" name="u_email" id="email" required value={email} onChange={this.handleChange} />
+                <label id="phone">휴대폰번호</label>
+                <input type="tel" name="u_phone" id="phone" required value={phone} onChange={this.handleChange} />
+                <div className="edit-error-msg">{error}</div>
+                <input type="submit" id="btn-edit" value="EDIT" disabled={loading} />
+              </form>
+            </div>
           </div>
-          <hr />
-          <form className="edit-form-input" method="post" onSubmit={this.handleSubmit}>
-            <label htmlFor="id">아이디</label>
-            <input type="text" name="u_id" id="id" required value={id} onChange={this.handleChange} />
-            <label htmlFor="pw">비밀번호</label>
-            <input type="password" name="u_password" id="pw" required value={pw} onChange={this.handleChange} />
-            <label htmlFor="pwdcheck">비밀번호 확인</label>
-            <input type="password" id="pwdcheck" required value={pwdcheck} onChange={this.handleChange} />
-            <label htmlFor="name">이름</label>
-            <input type="text" name="u_name" id="name" required value={name} onChange={this.handleChange} />
-            <label htmlFor="email">이메일</label>
-            <input type="email" name="u_email" id="email" required value={email} onChange={this.handleChange} />
-            <label id="phone">휴대폰번호</label>
-            <input type="tel" name="u_phone" id="phone" required value={phone} onChange={this.handleChange} />
-            <input type="submit" id="btn-edit" value="EDIT" disabled={loading} />
-          </form>
-        </div>
+        )}
       </div>
     );
   }

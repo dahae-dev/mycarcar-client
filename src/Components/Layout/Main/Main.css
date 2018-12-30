@@ -18,6 +18,10 @@
   margin-left: -250px;
 }
 
+.pre-loader {
+  width: 100px;
+}
+
 @media only screen and (max-width: 1280px) {
   .background-bottom {
     display: inline-block;
