@@ -1,0 +1,57 @@
+.my-header {
+  background-color: #1465b1;
+  display: flex;
+}
+
+.my-header a {
+  cursor: pointer;
+  text-align: center;
+}
+
+.logo-container {
+  line-height: 50px;
+  width: 250px;
+  background-color: #1e458e;
+}
+
+.logo-image {
+  width: 130px;
+  vertical-align: middle;
+}
+
+.toggle-btn {
+  line-height: 2;
+  width: 60px;
+  color: #fff;
+  font-size: 24px;
+}
+
+.toggle-btn:hover {
+  background-color: #1e458e;
+}
+
+@media only screen and (max-width: 1280px) {
+  .logo-container {
+    width: 230px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .my-header {
+    background-color: #1e458e;
+  }
+
+  .my-header a {
+    display: block;
+  }
+
+  .logo-container {
+    margin: 0 auto;
+  }
+
+  .toggle-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
