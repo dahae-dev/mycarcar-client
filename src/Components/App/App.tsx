@@ -41,6 +41,14 @@ export default class App extends React.Component<{}, IAppState> {
           footerToggle: "footer-close"
         });
       }
+      if (window.innerWidth >= 1280) {
+        this.setState({
+          isOpen: !this.state.isOpen,
+          sidebarToggle: "sidebar-open",
+          mainToggle: "main-open",
+          footerToggle: "footer-open"
+        });
+      }
     });
   }
 
