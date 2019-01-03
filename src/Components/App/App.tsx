@@ -19,12 +19,29 @@ export default class App extends React.Component<{}, IAppState> {
   }
 
   /**
-   * 브라우저의 back, forth  버튼 클릭 이벤트 발생시, url에 맞는 화면 전환 컨트롤
+   * 컴포넌트 마운트 시 적용되어야 할 history 전환 및 사이드바 컨트롤
    */
   componentDidMount() {
+    /**
+     * 브라우저의 back, forth  버튼 클릭 이벤트 발생시, url에 맞는 화면 전환 컨트롤
+     */
     onpopstate = () => {
       this.forceUpdate();
     };
+
+    /**
+     * 화면 크기 조절에 따른 토글 사이드바 컨트롤
+     */
+    addEventListener("resize", () => {
+      if (window.innerWidth <= 768) {
+        this.setState({
+          isOpen: !this.state.isOpen,
+          sidebarToggle: "sidebar-close",
+          mainToggle: "main-close",
+          footerToggle: "footer-close"
+        });
+      }
+    });
   }
 
   /**
