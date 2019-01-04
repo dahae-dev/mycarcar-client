@@ -1,3 +1,7 @@
+/**
+ * 홈 화면 백그라운드 이미지가 렌더링 되는 컴포넌트
+ */
+
 import * as React from "react";
 import { IHomeProps } from "./IHome";
 import background from "./assets/img/slider1.jpg";

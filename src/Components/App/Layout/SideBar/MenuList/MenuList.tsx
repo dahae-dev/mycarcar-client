@@ -1,3 +1,7 @@
+/**
+ * 사이드바에 포함되는 메뉴 리스트 컴포넌트
+ */
+
 import * as React from "react";
 import { IList } from "./IMenuList";
 import "./MenuList.css";
