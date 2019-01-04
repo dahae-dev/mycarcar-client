@@ -1,3 +1,7 @@
+/**
+ * 회원가입 입력양식 컴포넌트
+ */
+
 import * as React from "react";
 import axios from "axios";
 import { IRegisterFormProps, IRegisterFormState } from "./IRegisterForm";
@@ -5,7 +9,10 @@ import logo from "../assets/img/logo_basic.png";
 import loader from "../assets/preloader/Spinner.gif";
 import "./RegisterForm.css";
 
-export default class RegisterForm extends React.Component<IRegisterFormProps, IRegisterFormState> {
+export default class RegisterForm extends React.Component<
+  IRegisterFormProps,
+  IRegisterFormState
+> {
   constructor(props: IRegisterFormProps) {
     super(props);
 
@@ -24,19 +31,13 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  /**
-   * 사용자 입력값 받아오기
-   */
+  // 사용자로부터 입력값 받아와 state에 저장
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
   }
 
-  /**
-   * 사용자로부터 입력받은 값으로 비밀번호 일치 여부 우선 확인
-   * 서버에 HTTP post request 요청하여 회원가입 처리 후, 로그인 페이지로 이동
-   * 이미 가입된 회원의 경우 에러 처리
-   */
+  // 사용자로부터 입력받은 값으로 비밀번호 일치 여부 우선 확인
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -49,9 +50,17 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
 
     this.setState({ loading: true });
 
+    // 서버에 HTTP post request 요청
     axios
-      .post(`${process.env.REACT_APP_API_URL}/api/register`, { id, pw, name, email, phone })
+      .post(`${process.env.REACT_APP_API_URL}/api/register`, {
+        id,
+        pw,
+        name,
+        email,
+        phone
+      })
       .then(res => {
+        // 회원가입 처리된 경우, 로그인 페이지로 이동
         alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
         setTimeout(() => {
           history.pushState(null, "", "/login");
@@ -59,6 +68,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
         }, 1000);
       })
       .catch((err: Error) => {
+        // 이미 가입된 회원의 경우, 에러 처리
         this.setState({ loading: false, error: "이미 가입된 회원입니다." });
       });
   }
@@ -67,6 +77,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     const { mainToggle } = this.props;
     const { id, pw, pwdcheck, name, email, phone, loading, error } = this.state;
 
+    // 로딩 중일 때는 pre-loader 렌더링
     if (loading) {
       return (
         <div className={`my-main ${mainToggle}`}>
@@ -90,7 +101,11 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
                 회원가입
               </div>
               <hr />
-              <form className="register-form-input" method="post" onSubmit={this.handleSubmit}>
+              <form
+                className="register-form-input"
+                method="post"
+                onSubmit={this.handleSubmit}
+              >
                 <label htmlFor="id">아이디</label>
                 <input
                   type="text"
@@ -152,7 +167,12 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
                   onChange={this.handleChange}
                 />
                 <div className="register-error-msg">{error}</div>
-                <input type="submit" id="btn-register" value="SIGN UP" disabled={loading} />
+                <input
+                  type="submit"
+                  id="btn-register"
+                  value="SIGN UP"
+                  disabled={loading}
+                />
               </form>
             </div>
           </div>
