@@ -1,5 +1,5 @@
 /**
- * 회원가입 이용약관 컴포넌트
+ * 1주차 다해 - 회원가입 이용약관 컴포넌트
  */
 
 import * as React from "react";
@@ -46,11 +46,10 @@ export default class RegisterTerms extends React.Component<
   }
 
   render() {
-    const { mainToggle } = this.props;
     const { terms, privatePolicy } = termsContent;
 
     return (
-      <div className={`my-main ${mainToggle}`}>
+      <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
         <div className="terms-form-container">
           <div>
             <div className="terms-logo">
@@ -71,7 +70,7 @@ export default class RegisterTerms extends React.Component<
                   회원가입약관
                   <textarea value={terms} rows={6} cols={54} disabled />
                   <label className="checkbox-container">
-                    회원가입약관의 내용에 동의합니다.
+                    회원가입약관의 내용에 동의합니다
                     <input type="checkbox" onChange={this.handleChangeFst} />
                   </label>
                 </div>
@@ -79,7 +78,7 @@ export default class RegisterTerms extends React.Component<
                   개인정보처리방침안내
                   <textarea value={privatePolicy} rows={6} cols={54} disabled />
                   <label className="checkbox-container">
-                    개인정보처리방침안내의 내용에 동의합니다.
+                    개인정보처리방침안내의 내용에 동의합니다
                     <input type="checkbox" onChange={this.handleChangeSnd} />
                   </label>
                 </div>

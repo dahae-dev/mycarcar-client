@@ -1,5 +1,5 @@
 /**
- * 로그인 입력양식 컴포넌트
+ * 1주차 다해 -로그인 입력양식 컴포넌트
  */
 
 import * as React from "react";
@@ -43,7 +43,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
       .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
       .then(res => {
         // 인증된 경우, 서버로부터 응답받은 JWT 토큰을 localStorage에 저장 후
-        this.props.handleAuth(true);
+        this.props.handleAuth(true, id, res.headers.level);
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
 
         // 홈 화면으로 페이지 이동
@@ -62,12 +62,11 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
   }
 
   render() {
-    const { mainToggle } = this.props;
     const { id, pw, loading, error } = this.state;
 
     if (loading) {
       return (
-        <div className={`my-main ${mainToggle}`}>
+        <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
           <div className="login-form-container">
             <img className="pre-loader" src={loader} />
           </div>
@@ -75,7 +74,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
       );
     }
     return (
-      <div className={`my-main ${mainToggle}`}>
+      <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
         <div className="login-form-container">
           <div>
             <div className="login-logo">

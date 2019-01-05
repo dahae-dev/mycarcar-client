@@ -1,10 +1,10 @@
 /**
- * 회원정보수정 양식 컴포넌트
+ * 1주차 다해 - 회원정보수정 양식 컴포넌트
  */
 
 import * as React from "react";
 import axios from "axios";
-import { IEditFormProps, IEditFormState } from "./IEditForm";
+import { IEditFormProps, IEditFormState, PostEdit } from "./IEditForm";
 import logo from "../assets/img/logo_basic.png";
 import loader from "../assets/preloader/Spinner.gif";
 import "./EditForm.css";
@@ -14,12 +14,14 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     super(props);
 
     this.state = {
+      company: "",
       id: "",
       pw: "",
       pwdcheck: "",
       name: "",
       email: "",
       phone: "",
+      fax: "",
       loading: false,
       error: ""
     };
@@ -47,7 +49,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       .catch((err: Error) => {
         // JWT 토큰 기간이 만료된 경우, 에러 처리
         alert("재로그인 한 후 사용 가능합니다.");
-        this.props.handleAuth(false);
+        this.props.handleAuth(false, "", 0);
         localStorage.removeItem("x-access-token");
         history.pushState(null, "", "/login");
         this.props.app.forceUpdate();
@@ -64,7 +66,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const { id, pw, pwdcheck, name, email, phone } = this.state;
+    const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;
 
     if (pw !== pwdcheck) {
       this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
@@ -79,30 +81,52 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     };
 
     // 사용자가 수정한 값과 함께 서버에 HTTP post request 요청
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/api/edit_account`,
-        { id, pw, name, email, phone },
-        config
-      )
-      .then(res => {
-        // 회원정보 수정 처리에 대한 응답을 받으면 페이지 이동
-        alert("회원정보가 정상적으로 수정되었습니다.");
-        history.pushState(null, "", "/");
-        this.props.app.forceUpdate();
-      })
-      .catch((err: Error) => {
-        this.setState({ loading: false, error: err.message });
-      });
+    const postEdit: PostEdit = (endpoint, data) => {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`,
+          data,
+          config
+        )
+        .then(res => {
+          // 회원정보 수정 처리에 대한 응답을 받으면 페이지 이동
+          alert("회원정보가 정상적으로 수정되었습니다.");
+          history.pushState(null, "", "/");
+          this.props.app.forceUpdate();
+        })
+        .catch((err: Error) => {
+          this.setState({ loading: false, error: err.message });
+        });
+    };
+
+    // 일반 회원인 경우 HTTP request 요청
+    if (this.state.company === null) {
+      postEdit(`user`, { id, pw, name, email, phone });
+    }
+
+    // 협력사 회원인 경우 HTTP request 요청
+    if (this.state.company !== null) {
+      postEdit(`company`, { company, id, pw, name, email, phone, fax });
+    }
   }
 
   render() {
-    const { mainToggle } = this.props;
-    const { id, pw, pwdcheck, name, email, phone, loading, error } = this.state;
+    const {
+      company,
+      id,
+      pw,
+      pwdcheck,
+      name,
+      email,
+      phone,
+      fax,
+      loading,
+      error
+    } = this.state;
 
     if (loading) {
       return (
-        <div className={`my-main ${mainToggle}`}>
+        <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
           <div className="edit-form-container">
             <img className="pre-loader" src={loader} />
           </div>
@@ -111,7 +135,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     }
 
     return (
-      <div className={`my-main ${mainToggle}`}>
+      <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
         <div className="edit-form-container">
           <div>
             <div className="edit-logo">
@@ -128,16 +152,22 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
                 method="post"
                 onSubmit={this.handleSubmit}
               >
+                <div
+                  id="company-input-container"
+                  className={this.state.company === null ? "input-hidden" : ""}
+                >
+                  <label htmlFor="company">회사명</label>
+                  <input
+                    type="text"
+                    name="u_company"
+                    id="company"
+                    placeholder="회사명"
+                    value={company}
+                    disabled
+                  />
+                </div>
                 <label htmlFor="id">아이디</label>
-                <input
-                  type="text"
-                  name="u_id"
-                  id="id"
-                  required
-                  value={id}
-                  onChange={this.handleChange}
-                  disabled
-                />
+                <input type="text" name="u_id" id="id" required value={id} disabled />
                 <label htmlFor="pw">비밀번호</label>
                 <input
                   type="password"
@@ -182,6 +212,20 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
                   value={phone}
                   onChange={this.handleChange}
                 />
+                <div
+                  id="fax-input-container"
+                  className={this.state.company === null ? "input-hidden" : ""}
+                >
+                  <label htmlFor="fax">팩스번호</label>
+                  <input
+                    type="text"
+                    name="u_fax"
+                    id="fax"
+                    placeholder="팩스번호"
+                    value={fax}
+                    onChange={this.handleChange}
+                  />
+                </div>
                 <div className="edit-error-msg">{error}</div>
                 <input type="submit" id="btn-edit" value="EDIT" disabled={loading} />
               </form>
