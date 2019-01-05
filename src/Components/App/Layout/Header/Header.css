@@ -1,9 +1,11 @@
-.my-header {
+/* 1주차 다해 - Header 컴포넌트의 css 스타일 적용 */
+
+#my-header {
   background-color: #1465b1;
   display: flex;
 }
 
-.my-header a {
+#my-header a {
   cursor: pointer;
   text-align: center;
 }
@@ -15,8 +17,7 @@
 }
 
 .logo-image {
-  width: 130px;
-  vertical-align: middle;
+  width: 100px;
 }
 
 .toggle-btn {
@@ -28,20 +29,15 @@
 
 .toggle-btn:hover {
   background-color: #1e458e;
-}
-
-@media only screen and (max-width: 1280px) {
-  .logo-container {
-    width: 230px;
-  }
+  color: #fff;
 }
 
 @media only screen and (max-width: 768px) {
-  .my-header {
+  #my-header {
     background-color: #1e458e;
   }
 
-  .my-header a {
+  #my-header a {
     display: block;
   }
 

@@ -1,5 +1,5 @@
 /**
- * 레이아웃 메인 컴포넌트. 주로 이 컴포넌트의 내용이 업데이트되며 렌더링 됨.
+ * 1주차 다해 - 레이아웃 메인 컴포넌트. 주로 이 컴포넌트의 내용이 업데이트되며 렌더링 됨.
  */
 
 import * as React from "react";
@@ -7,7 +7,7 @@ import { Home, RegisterForm, LoginForm, EditForm, RegisterTerms } from "./Conten
 import { IMainProps } from "./IMain";
 import "./Main.css";
 
-class Main extends React.Component<IMainProps, {}> {
+export default class Main extends React.Component<IMainProps, {}> {
   constructor(props: IMainProps) {
     super(props);
   }
@@ -24,21 +24,17 @@ class Main extends React.Component<IMainProps, {}> {
         <LoginForm
           handleAuth={this.props.handleAuth}
           app={this.props.app}
-          mainToggle={this.props.mainToggle}
+          isOpen={this.props.isOpen}
         />
       );
     }
 
     if (isTermsPage) {
-      return (
-        <RegisterTerms app={this.props.app} mainToggle={this.props.mainToggle} />
-      );
+      return <RegisterTerms app={this.props.app} isOpen={this.props.isOpen} />;
     }
 
     if (isRegisterPage) {
-      return (
-        <RegisterForm app={this.props.app} mainToggle={this.props.mainToggle} />
-      );
+      return <RegisterForm app={this.props.app} isOpen={this.props.isOpen} />;
     }
 
     if (isEditPage) {
@@ -46,13 +42,11 @@ class Main extends React.Component<IMainProps, {}> {
         <EditForm
           handleAuth={this.props.handleAuth}
           app={this.props.app}
-          mainToggle={this.props.mainToggle}
+          isOpen={this.props.isOpen}
         />
       );
     }
 
-    return <Home mainToggle={this.props.mainToggle} />;
+    return <Home isOpen={this.props.isOpen} />;
   }
 }
-
-export default Main;

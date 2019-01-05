@@ -1,5 +1,9 @@
-.my-main {
+#my-main {
   background-color: rgb(221, 229, 237);
+}
+
+.my-main-margin-left {
+  margin-left: -250px;
 }
 
 .background {
@@ -10,16 +14,12 @@
   display: none;
 }
 
-.main-open {
-  margin-left: 0px;
-}
-
-.main-close {
-  margin-left: -250px;
-}
-
 .pre-loader {
   width: 100px;
+}
+
+.input-hidden {
+  display: none;
 }
 
 @media only screen and (max-width: 1280px) {
@@ -27,22 +27,10 @@
     display: inline-block;
     width: 50%;
   }
-
-  .main-open {
-    margin-left: 0px;
-  }
-
-  .main-close {
-    margin-left: -230px;
-  }
 }
 
 @media only screen and (max-width: 768px) {
-  .main-open {
-    margin-left: -300px;
-  }
-
-  .main-close {
+  .my-main-margin-left {
     margin-left: 0px;
   }
 }

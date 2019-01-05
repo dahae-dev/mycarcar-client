@@ -1,5 +1,5 @@
 /**
- * 인증 상태에 따라 각각 다른 버튼이 렌더링 되는 컴포넌트
+ * 1주차 다해 - 인증 상태에 따라 각각 다른 버튼이 렌더링 되는 컴포넌트
  * 로그인 시 로그인된 아이디 및 권한 그룹에 대한 표시도 여기서 이루어져야함
  */
 
@@ -30,11 +30,13 @@ export default class Status extends React.Component<IStatusProps, {}> {
             title="로그아웃"
             handlePage={this.handlePage}
             handleAuth={this.props.handleAuth}
+            handleSidebar={this.props.handleSidebar}
             app={this.props.app}
           />
           <RegisterButtons
             title="정보수정"
             handlePage={this.handlePage}
+            handleSidebar={this.props.handleSidebar}
             app={this.props.app}
           />
         </div>
@@ -48,11 +50,13 @@ export default class Status extends React.Component<IStatusProps, {}> {
           title="로그인"
           handlePage={this.handlePage}
           handleAuth={this.props.handleAuth}
+          handleSidebar={this.props.handleSidebar}
           app={this.props.app}
         />
         <RegisterButtons
           title="회원가입"
           handlePage={this.handlePage}
+          handleSidebar={this.props.handleSidebar}
           app={this.props.app}
         />
       </div>

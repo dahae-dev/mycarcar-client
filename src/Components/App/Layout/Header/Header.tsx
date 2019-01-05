@@ -1,5 +1,5 @@
 /**
- * 레이아웃 최상단 Header 컴포넌트, 로고이미지와 사이드바 토글버튼 렌더링
+ * 1주차 다해 - 레이아웃 최상단 Header 컴포넌트, 로고이미지와 사이드바 토글버튼 렌더링
  */
 
 import * as React from "react";
@@ -22,7 +22,7 @@ export default class Header extends React.Component<IHeaderProps> {
 
   render() {
     return (
-      <header className="my-header">
+      <header id="my-header">
         <a className="logo-container">
           <img
             className="logo-image"
@@ -31,7 +31,7 @@ export default class Header extends React.Component<IHeaderProps> {
             onClick={this.handlePage}
           />
         </a>
-        <a className="toggle-btn" onClick={() => this.props.handleSidebar()}>
+        <a className="toggle-btn" onClick={this.props.handleSidebar}>
           <i className="fa fa-bars" />
         </a>
       </header>

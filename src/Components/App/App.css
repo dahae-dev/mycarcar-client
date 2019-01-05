@@ -1,13 +1,15 @@
-.my-header {
+/* 1주차 다해 - css grid 시스템을 이용한 전체 holy grail layout */
+
+#my-header {
   grid-area: header;
 }
-.my-sidebar {
+#my-sidebar {
   grid-area: sidebar;
 }
-.my-main {
+#my-main {
   grid-area: main;
 }
-.my-footer {
+#my-footer {
   grid-area: footer;
 }
 
@@ -18,8 +20,8 @@
   grid-template-rows: 50px auto 80px;
   grid-template-columns: 250px auto;
   grid-template-areas:
-    "header header header header header header header header header header"
-    "sidebar main main main main main main main main main"
+    "header  header header header header header header header header header"
+    "sidebar main   main   main   main   main   main   main   main   main"
     "sidebar footer footer footer footer footer footer footer footer footer";
 }
 
@@ -30,8 +32,8 @@
       "sidebar main"
       "footer";
 
-    grid-template-columns: 230px auto;
     grid-template-rows: 50px auto 80px;
+    grid-template-columns: 250px auto;
   }
 }
 
@@ -42,7 +44,7 @@
       "sidebar main"
       "footer";
 
-    grid-template-columns: auto;
     grid-template-rows: 50px auto 60px;
+    grid-template-columns: 0px auto;
   }
 }
