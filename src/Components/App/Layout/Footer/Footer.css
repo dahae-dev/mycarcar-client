@@ -1,24 +1,18 @@
-.my-footer {
+/* 1주차 다해 - Footer 컴포넌트의 css 스타일 적용 */
+
+#my-footer {
   background-color: rgb(177, 179, 179);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.footer-open {
-  margin-left: 0px;
-}
-
-.footer-close {
+.my-footer-margin-left {
   margin-left: -250px;
 }
 
 @media only screen and (max-width: 768px) {
-  .footer-open {
-    margin-left: -300px;
-  }
-
-  .footer-close {
+  .my-footer-margin-left {
     margin-left: 0px;
   }
 
