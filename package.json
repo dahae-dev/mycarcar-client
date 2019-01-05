@@ -29,6 +29,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/react-bootstrap": "^0.32.15",
+    "react-bootstrap": "^0.32.4",
     "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-react": "^3.6.0"
