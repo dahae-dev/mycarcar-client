@@ -55,9 +55,6 @@ export default class App extends React.Component<{}, IAppState> {
 
   // 레이아웃 컴포넌트 렌더링
   render() {
-    console.log("id: ", this.state.signedInId);
-    console.log("level: ", this.state.signedInLevel);
-
     return (
       <div className="grid-container">
         <Header handleSidebar={this.handleSidebar} app={this} />
