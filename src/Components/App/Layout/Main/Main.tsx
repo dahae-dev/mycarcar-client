@@ -2,10 +2,17 @@
  * 1주차 다해 - 레이아웃 메인 컴포넌트. 주로 이 컴포넌트의 내용이 업데이트되며 렌더링 됨.
  */
 
-import * as React from "react";
-import { Home, RegisterForm, LoginForm, EditForm, RegisterTerms } from "./Content";
-import { IMainProps } from "./IMain";
 import "./Main.css";
+import React from "react";
+import { Home, RegisterForm, LoginForm, EditForm, RegisterTerms } from "./Content";
+
+interface IMainProps {
+  isOpen: boolean;
+  isSignedIn: boolean;
+
+  handlePage: (pathname: string) => void;
+  handleAuth: (result: boolean, id: string, level: number) => void;
+}
 
 export default class Main extends React.Component<IMainProps, {}> {
   constructor(props: IMainProps) {
@@ -21,29 +28,21 @@ export default class Main extends React.Component<IMainProps, {}> {
 
     if (isLoginPage) {
       return (
-        <LoginForm
-          handleAuth={this.props.handleAuth}
-          app={this.props.app}
-          isOpen={this.props.isOpen}
-        />
+        <LoginForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
       );
     }
 
     if (isTermsPage) {
-      return <RegisterTerms app={this.props.app} isOpen={this.props.isOpen} />;
+      return <RegisterTerms handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
     }
 
     if (isRegisterPage) {
-      return <RegisterForm app={this.props.app} isOpen={this.props.isOpen} />;
+      return <RegisterForm handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
     }
 
     if (isEditPage) {
       return (
-        <EditForm
-          handleAuth={this.props.handleAuth}
-          app={this.props.app}
-          isOpen={this.props.isOpen}
-        />
+        <EditForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
       );
     }
 

@@ -1,29 +1,56 @@
 /**
- * 1주차 다해 - 사이드바에 포함되는 메뉴 리스트 컴포넌트
+ * 1주차
+ * 작성자 : 김다해
+ * 사이드바에 포함되는 메뉴 리스트 컴포넌트
+ *
+ * 작성자 : 김재훈
+ *
  */
 
-import * as React from "react";
-import { IList } from "./IMenuList";
 import "./MenuList.css";
+import React, { MouseEvent, Component } from "react";
+import { getApiPathName } from "../../../../../util/api";
+import { getMenus } from "../../../../../util/MenuList";
 
-export default class MenuList extends React.Component {
+interface IMenus {
+  icon: string;
+  content: string;
+}
+
+interface IMenuListProps {
+  signedInLevel: number;
+
+  handlePage: (pathname: string) => void;
+}
+
+interface IMenuListState {
+  menus: IMenus[];
+}
+
+export default class MenuList extends Component<IMenuListProps, IMenuListState> {
+  constructor(props: IMenuListProps) {
+    super(props);
+
+    this.state = {
+      menus: getMenus(this.props.signedInLevel),
+    };
+
+    this.handleMenuClick = this.handleMenuClick.bind(this);
+  }
+
+  handleMenuClick(e: MouseEvent) {
+    const pathname = getApiPathName(e.currentTarget.className);
+    this.props.handlePage(pathname);
+  }
+
   render() {
-    const menus: IList[] = [
-      { icon: "home", content: "home" },
-      { icon: "cab", content: "장기렌트" },
-      { icon: "calculator", content: "운용리스" },
-      { icon: "television", content: "견적내역보기" }
-    ];
-
     return (
       <div className="menu-wrapper">
         <ul className="menu-list">
-          {menus.map((menu: IList) => (
-            <li key={menu.content}>
-              <a href="#">
-                <i className={`menu-icon fa fa-${menu.icon}`} />
-                {menu.content}
-              </a>
+          {this.state.menus.map(menu => (
+            <li className={menu.content} onClick={this.handleMenuClick} key={menu.content}>
+              <i className={`menu-icon fa fa-${menu.icon}`} />
+              {menu.content}
             </li>
           ))}
         </ul>

@@ -3,8 +3,8 @@
  */
 
 import Home from "./Home/Home";
-import RegisterTerms from "./User/Register/RegisterTerms";
-import RegisterForm from "./User/Register/RegisterForm";
+import RegisterTerms from "./User/Register/RegisterTerms/RegisterTerms";
+import RegisterForm from "./User/Register/RegisterForm/RegisterForm";
 import LoginForm from "./User/Login/LoginForm";
 import EditForm from "./User/EditAccount/EditForm";
 
