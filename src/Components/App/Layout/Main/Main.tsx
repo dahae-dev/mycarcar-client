@@ -3,8 +3,14 @@
  */
 
 import "./Main.css";
+
 import React from "react";
-import { Home, RegisterForm, LoginForm, EditForm, RegisterTerms } from "./Content";
+
+import LoginForm from "./User/Login/LoginForm";
+import RegisterTerms from "./User/Register/RegisterTerms/RegisterTerms";
+import RegisterForm from "./User/Register/RegisterForm/RegisterForm";
+import EditForm from "./User/EditAccount/EditForm";
+import Home from "./Home/Home";
 
 interface IMainProps {
   isOpen: boolean;

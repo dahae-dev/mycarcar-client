@@ -3,10 +3,12 @@
  */
 
 import "./LoginForm.css";
+
 import React from "react";
 import axios from "axios";
-import logo from "../../../../../../../assets/img/logo_basic.png";
-import loader from "../../../../../../../assets/preloader/Spinner.gif";
+
+import logo from "assets/img/logo_basic.png";
+import loader from "assets/preloader/Spinner.gif";
 
 interface ILoginFormProps {
   isOpen: boolean;

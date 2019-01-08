@@ -2,7 +2,7 @@
  * 1주차 다해 - 로그인 or 로그아웃 버튼 컴포넌트
  */
 
-import * as React from "react";
+import React from "react";
 
 interface ILoginButtonsProps {
   title: string;

@@ -3,7 +3,7 @@
  */
 
 import "./Header.css";
-import logo from "../../../../assets/img/logo.png";
+import logo from "assets/img/logo.png";
 import React from "react";
 
 interface IHeaderProps {

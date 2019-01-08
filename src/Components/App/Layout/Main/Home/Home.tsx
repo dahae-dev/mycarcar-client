@@ -3,13 +3,14 @@
  * 추가) 부트스트랩을 이용한 슬라이드쇼 적용
  */
 
-import * as React from "react";
+import React from "react";
 import { Carousel } from "react-bootstrap";
-import slider1 from "./assets/img/slider1.jpg";
-import slider2 from "./assets/img/slider2.jpg";
-import slider3 from "./assets/img/slider3.jpg";
-import bottom1 from "./assets/img/main_quick1.jpg";
-import bottom2 from "./assets/img/main_quick2.jpg";
+
+import slider1 from "assets/img/slider1.jpg";
+import slider2 from "assets/img/slider2.jpg";
+import slider3 from "assets/img/slider3.jpg";
+import bottom1 from "assets/img/main_quick1.jpg";
+import bottom2 from "assets/img/main_quick2.jpg";
 
 interface IHomeProps {
   isOpen: boolean;

@@ -3,8 +3,10 @@
  */
 
 import "./RegisterTerms.css";
+
 import React from "react";
-import logo from "../../../../../../../../assets/img/logo_basic.png";
+
+import logo from "assets/img/logo_basic.png";
 import * as termsContent from "./terms";
 
 interface IRegisterTermsProps {

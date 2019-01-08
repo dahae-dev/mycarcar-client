@@ -3,7 +3,9 @@
  */
 
 import "./App.css";
+
 import React from "react";
+
 import { Header, SideBar, Main, Footer } from "./Layout";
 
 interface IAppState {

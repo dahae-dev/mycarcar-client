@@ -4,7 +4,9 @@
  */
 
 import "./Status.css";
+
 import React from "react";
+
 import LoginButtons from "./LoginButtons/LoginButtons";
 import RegisterButtons from "./RegisterButtons/RegisterButtons";
 
