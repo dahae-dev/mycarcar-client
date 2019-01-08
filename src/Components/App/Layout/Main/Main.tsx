@@ -6,11 +6,11 @@ import "./Main.css";
 
 import React from "react";
 
-import LoginForm from "./User/Login/LoginForm";
-import RegisterTerms from "./User/Register/RegisterTerms/RegisterTerms";
-import RegisterForm from "./User/Register/RegisterForm/RegisterForm";
-import EditForm from "./User/EditAccount/EditForm";
 import Home from "./Home/Home";
+import LoginForm from "./Login/LoginForm";
+import EditForm from "./EditAccount/EditForm";
+import RegisterForm from "./RegisterForm/RegisterForm";
+import RegisterTerms from "./RegisterTerms/RegisterTerms";
 
 interface IMainProps {
   isOpen: boolean;
