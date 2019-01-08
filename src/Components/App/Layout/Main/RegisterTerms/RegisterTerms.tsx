@@ -7,7 +7,8 @@ import "./RegisterTerms.css";
 import React from "react";
 
 import logo from "assets/img/logo_basic.png";
-import * as termsContent from "./terms";
+
+import * as termsContent from "../../../../../util/Terms/terms";
 
 interface IRegisterTermsProps {
   isOpen: boolean;
