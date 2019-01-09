@@ -1,0 +1,14 @@
+h1 {
+  text-align: center;
+}
+
+.list_group {
+  width: 200px;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+.select_car {
+  display: flex;
+  flex-direction: row;
+}

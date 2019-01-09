@@ -11,6 +11,13 @@ import LoginForm from "./Login/LoginForm";
 import EditForm from "./EditAccount/EditForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
 import RegisterTerms from "./RegisterTerms/RegisterTerms";
+import Rental from "./Rental/Rental";
+
+interface ICommonAttribute {
+  isOpen: boolean;
+
+  handlePage: (pathname: string) => void;
+}
 
 interface IMainProps {
   isOpen: boolean;
@@ -20,36 +27,40 @@ interface IMainProps {
   handleAuth: (result: boolean, id: string, level: number) => void;
 }
 
-export default class Main extends React.Component<IMainProps, {}> {
+interface IMainState {
+  commonAttribute: ICommonAttribute;
+}
+
+export default class Main extends React.Component<IMainProps, IMainState> {
   constructor(props: IMainProps) {
     super(props);
+
+    this.state = {
+      commonAttribute: {
+        handlePage: this.props.handlePage,
+        isOpen: this.props.isOpen,
+      },
+    };
   }
 
   // url 주소창의 endpoint에 따른 화면 전환
   render() {
     const pathname = location.pathname;
-
-    // TODO
-    const isRentalPage = pathname === "rental";
-    const isCarListPage = pathname === "rental";
-    const isCatalogPage = pathname === "rental";
-    const isMemberListPage = pathname === "rental";
+    const commonAttribute = this.state.commonAttribute;
 
     switch (pathname) {
       case "/login":
-        return (
-          <LoginForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
-        );
+        return <LoginForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
       case "/terms":
-        return <RegisterTerms handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
+        return <RegisterTerms {...commonAttribute} />;
       case "/register":
-        return <RegisterForm handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
+        return <RegisterForm {...commonAttribute} />;
       case "/edit_account":
-        return (
-          <EditForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
-        );
+        return <EditForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
+      case "/rental":
+        return <Rental {...commonAttribute} />;
       default:
-        return <Home isOpen={this.props.isOpen} />;
+        return <Home {...commonAttribute} />;
     }
   }
 }
