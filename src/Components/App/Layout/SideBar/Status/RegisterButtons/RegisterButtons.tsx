@@ -2,8 +2,14 @@
  * 1주차 다해 - 회원가입 or 정보수정 버튼 컴포넌트
  */
 
-import * as React from "react";
-import { IRegisterButtonsProps } from "./IRegisterButtons";
+import React from "react";
+
+interface IRegisterButtonsProps {
+  title: string;
+
+  handlePage: (pathname: string) => void;
+  handleSidebar: () => void;
+}
 
 export default class RegisterButton extends React.Component<IRegisterButtonsProps> {
   constructor(props: IRegisterButtonsProps) {
@@ -17,13 +23,13 @@ export default class RegisterButton extends React.Component<IRegisterButtonsProp
     if (window.innerWidth <= 768) {
       this.props.handleSidebar();
     }
+
     const status = this.props.title === "회원가입";
     if (status) {
-      this.props.handlePage("terms");
-      return this.props.app.forceUpdate();
+      return this.props.handlePage("/terms");
     }
-    this.props.handlePage("edit_account");
-    this.props.app.forceUpdate();
+
+    this.props.handlePage("/edit_account");
   }
 
   render() {

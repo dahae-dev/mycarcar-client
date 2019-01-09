@@ -2,22 +2,32 @@
  * 1주차 다해 - 회원가입 이용약관 컴포넌트
  */
 
-import * as React from "react";
-import logo from "../assets/img/logo_basic.png";
-import { IRegisterTermsProps, IRegisterTermsState } from "./IRegisterTerms";
 import "./RegisterTerms.css";
-import * as termsContent from "./assets/terms";
 
-export default class RegisterTerms extends React.Component<
-  IRegisterTermsProps,
-  IRegisterTermsState
-> {
+import React from "react";
+
+import logo from "assets/img/logo_basic.png";
+
+import * as termsContent from "../../../../../util/Terms/terms";
+
+interface IRegisterTermsProps {
+  isOpen: boolean;
+
+  handlePage: (pathname: string) => void;
+}
+
+interface IRegisterTermsState {
+  isCheckedFst: boolean;
+  isCheckedSnd: boolean;
+}
+
+export default class RegisterTerms extends React.Component<IRegisterTermsProps, IRegisterTermsState> {
   constructor(props: IRegisterTermsProps) {
     super(props);
 
     this.state = {
       isCheckedFst: false,
-      isCheckedSnd: false
+      isCheckedSnd: false,
     };
 
     this.handleChangeFst = this.handleChangeFst.bind(this);
@@ -41,8 +51,7 @@ export default class RegisterTerms extends React.Component<
       alert("회원가입약관 및 개인정보처리방침에 동의해야 회원가입이 가능합니다.");
       return;
     }
-    history.pushState(null, "", "register");
-    this.props.app.forceUpdate();
+    this.props.handlePage("/register");
   }
 
   render() {
@@ -61,11 +70,7 @@ export default class RegisterTerms extends React.Component<
                 회원가입약관
               </div>
               <hr />
-              <form
-                className="terms-form-input"
-                method="post"
-                onSubmit={this.handleSubmit}
-              >
+              <form className="terms-form-input" method="post" onSubmit={this.handleSubmit}>
                 <div className="terms-container">
                   회원가입약관
                   <textarea value={terms} rows={6} cols={54} disabled />

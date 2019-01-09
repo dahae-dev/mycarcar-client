@@ -2,51 +2,65 @@
  * 1주차 다해 - 레이아웃 메인 컴포넌트. 주로 이 컴포넌트의 내용이 업데이트되며 렌더링 됨.
  */
 
-import * as React from "react";
-import { Home, RegisterForm, LoginForm, EditForm, RegisterTerms } from "./Content";
-import { IMainProps } from "./IMain";
 import "./Main.css";
 
-export default class Main extends React.Component<IMainProps, {}> {
+import React from "react";
+
+import Home from "./Home/Home";
+import LoginForm from "./Login/LoginForm";
+import EditForm from "./EditAccount/EditForm";
+import RegisterForm from "./RegisterForm/RegisterForm";
+import RegisterTerms from "./RegisterTerms/RegisterTerms";
+import Rental from "./Rental/Rental";
+
+interface ICommonAttribute {
+  isOpen: boolean;
+
+  handlePage: (pathname: string) => void;
+}
+
+interface IMainProps {
+  isOpen: boolean;
+  isSignedIn: boolean;
+
+  handlePage: (pathname: string) => void;
+  handleAuth: (result: boolean, id: string, level: number) => void;
+}
+
+interface IMainState {
+  commonAttribute: ICommonAttribute;
+}
+
+export default class Main extends React.Component<IMainProps, IMainState> {
   constructor(props: IMainProps) {
     super(props);
+
+    this.state = {
+      commonAttribute: {
+        handlePage: this.props.handlePage,
+        isOpen: this.props.isOpen,
+      },
+    };
   }
 
   // url 주소창의 endpoint에 따른 화면 전환
   render() {
-    const isLoginPage = location.pathname === "/login";
-    const isTermsPage = location.pathname === "/terms";
-    const isRegisterPage = location.pathname === "/register";
-    const isEditPage = location.pathname === "/edit_account";
+    const pathname = location.pathname;
+    const commonAttribute = this.state.commonAttribute;
 
-    if (isLoginPage) {
-      return (
-        <LoginForm
-          handleAuth={this.props.handleAuth}
-          app={this.props.app}
-          isOpen={this.props.isOpen}
-        />
-      );
+    switch (pathname) {
+      case "/login":
+        return <LoginForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
+      case "/terms":
+        return <RegisterTerms {...commonAttribute} />;
+      case "/register":
+        return <RegisterForm {...commonAttribute} />;
+      case "/edit_account":
+        return <EditForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
+      case "/rental":
+        return <Rental {...commonAttribute} />;
+      default:
+        return <Home {...commonAttribute} />;
     }
-
-    if (isTermsPage) {
-      return <RegisterTerms app={this.props.app} isOpen={this.props.isOpen} />;
-    }
-
-    if (isRegisterPage) {
-      return <RegisterForm app={this.props.app} isOpen={this.props.isOpen} />;
-    }
-
-    if (isEditPage) {
-      return (
-        <EditForm
-          handleAuth={this.props.handleAuth}
-          app={this.props.app}
-          isOpen={this.props.isOpen}
-        />
-      );
-    }
-
-    return <Home isOpen={this.props.isOpen} />;
   }
 }

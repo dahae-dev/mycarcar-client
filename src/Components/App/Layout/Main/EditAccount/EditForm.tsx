@@ -2,12 +2,38 @@
  * 1주차 다해 - 회원정보수정 양식 컴포넌트
  */
 
-import * as React from "react";
-import axios from "axios";
-import { IEditFormProps, IEditFormState, PostEdit } from "./IEditForm";
-import logo from "../assets/img/logo_basic.png";
-import loader from "../assets/preloader/Spinner.gif";
 import "./EditForm.css";
+
+import React from "react";
+import axios from "axios";
+
+import logo from "assets/img/logo_basic.png";
+import loader from "assets/preloader/Spinner.gif";
+
+interface IEditFormProps {
+  isOpen: boolean;
+
+  handlePage: (pathname: string) => void;
+  handleAuth: (result: boolean, id: string, level: number) => void;
+}
+
+interface IPostEdit {
+  (endpoint: string, data: object): void;
+}
+
+interface IEditFormState {
+  company: string;
+  id: string;
+  pw: string;
+  pwdcheck: string;
+  name: string;
+  email: string;
+  phone: string;
+  fax: string;
+  loading: boolean;
+  error: string;
+  [key: string]: string | boolean;
+}
 
 export default class EditForm extends React.Component<IEditFormProps, IEditFormState> {
   constructor(props: IEditFormProps) {
@@ -23,7 +49,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       phone: "",
       fax: "",
       loading: false,
-      error: ""
+      error: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -34,7 +60,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
   componentDidMount() {
     // localStorage에 저장된 JWT 토큰을 헤더에 실어 전달
     const config: object = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+      headers: { "x-access-token": localStorage.getItem("x-access-token") },
     };
 
     this.setState({ loading: true });
@@ -51,8 +77,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
         alert("재로그인 한 후 사용 가능합니다.");
         this.props.handleAuth(false, "", 0);
         localStorage.removeItem("x-access-token");
-        history.pushState(null, "", "/login");
-        this.props.app.forceUpdate();
+        this.props.handlePage("/login");
       });
   }
 
@@ -77,22 +102,17 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
 
     // 인증된 상태에서는 서버에 HTTP request를 할 때마다 헤더에 JWT 토큰을 실어서 함께 보내줘야 함
     const config: object = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+      headers: { "x-access-token": localStorage.getItem("x-access-token") },
     };
 
     // 사용자가 수정한 값과 함께 서버에 HTTP post request 요청
-    const postEdit: PostEdit = (endpoint, data) => {
+    const postEdit: IPostEdit = (endpoint, data) => {
       axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`,
-          data,
-          config
-        )
+        .post(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
         .then(res => {
           // 회원정보 수정 처리에 대한 응답을 받으면 페이지 이동
           alert("회원정보가 정상적으로 수정되었습니다.");
-          history.pushState(null, "", "/");
-          this.props.app.forceUpdate();
+          this.props.handlePage("/");
         })
         .catch((err: Error) => {
           this.setState({ loading: false, error: err.message });
@@ -111,18 +131,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
   }
 
   render() {
-    const {
-      company,
-      id,
-      pw,
-      pwdcheck,
-      name,
-      email,
-      phone,
-      fax,
-      loading,
-      error
-    } = this.state;
+    const { company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;
 
     if (loading) {
       return (
@@ -147,75 +156,24 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
                 회원정보수정
               </div>
               <hr />
-              <form
-                className="edit-form-input"
-                method="post"
-                onSubmit={this.handleSubmit}
-              >
-                <div
-                  id="company-input-container"
-                  className={this.state.company === null ? "input-hidden" : ""}
-                >
+              <form className="edit-form-input" method="post" onSubmit={this.handleSubmit}>
+                <div id="company-input-container" className={this.state.company === null ? "input-hidden" : ""}>
                   <label htmlFor="company">회사명</label>
-                  <input
-                    type="text"
-                    name="u_company"
-                    id="company"
-                    placeholder="회사명"
-                    value={company}
-                    disabled
-                  />
+                  <input type="text" name="u_company" id="company" placeholder="회사명" value={company} disabled />
                 </div>
                 <label htmlFor="id">아이디</label>
                 <input type="text" name="u_id" id="id" required value={id} disabled />
                 <label htmlFor="pw">비밀번호</label>
-                <input
-                  type="password"
-                  name="u_password"
-                  id="pw"
-                  required
-                  value={pw}
-                  onChange={this.handleChange}
-                />
+                <input type="password" name="u_password" id="pw" required value={pw} onChange={this.handleChange} />
                 <label htmlFor="pwdcheck">비밀번호 확인</label>
-                <input
-                  type="password"
-                  id="pwdcheck"
-                  required
-                  value={pwdcheck}
-                  onChange={this.handleChange}
-                />
+                <input type="password" id="pwdcheck" required value={pwdcheck} onChange={this.handleChange} />
                 <label htmlFor="name">이름</label>
-                <input
-                  type="text"
-                  name="u_name"
-                  id="name"
-                  required
-                  value={name}
-                  onChange={this.handleChange}
-                />
+                <input type="text" name="u_name" id="name" required value={name} onChange={this.handleChange} />
                 <label htmlFor="email">이메일</label>
-                <input
-                  type="email"
-                  name="u_email"
-                  id="email"
-                  required
-                  value={email}
-                  onChange={this.handleChange}
-                />
+                <input type="email" name="u_email" id="email" required value={email} onChange={this.handleChange} />
                 <label id="phone">휴대폰번호</label>
-                <input
-                  type="tel"
-                  name="u_phone"
-                  id="phone"
-                  required
-                  value={phone}
-                  onChange={this.handleChange}
-                />
-                <div
-                  id="fax-input-container"
-                  className={this.state.company === null ? "input-hidden" : ""}
-                >
+                <input type="tel" name="u_phone" id="phone" required value={phone} onChange={this.handleChange} />
+                <div id="fax-input-container" className={this.state.company === null ? "input-hidden" : ""}>
                   <label htmlFor="fax">팩스번호</label>
                   <input
                     type="text"

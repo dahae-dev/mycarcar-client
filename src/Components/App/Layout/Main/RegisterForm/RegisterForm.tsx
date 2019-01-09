@@ -2,17 +2,40 @@
  * 1주차 다해 - 회원가입 입력양식 컴포넌트
  */
 
-import * as React from "react";
-import axios from "axios";
-import { IRegisterFormProps, IRegisterFormState, PostRegister } from "./IRegisterForm";
-import logo from "../assets/img/logo_basic.png";
-import loader from "../assets/preloader/Spinner.gif";
 import "./RegisterForm.css";
 
-export default class RegisterForm extends React.Component<
-  IRegisterFormProps,
-  IRegisterFormState
-> {
+import React, { FormEvent, ChangeEvent } from "react";
+import axios from "axios";
+
+import logo from "assets/img/logo_basic.png";
+import loader from "assets/preloader/Spinner.gif";
+
+interface IRegisterFormProps {
+  isOpen: boolean;
+
+  handlePage: (pathname: string) => void;
+}
+
+interface IRegisterFormState {
+  checkedValue: string;
+  pwdcheck: string;
+  id: string;
+  pw: string;
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  fax: string;
+  loading: boolean;
+  error: string;
+  [key: string]: string | boolean;
+}
+
+interface IPostRegister {
+  (endpoint: string, data: object): void;
+}
+
+export default class RegisterForm extends React.Component<IRegisterFormProps, IRegisterFormState> {
   constructor(props: IRegisterFormProps) {
     super(props);
 
@@ -27,7 +50,7 @@ export default class RegisterForm extends React.Component<
       phone: "",
       fax: "",
       loading: false,
-      error: ""
+      error: "",
     };
 
     this.handleCheck = this.handleCheck.bind(this);
@@ -37,23 +60,23 @@ export default class RegisterForm extends React.Component<
   }
 
   // 일반회원인지, 협력사인지에 따라 입력양식 다르게 렌더링 되도록
-  handleCheck(e: React.FormEvent<HTMLInputElement>) {
+  handleCheck(e: FormEvent<HTMLInputElement>) {
     const { value } = e.currentTarget;
     this.setState({ checkedValue: value });
   }
 
   // 사용자로부터 입력값 받아와 state에 저장
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  handleChange(e: FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
   }
-  handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
+  handleSelect(e: ChangeEvent<HTMLSelectElement>) {
     const { value } = e.currentTarget;
     this.setState({ company: value });
   }
 
   // 사용자로부터 입력받은 값으로 비밀번호 일치 여부 우선 확인
-  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;
@@ -66,15 +89,14 @@ export default class RegisterForm extends React.Component<
     this.setState({ loading: true });
 
     // 서버에 HTTP post request를 요청할 함수
-    const postRegister: PostRegister = (endpoint, data) => {
+    const postRegister: IPostRegister = (endpoint, data) => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/api/register/${endpoint}`, data)
         .then(res => {
           // 회원가입 처리된 경우, 로그인 페이지로 이동
           alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
           setTimeout(() => {
-            history.pushState(null, "", "/login");
-            this.props.app.forceUpdate();
+            this.props.handlePage("/login");
           }, 1000);
         })
         .catch((err: Error) => {
@@ -95,19 +117,7 @@ export default class RegisterForm extends React.Component<
   }
 
   render() {
-    const {
-      checkedValue,
-      company,
-      id,
-      pw,
-      pwdcheck,
-      name,
-      email,
-      phone,
-      fax,
-      loading,
-      error
-    } = this.state;
+    const { checkedValue, company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;
 
     // 로딩 중일 때는 pre-loader 렌더링
     if (loading) {
@@ -133,11 +143,7 @@ export default class RegisterForm extends React.Component<
                 회원가입
               </div>
               <hr />
-              <form
-                className="register-form-input"
-                method="post"
-                onSubmit={this.handleSubmit}
-              >
+              <form className="register-form-input" method="post" onSubmit={this.handleSubmit}>
                 <div className="register-form-group">
                   <input
                     type="radio"
@@ -158,17 +164,9 @@ export default class RegisterForm extends React.Component<
                   />
                   <label htmlFor="company-group">협력사</label>
                 </div>
-                <div
-                  id="select-container"
-                  className={this.state.checkedValue === "개인" ? "input-hidden" : ""}
-                >
+                <div id="select-container" className={this.state.checkedValue === "개인" ? "input-hidden" : ""}>
                   <label htmlFor="company">회사명</label>
-                  <select
-                    id="company"
-                    value={company}
-                    onChange={this.handleSelect}
-                    required
-                  >
+                  <select id="company" value={company} onChange={this.handleSelect} required>
                     <option value="회사명을 선택하세요" hidden>
                       회사명을 선택하세요
                     </option>
@@ -247,10 +245,7 @@ export default class RegisterForm extends React.Component<
                   value={phone}
                   onChange={this.handleChange}
                 />
-                <div
-                  id="fax-input-container"
-                  className={this.state.checkedValue === "개인" ? "input-hidden" : ""}
-                >
+                <div id="fax-input-container" className={this.state.checkedValue === "개인" ? "input-hidden" : ""}>
                   <label htmlFor="fax">팩스번호</label>
                   <input
                     type="text"
@@ -262,12 +257,7 @@ export default class RegisterForm extends React.Component<
                   />
                 </div>
                 <div className="register-error-msg">{error}</div>
-                <input
-                  type="submit"
-                  id="btn-register"
-                  value="SIGN UP"
-                  disabled={loading}
-                />
+                <input type="submit" id="btn-register" value="SIGN UP" disabled={loading} />
               </form>
             </div>
           </div>

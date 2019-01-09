@@ -2,10 +2,18 @@
  * 1주차 다해 - 전반적인 레이아웃 및 하위 컴포넌트들을 감싸고 있는 최상위 컴포넌트
  */
 
-import * as React from "react";
-import { Header, SideBar, Main, Footer } from "./Layout";
-import { IAppState } from "./IApp";
 import "./App.css";
+
+import React from "react";
+
+import { Header, SideBar, Main, Footer } from "./Layout";
+
+interface IAppState {
+  isOpen: boolean;
+  isSignedIn: boolean;
+  signedInId: string;
+  signedInLevel: number;
+}
 
 export default class App extends React.Component<{}, IAppState> {
   constructor(props: {}) {
@@ -14,11 +22,12 @@ export default class App extends React.Component<{}, IAppState> {
       isOpen: true,
       isSignedIn: localStorage.getItem("x-access-token") ? true : false,
       signedInId: "",
-      signedInLevel: 0
+      signedInLevel: 10,
     };
 
     this.handleSidebar = this.handleSidebar.bind(this);
     this.handleAuth = this.handleAuth.bind(this);
+    this.handlePage = this.handlePage.bind(this);
   }
 
   // App 컴포넌트 마운트 시 호출되는 리액트 라이프사이클 메서드
@@ -49,31 +58,37 @@ export default class App extends React.Component<{}, IAppState> {
     this.setState({
       isSignedIn: result,
       signedInId: id,
-      signedInLevel: level
+      signedInLevel: level,
     });
+  }
+
+  // 사이드바 버튼 클릭 이벤트에 따른 화면 전환을 컨트롤하는 메서드
+  handlePage(pathname: string) {
+    history.pushState(null, "", pathname);
+    this.forceUpdate();
   }
 
   // 레이아웃 컴포넌트 렌더링
   render() {
     return (
       <div className="grid-container">
-        <Header handleSidebar={this.handleSidebar} app={this} />
+        <Header handlePage={this.handlePage} handleSidebar={this.handleSidebar} />
 
         <SideBar
           isOpen={this.state.isOpen}
-          handleSidebar={this.handleSidebar}
           isSignedIn={this.state.isSignedIn}
-          handleAuth={this.handleAuth}
           signedInId={this.state.signedInId}
           signedInLevel={this.state.signedInLevel}
-          app={this}
+          handlePage={this.handlePage}
+          handleSidebar={this.handleSidebar}
+          handleAuth={this.handleAuth}
         />
 
         <Main
           isOpen={this.state.isOpen}
           isSignedIn={this.state.isSignedIn}
           handleAuth={this.handleAuth}
-          app={this}
+          handlePage={this.handlePage}
         />
 
         <Footer isOpen={this.state.isOpen} />
