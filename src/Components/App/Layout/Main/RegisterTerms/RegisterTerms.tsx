@@ -9,11 +9,12 @@ import React from "react";
 import logo from "assets/img/logo_basic.png";
 
 import * as termsContent from "../../../../../util/Terms/terms";
+import { IHandlePage } from "../../../App";
 
 interface IRegisterTermsProps {
   isOpen: boolean;
 
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
 }
 
 interface IRegisterTermsState {

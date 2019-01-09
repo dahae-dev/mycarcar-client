@@ -3,11 +3,12 @@
  */
 
 import React from "react";
+import { IHandlePage } from "../../../../App";
 
 interface IRegisterButtonsProps {
   title: string;
 
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
   handleSidebar: () => void;
 }
 

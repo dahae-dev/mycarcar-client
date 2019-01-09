@@ -12,18 +12,19 @@ import EditForm from "./EditAccount/EditForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
 import RegisterTerms from "./RegisterTerms/RegisterTerms";
 import Rental from "./Rental/Rental";
+import { IHandlePage } from "../../App";
 
 interface ICommonAttribute {
   isOpen: boolean;
 
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
 }
 
 interface IMainProps {
   isOpen: boolean;
   isSignedIn: boolean;
 
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
   handleAuth: (result: boolean, id: string, level: number) => void;
 }
 

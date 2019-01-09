@@ -3,10 +3,11 @@
  */
 
 import React from "react";
+import { IHandlePage } from "../../../../App";
 
 interface ILoginButtonsProps {
   title: string;
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
   handleAuth: (result: boolean, id: string, level: number) => void;
   handleSidebar: () => void;
 }

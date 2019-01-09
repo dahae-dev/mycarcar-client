@@ -9,11 +9,12 @@ import React from "react";
 
 import LoginButtons from "./LoginButtons/LoginButtons";
 import RegisterButtons from "./RegisterButtons/RegisterButtons";
+import { IHandlePage } from "../../../App";
 
 interface IStatusProps {
   isSignedIn: boolean;
 
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
   handleAuth: (result: boolean, id: string, level: number) => void;
   handleSidebar: () => void;
 }

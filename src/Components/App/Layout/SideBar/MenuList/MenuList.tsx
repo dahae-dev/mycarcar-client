@@ -12,11 +12,12 @@ import "./MenuList.css";
 import React, { MouseEvent, Component } from "react";
 
 import { getMenus, IMenus } from "../../../../../util/MenuList";
+import { IHandlePage } from "../../../App";
 
 interface IMenuListProps {
   signedInLevel: number;
 
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
 }
 
 interface IMenuListState {
