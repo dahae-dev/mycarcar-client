@@ -1,24 +1,40 @@
-interface IMenus {
+export interface IMenus {
   icon: string;
   content: string;
+  path: string;
 }
 
 interface IGetMenus {
   (signedInLevel: number): IMenus[];
 }
 
-const defaultMenu = [
-  { icon: "home", content: "홈으로 가기" },
-  { icon: "cab", content: "장기렌트" },
-  { icon: "calculator", content: "운용리스" },
-  { icon: "television", content: "견적내역보기" },
+const guestUserMenu = [
+  { icon: "home", content: "홈으로 가기", path: "/" },
+  { icon: "cab", content: "장기렌트", path: "/rental" },
+  { icon: "calculator", content: "운용리스", path: "/" },
 ];
 
-const nomalUserMenu = [...defaultMenu];
-const capitalUserMenu = [...nomalUserMenu, { icon: "television", content: "차량정보등록" }];
-const superUserMenu = [...capitalUserMenu, { icon: "television", content: "유저정보관리" }];
+const nomalUserMenu = [
+  ...guestUserMenu,
+  { icon: "television", content: "견적내역보기", path: "view_estimate_details" },
+];
+
+const capitalUserMenu = [
+  ...nomalUserMenu,
+  { icon: "television", content: "차량정보등록", path: "vehicle_information_registration" },
+];
+
+const superUserMenu = [
+  ...capitalUserMenu,
+  { icon: "television", content: "유저정보관리", path: "user_information_management" },
+];
 
 export const getMenus: IGetMenus = signedInLevel => {
+  const isGuestUser = signedInLevel === 0;
+  if (isGuestUser) {
+    return guestUserMenu;
+  }
+
   const isNomalUser = signedInLevel < 2;
   if (isNomalUser) {
     return nomalUserMenu;

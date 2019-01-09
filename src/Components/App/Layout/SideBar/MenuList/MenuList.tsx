@@ -11,13 +11,7 @@ import "./MenuList.css";
 
 import React, { MouseEvent, Component } from "react";
 
-import { getApiPathName } from "../../../../../util/api";
-import { getMenus } from "../../../../../util/MenuList";
-
-interface IMenus {
-  icon: string;
-  content: string;
-}
+import { getMenus, IMenus } from "../../../../../util/MenuList";
 
 interface IMenuListProps {
   signedInLevel: number;
@@ -41,7 +35,7 @@ export default class MenuList extends Component<IMenuListProps, IMenuListState> 
   }
 
   handleMenuClick(e: MouseEvent) {
-    const pathname = getApiPathName(e.currentTarget.className);
+    const pathname = e.currentTarget.getAttribute("data-path") || "/";
     this.props.handlePage(pathname);
   }
 
@@ -50,7 +44,7 @@ export default class MenuList extends Component<IMenuListProps, IMenuListState> 
       <div className="menu-wrapper">
         <ul className="menu-list">
           {this.state.menus.map(menu => (
-            <li className={menu.content} onClick={this.handleMenuClick} key={menu.content}>
+            <li className={menu.content} onClick={this.handleMenuClick} key={menu.content} data-path={menu.path}>
               <i className={`menu-icon fa fa-${menu.icon}`} />
               {menu.content}
             </li>
