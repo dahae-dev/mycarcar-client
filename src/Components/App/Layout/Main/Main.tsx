@@ -27,31 +27,29 @@ export default class Main extends React.Component<IMainProps, {}> {
 
   // url 주소창의 endpoint에 따른 화면 전환
   render() {
-    const isLoginPage = location.pathname === "/login";
-    const isTermsPage = location.pathname === "/terms";
-    const isRegisterPage = location.pathname === "/register";
-    const isEditPage = location.pathname === "/edit_account";
+    const pathname = location.pathname;
 
-    if (isLoginPage) {
-      return (
-        <LoginForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
-      );
+    // TODO
+    const isRentalPage = pathname === "rental";
+    const isCarListPage = pathname === "rental";
+    const isCatalogPage = pathname === "rental";
+    const isMemberListPage = pathname === "rental";
+
+    switch (pathname) {
+      case "/login":
+        return (
+          <LoginForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
+        );
+      case "/terms":
+        return <RegisterTerms handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
+      case "/register":
+        return <RegisterForm handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
+      case "/edit_account":
+        return (
+          <EditForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
+        );
+      default:
+        return <Home isOpen={this.props.isOpen} />;
     }
-
-    if (isTermsPage) {
-      return <RegisterTerms handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
-    }
-
-    if (isRegisterPage) {
-      return <RegisterForm handlePage={this.props.handlePage} isOpen={this.props.isOpen} />;
-    }
-
-    if (isEditPage) {
-      return (
-        <EditForm handlePage={this.props.handlePage} handleAuth={this.props.handleAuth} isOpen={this.props.isOpen} />
-      );
-    }
-
-    return <Home isOpen={this.props.isOpen} />;
   }
 }
