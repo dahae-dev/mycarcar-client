@@ -1,7 +1,24 @@
-body {
-  font: 16px "Roboto", Helvetica, sans-serif;
-  box-sizing: border-box;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px "Roboto", Helvetica, sans-serif;
   overflow-x: hidden;
+}
+
+.apply_display_flex {
+  display: flex;
+}
+
+.apply_display_flex_row {
+  display: flex;
+  flex-direction: row;
+}
+
+.apply_display_flex_sb {
+  display: flex;
+  justify-content: space-between;
 }

@@ -1,0 +1,17 @@
+.origin {
+  display: flex;
+
+  background-color: white;
+  color: #1465b1;
+  
+  border: solid 1px #1560a7;
+}
+
+.checked_radio {
+  background-color: #1560a7;
+  color: white;
+}
+
+.origin_radio {
+  padding: 5px;
+}

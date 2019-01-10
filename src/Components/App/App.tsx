@@ -8,6 +8,10 @@ import React from "react";
 
 import { Header, SideBar, Main, Footer } from "./Layout";
 
+export interface IHandlePage {
+  (pathname: string): void;
+}
+
 interface IAppState {
   isOpen: boolean;
   isSignedIn: boolean;

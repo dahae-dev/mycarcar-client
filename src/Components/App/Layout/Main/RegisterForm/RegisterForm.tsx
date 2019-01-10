@@ -9,11 +9,12 @@ import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
+import { IHandlePage } from "../../../App";
 
 interface IRegisterFormProps {
   isOpen: boolean;
 
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
 }
 
 interface IRegisterFormState {

@@ -5,10 +5,11 @@
 import "./Header.css";
 import logo from "assets/img/logo.png";
 import React from "react";
+import { IHandlePage } from "../../App";
 
 interface IHeaderProps {
   handleSidebar: () => void;
-  handlePage: (pathname: string) => void;
+  handlePage: IHandlePage;
 }
 
 export default class Header extends React.Component<IHeaderProps> {

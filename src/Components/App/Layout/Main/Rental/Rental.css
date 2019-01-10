@@ -2,13 +2,80 @@ h1 {
   text-align: center;
 }
 
-.list_group {
-  width: 200px;
-  height: 200px;
-  overflow-y: scroll;
-}
-
-.select_car {
+.item_lists {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+
+  margin: 30px 30px;
+  height: 300px;
+}
+
+.item_list {
+  border-radius: 5px;
+  flex: 1;
+
+  margin: 10px;
+  background-color: white;
+}
+
+.option_and_price {
+  margin: 30px 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  height: 300px;
+}
+
+.option {
+  flex: 3;
+}
+
+.price {
+  background-color: #fff3cd;
+  flex: 1;
+
+  padding: 20px;
+}
+
+.rental {
+  background-color: rgba(0,0,0, 0.2);
+}
+
+.list_group {
+  background-color: rgba(255,255,255, 1);
+  margin: 0;
+}
+
+.item_lists_title {
+  display: flex;
+  justify-content: space-between;
+
+  height: 40px;
+
+  background-color: #718389;
+  color: white;
+}
+
+.item_list_title {
+  padding: 5px;
+}
+
+.list_group {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+.option_and_price > * {
+  margin: 10px;
+}
+
+.price > hr {
+  color: black;
+  border: solid 1px;
+}
+
+.price div {
+  margin: 10px;
 }
