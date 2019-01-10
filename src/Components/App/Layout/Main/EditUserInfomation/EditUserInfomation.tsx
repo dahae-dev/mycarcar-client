@@ -77,7 +77,7 @@ export default class EditUserInfomation extends Component<IEditUserInfomationPro
 
   render() {
     return (
-      <div id="my-main">
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="edit_user_infomation">
           <div>
             <form className="edit_user_info_form" onSubmit={this.handleOnSubmit}>

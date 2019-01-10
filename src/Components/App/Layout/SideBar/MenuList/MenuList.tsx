@@ -11,7 +11,7 @@ import "./MenuList.css";
 
 import React, { MouseEvent, Component } from "react";
 
-import { getMenus, IMenus } from "../../../../../util/MenuList";
+import { getMenus } from "../../../../../util/MenuList";
 import { IHandlePage } from "../../../App";
 
 interface IMenuListProps {
@@ -20,17 +20,9 @@ interface IMenuListProps {
   handlePage: IHandlePage;
 }
 
-interface IMenuListState {
-  menus: IMenus[];
-}
-
-export default class MenuList extends Component<IMenuListProps, IMenuListState> {
+export default class MenuList extends Component<IMenuListProps> {
   constructor(props: IMenuListProps) {
     super(props);
-
-    this.state = {
-      menus: getMenus(this.props.signedInLevel),
-    };
 
     this.handleMenuClick = this.handleMenuClick.bind(this);
   }
@@ -44,7 +36,7 @@ export default class MenuList extends Component<IMenuListProps, IMenuListState> 
     return (
       <div className="menu-wrapper">
         <ul className="menu-list">
-          {this.state.menus.map(menu => (
+          {getMenus(this.props.signedInLevel).map(menu => (
             <li className={menu.content} onClick={this.handleMenuClick} key={menu.content} data-path={menu.path}>
               <i className={`menu-icon fa fa-${menu.icon}`} />
               {menu.content}
