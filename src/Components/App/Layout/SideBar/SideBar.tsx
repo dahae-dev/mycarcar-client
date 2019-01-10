@@ -9,7 +9,7 @@ import React from "react";
 
 import Status from "./Status/Status";
 import MenuList from "./MenuList/MenuList";
-import { IHandlePage } from "../../App";
+import { IHandlePage, IHandleAuth } from "../../App";
 
 interface ISidebarProps {
   isSidebarOpen: boolean;
@@ -18,7 +18,7 @@ interface ISidebarProps {
   signedInLevel: number;
 
   handlePage: IHandlePage;
-  handleAuth: (result: boolean, id: string, level: number) => void;
+  handleAuth: IHandleAuth;
   handleSidebar: () => void;
 }
 

@@ -3,12 +3,12 @@
  */
 
 import React from "react";
-import { IHandlePage } from "../../../../App";
+import { IHandlePage, IHandleAuth } from "../../../../App";
 
 interface ILoginButtonsProps {
   title: string;
   handlePage: IHandlePage;
-  handleAuth: (result: boolean, id: string, level: number) => void;
+  handleAuth: IHandleAuth;
   handleSidebar: () => void;
 }
 

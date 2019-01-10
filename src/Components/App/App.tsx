@@ -12,11 +12,33 @@ export interface IHandlePage {
   (pathname: string): void;
 }
 
+export interface IHandleAuth {
+  (result: boolean, id: string, level: number): void;
+}
+
+export interface IEditUserInfomation {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  level: number;
+  company: string;
+  fax: string;
+  registerDate: string;
+}
+
+export interface IHandleEditUserInfomationBtnClick {
+  (editUserInfomation: IEditUserInfomation): void;
+}
+
 interface IAppState {
   isSidebarOpen: boolean;
   isSignedIn: boolean;
+
   signedInId: string;
   signedInLevel: number;
+
+  editUserInfomation: IEditUserInfomation;
 }
 
 export default class App extends React.Component<{}, IAppState> {
@@ -27,11 +49,22 @@ export default class App extends React.Component<{}, IAppState> {
       isSignedIn: localStorage.getItem("x-access-token") ? true : false,
       signedInId: "",
       signedInLevel: 10,
+      editUserInfomation: {
+        id: "",
+        name: "",
+        email: "",
+        phone: "",
+        level: -1,
+        company: "",
+        fax: "",
+        registerDate: "",
+      },
     };
 
     this.handleSidebar = this.handleSidebar.bind(this);
     this.handleAuth = this.handleAuth.bind(this);
     this.handlePage = this.handlePage.bind(this);
+    this.handleEditUserInfomationBtnClick = this.handleEditUserInfomationBtnClick.bind(this);
   }
 
   // App 컴포넌트 마운트 시 호출되는 리액트 라이프사이클 메서드
@@ -50,6 +83,10 @@ export default class App extends React.Component<{}, IAppState> {
         this.setState({ isSidebarOpen: false });
       }
     });
+  }
+
+  handleEditUserInfomationBtnClick(editUserInfomation: IEditUserInfomation) {
+    this.setState({ editUserInfomation });
   }
 
   // 헤더에 있는 사이드바 토글 버튼 클릭시 각각의 css 적용시켜주는 메서드
@@ -89,10 +126,12 @@ export default class App extends React.Component<{}, IAppState> {
         />
 
         <Main
+          editUserInfomation={this.state.editUserInfomation}
           isSidebarOpen={this.state.isSidebarOpen}
           isSignedIn={this.state.isSignedIn}
           handleAuth={this.handleAuth}
           handlePage={this.handlePage}
+          handleEditUserInfomationBtnClick={this.handleEditUserInfomationBtnClick}
         />
 
         <Footer isSidebarOpen={this.state.isSidebarOpen} />

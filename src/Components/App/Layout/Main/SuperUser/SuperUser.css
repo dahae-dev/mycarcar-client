@@ -1,0 +1,45 @@
+.super_user {
+  background-color: rgb(221, 229, 237);
+
+  padding: 20px;
+}
+
+.mb_list {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mb_list_title {
+  background-color: #9ec8df;
+}
+
+.mb_list:nth-child(2n) {
+  background-color: #c0deed;
+}
+
+.mb_list_element {
+  flex: 1;
+  text-align: center;
+  padding: 20px;
+}
+
+.mb_list_nav {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mb_list_nav * {
+  font-size: 20px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+}
+
+.mb_list_nav *:hover {
+  cursor: pointer;
+}
+
+.mb_edit_btn:hover {
+  cursor: pointer;
+}

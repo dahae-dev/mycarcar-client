@@ -16,17 +16,17 @@ const guestUserMenu = [
 
 const nomalUserMenu = [
   ...guestUserMenu,
-  { icon: "television", content: "견적내역보기", path: "view_estimate_details" },
+  { icon: "television", content: "견적내역보기", path: "/view_estimate_details" },
 ];
 
 const capitalUserMenu = [
   ...nomalUserMenu,
-  { icon: "television", content: "차량정보등록", path: "vehicle_information_registration" },
+  { icon: "television", content: "차량정보등록", path: "/vehicle_information_registration" },
 ];
 
 const superUserMenu = [
   ...capitalUserMenu,
-  { icon: "television", content: "유저정보관리", path: "user_information_management" },
+  { icon: "television", content: "유저정보관리", path: "/admin/user_information_management" },
 ];
 
 export const getMenus: IGetMenus = signedInLevel => {

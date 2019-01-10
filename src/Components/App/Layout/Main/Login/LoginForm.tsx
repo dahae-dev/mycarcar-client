@@ -9,13 +9,13 @@ import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
-import { IHandlePage } from "../../../App";
+import { IHandlePage, IHandleAuth } from "../../../App";
 
 interface ILoginFormProps {
   isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
-  handleAuth: (result: boolean, id: string, level: number) => void;
+  handleAuth: IHandleAuth;
 }
 
 interface ILoginFormState {
@@ -89,42 +89,45 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
         </div>
       );
     }
+
     return (
-      <div className="login-form-container">
-        <div>
-          <div className="login-logo">
-            <img src={logo} />
-          </div>
-          <div className="login-form-box">
-            <div className="login-title">
-              <i className="fa fa-sign-in" />
-              로그인
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+        <div className="login-form-container">
+          <div>
+            <div className="login-logo">
+              <img src={logo} />
             </div>
-            <hr />
-            <form className="login-form-input" method="post" onSubmit={this.handleSubmit}>
-              <label htmlFor="id">USERNAME</label>
-              <input
-                type="text"
-                name="u_id"
-                id="id"
-                placeholder="회원아이디"
-                required
-                value={id}
-                onChange={this.handleChange}
-              />
-              <label htmlFor="pw">PASSWORD</label>
-              <input
-                type="password"
-                name="u_pw"
-                id="pw"
-                placeholder="비밀번호"
-                required
-                value={pw}
-                onChange={this.handleChange}
-              />
-              <div className="login-error-msg">{error}</div>
-              <input type="submit" id="btn-login" value="SIGN IN" disabled={loading} />
-            </form>
+            <div className="login-form-box">
+              <div className="login-title">
+                <i className="fa fa-sign-in" />
+                로그인
+              </div>
+              <hr />
+              <form className="login-form-input" method="post" onSubmit={this.handleSubmit}>
+                <label htmlFor="id">USERNAME</label>
+                <input
+                  type="text"
+                  name="u_id"
+                  id="id"
+                  placeholder="회원아이디"
+                  required
+                  value={id}
+                  onChange={this.handleChange}
+                />
+                <label htmlFor="pw">PASSWORD</label>
+                <input
+                  type="password"
+                  name="u_pw"
+                  id="pw"
+                  placeholder="비밀번호"
+                  required
+                  value={pw}
+                  onChange={this.handleChange}
+                />
+                <div className="login-error-msg">{error}</div>
+                <input type="submit" id="btn-login" value="SIGN IN" disabled={loading} />
+              </form>
+            </div>
           </div>
         </div>
       </div>

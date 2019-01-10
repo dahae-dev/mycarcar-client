@@ -9,13 +9,13 @@ import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
-import { IHandlePage } from "../../../App";
+import { IHandlePage, IHandleAuth } from "../../../App";
 
 interface IEditFormProps {
   isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
-  handleAuth: (result: boolean, id: string, level: number) => void;
+  handleAuth: IHandleAuth;
 }
 
 interface IPostEdit {

@@ -127,6 +127,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           detailList: [{ car_detail: selectMessages.detail }],
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -154,6 +155,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           detailList: [{ car_detail: selectMessages.detail }],
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -183,6 +185,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           detailList: [{ car_detail: selectMessages.detail }],
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -213,6 +216,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           model,
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -248,6 +252,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList,
           detail,
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -314,7 +319,6 @@ export default class Rental extends Component<{}, IRentalStates> {
     const option = this.state.option;
     const optionInfo = this.state.optionList.reduce(
       (accu, curr) => {
-        // console.log(curr.car_option, option);
         return curr.car_option === option ? curr : accu;
       },
       {
@@ -333,6 +337,11 @@ export default class Rental extends Component<{}, IRentalStates> {
         <h1>
           <i className="fa fa-list-ol">step1</i>
         </h1>
+        <h3>
+          {`${this.state.brand} >> ${this.state.series} >> ${this.state.model} >> ${this.state.detail} >> ${
+            this.state.grade
+          } >> ${this.state.option}`}
+        </h3>
         <div className="select_car">
           <div className="item_lists">
             <div className="item_list">
@@ -424,10 +433,10 @@ export default class Rental extends Component<{}, IRentalStates> {
             </div>
 
             <div className="price">
-              <div>차량가격 : {`${carPrice}원`}</div>
-              <div>옵션가격 : {`${optionPrice}원`}</div>
+              <div>차량가격 : {`${carPrice.toLocaleString()}원`}</div>
+              <div>옵션가격 : {`${optionPrice.toLocaleString()}원`}</div>
               <hr />
-              <div>최종가격 : {`${resultPrice}원`}</div>
+              <div>최종가격 : {`${resultPrice.toLocaleString()}원`}</div>
             </div>
           </div>
         </div>
