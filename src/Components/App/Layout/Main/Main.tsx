@@ -4,7 +4,7 @@
 
 import "./Main.css";
 
-import React from "react";
+import React, { Component } from "react";
 
 import Home from "./Home/Home";
 import LoginForm from "./Login/LoginForm";
@@ -12,42 +12,33 @@ import EditForm from "./EditAccount/EditForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
 import RegisterTerms from "./RegisterTerms/RegisterTerms";
 import Rental from "./Rental/Rental";
-import { IHandlePage } from "../../App";
-
-interface ICommonAttribute {
-  isOpen: boolean;
-
-  handlePage: IHandlePage;
-}
+import { IHandlePage, IHandleEditUserInfomationBtnClick, IHandleAuth, IEditUserInfomation } from "../../App";
+import SuperUser from "./SuperUser/SuperUser";
+import EditUserInfomation from "./EditUserInfomation/EditUserInfomation";
 
 interface IMainProps {
-  isOpen: boolean;
+  editUserInfomation: IEditUserInfomation;
+
+  isSidebarOpen: boolean;
   isSignedIn: boolean;
 
   handlePage: IHandlePage;
-  handleAuth: (result: boolean, id: string, level: number) => void;
+  handleAuth: IHandleAuth;
+  handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
 }
 
-interface IMainState {
-  commonAttribute: ICommonAttribute;
-}
-
-export default class Main extends React.Component<IMainProps, IMainState> {
+export default class Main extends Component<IMainProps> {
   constructor(props: IMainProps) {
     super(props);
-
-    this.state = {
-      commonAttribute: {
-        handlePage: this.props.handlePage,
-        isOpen: this.props.isOpen,
-      },
-    };
   }
 
   // url 주소창의 endpoint에 따른 화면 전환
   render() {
     const pathname = location.pathname;
-    const commonAttribute = this.state.commonAttribute;
+    const commonAttribute = {
+      handlePage: this.props.handlePage,
+      isSidebarOpen: this.props.isSidebarOpen,
+    };
 
     switch (pathname) {
       case "/login":
@@ -60,6 +51,15 @@ export default class Main extends React.Component<IMainProps, IMainState> {
         return <EditForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
       case "/rental":
         return <Rental {...commonAttribute} />;
+      case "/admin/user_information_management":
+        return (
+          <SuperUser
+            {...commonAttribute}
+            handleEditUserInfomationBtnClick={this.props.handleEditUserInfomationBtnClick}
+          />
+        );
+      case "/admin/edit_user_infomation":
+        return <EditUserInfomation {...commonAttribute} editUserInfomation={this.props.editUserInfomation} />;
       default:
         return <Home {...commonAttribute} />;
     }

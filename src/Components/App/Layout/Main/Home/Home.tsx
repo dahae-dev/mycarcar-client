@@ -13,7 +13,7 @@ import bottom1 from "assets/img/main_quick1.jpg";
 import bottom2 from "assets/img/main_quick2.jpg";
 
 interface IHomeProps {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
 }
 
 export default class Home extends React.Component<IHomeProps> {
@@ -23,7 +23,7 @@ export default class Home extends React.Component<IHomeProps> {
 
   render() {
     return (
-      <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
         <Carousel>
           <Carousel.Item>
             <img width="100%" height="100%" src={slider1} />

@@ -13,11 +13,6 @@ body {
   display: flex;
 }
 
-.apply_display_flex_row {
-  display: flex;
-  flex-direction: row;
-}
-
 .apply_display_flex_sb {
   display: flex;
   justify-content: space-between;

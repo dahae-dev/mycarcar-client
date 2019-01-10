@@ -1,0 +1,81 @@
+.edit_user_infomation * {
+  all: unset;
+}
+
+.edit_user_infomation {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit_user_infomation > div {
+  width: 40%;
+  height: 70%;
+}
+
+.edit_user_info_form {
+  width: 100%;
+  height: 100%;
+
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+
+  border: solid 1px black;
+  border-radius: 5px;
+  padding: 30px;
+}
+
+.edit_user_info {
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+
+  margin: 10px;
+}
+
+.edit_user_info > *:first-child {
+  flex: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: bold;
+}
+
+.edit_user_info > *:last-child {
+  flex: 2;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: solid 1px black;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.edit_user_info_form > input[type="submit"] {
+  background-color: #4caf50;
+
+  border: solid 1px black;
+  border-radius: 5px;
+
+  height: 50px;
+  
+  margin-top: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+
+  text-align: center;
+  font-weight: bold;
+}
+
+.edit_user_info > input:hover {
+  cursor: pointer;
+}

@@ -6,7 +6,7 @@ import "./Footer.css";
 import React from "react";
 
 interface IFooterProps {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
 }
 
 export default class Footer extends React.Component<IFooterProps> {
@@ -16,7 +16,7 @@ export default class Footer extends React.Component<IFooterProps> {
 
   render() {
     return (
-      <div id="my-footer" className={this.props.isOpen ? "" : "my-footer-margin-left"}>
+      <div id="my-footer" className={this.props.isSidebarOpen ? "" : "my-footer-margin-left"}>
         <div id="ft-copy">
           Copyright &copy; <b>mycarcar.com</b> All rights reserved.
         </div>

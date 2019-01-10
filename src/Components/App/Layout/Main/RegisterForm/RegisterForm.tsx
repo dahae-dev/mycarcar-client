@@ -12,7 +12,7 @@ import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 
 interface IRegisterFormProps {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
 }
@@ -123,7 +123,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     // 로딩 중일 때는 pre-loader 렌더링
     if (loading) {
       return (
-        <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
+        <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
           <div className="register-form-container">
             <img className="pre-loader" src={loader} />
           </div>
@@ -132,7 +132,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     }
 
     return (
-      <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="register-form-container">
           <div>
             <div className="register-logo">
