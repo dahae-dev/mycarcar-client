@@ -30,6 +30,10 @@ interface IOption {
   car_option_price: number;
 }
 
+interface IRentalProps {
+  isSidebarOpen: boolean;
+}
+
 interface IRentalStates {
   origin: string;
 
@@ -77,8 +81,8 @@ function isInvaildItem(item: string): boolean {
   return false;
 }
 
-export default class Rental extends Component<{}, IRentalStates> {
-  constructor(props: {}) {
+export default class Rental extends Component<IRentalProps, IRentalStates> {
+  constructor(props: IRentalProps) {
     super(props);
 
     this.state = {
@@ -333,110 +337,112 @@ export default class Rental extends Component<{}, IRentalStates> {
     const resultPrice = carPrice + optionPrice;
 
     return (
-      <div className="rental">
-        <h1>
-          <i className="fa fa-list-ol">step1</i>
-        </h1>
-        <h3>
-          {`${this.state.brand} >> ${this.state.series} >> ${this.state.model} >> ${this.state.detail} >> ${
-            this.state.grade
-          } >> ${this.state.option}`}
-        </h3>
-        <div className="select_car">
-          <div className="item_lists">
-            <div className="item_list">
-              <div className="item_lists_title">
-                <div className="item_list_title">
-                  <div className="item_list_title">제조사</div>
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+        <div className="rental">
+          <h1>
+            <i className="fa fa-list-ol">step1</i>
+          </h1>
+          <h3>
+            {`${this.state.brand} >> ${this.state.series} >> ${this.state.model} >> ${this.state.detail} >> ${
+              this.state.grade
+            } >> ${this.state.option}`}
+          </h3>
+          <div className="select_car">
+            <div className="item_lists">
+              <div className="item_list">
+                <div className="item_lists_title">
+                  <div className="item_list_title">
+                    <div className="item_list_title">제조사</div>
+                  </div>
+                  <Origin handleOriginClick={this.handleOriginClick} />
                 </div>
-                <Origin handleOriginClick={this.handleOriginClick} />
+                <ul className="list_group">
+                  {this.state.brandList.map(v => (
+                    <li className="list-group-item" onClick={this.handleBrandClick} key={v.car_brand}>
+                      {v.car_brand}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="list_group">
-                {this.state.brandList.map(v => (
-                  <li className="list-group-item" onClick={this.handleBrandClick} key={v.car_brand}>
-                    {v.car_brand}
-                  </li>
-                ))}
-              </ul>
+
+              <div className="item_list">
+                <div className="item_lists_title">
+                  <div className="item_list_title">시리즈</div>
+                </div>
+                <ul className="list_group">
+                  {this.state.seriesList.map(v => (
+                    <li className="list-group-item" onClick={this.handleSeriesClick} key={v.car_series}>
+                      {v.car_series}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="item_list">
+                <div className="item_lists_title">
+                  <div className="item_list_title">모델명</div>
+                </div>
+                <ul className="list_group">
+                  {this.state.modelList.map(v => (
+                    <li className="list-group-item" onClick={this.handleModelClick} key={v.car_model}>
+                      {v.car_model}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="item_list">
+                <div className="item_lists_title">
+                  <div className="item_list_title">상세모델</div>
+                </div>
+                <ul className="list_group">
+                  {this.state.detailList.map(v => (
+                    <li className="list-group-item" onClick={this.handleDetailClick} key={v.car_detail}>
+                      {v.car_detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="item_list">
+                <div className="item_lists_title">
+                  <div className="item_list_title">등급</div>
+                </div>
+                <ul className="list_group">
+                  {this.state.gradeList.map(v => (
+                    <li className="list-group-item" onClick={this.handleGradeClick} key={v.car_grade}>
+                      {v.car_grade}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            <div className="item_list">
-              <div className="item_lists_title">
-                <div className="item_list_title">시리즈</div>
+            <div className="option_and_price">
+              <div className="option">
+                <div className="item_lists_title">
+                  <div className="item_list_title">옵션</div>
+                </div>
+                <ul className="list_group">
+                  {this.state.optionList.map(v => (
+                    <li
+                      className="list-group-item apply_display_flex_sb"
+                      onClick={this.handleOptionClick}
+                      key={v.car_option}
+                    >
+                      <div>{v.car_option}</div>
+                      <div>{`${v.car_option_price}원`}</div>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="list_group">
-                {this.state.seriesList.map(v => (
-                  <li className="list-group-item" onClick={this.handleSeriesClick} key={v.car_series}>
-                    {v.car_series}
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            <div className="item_list">
-              <div className="item_lists_title">
-                <div className="item_list_title">모델명</div>
+              <div className="price">
+                <div>차량가격 : {`${carPrice.toLocaleString()}원`}</div>
+                <div>옵션가격 : {`${optionPrice.toLocaleString()}원`}</div>
+                <hr />
+                <div>최종가격 : {`${resultPrice.toLocaleString()}원`}</div>
               </div>
-              <ul className="list_group">
-                {this.state.modelList.map(v => (
-                  <li className="list-group-item" onClick={this.handleModelClick} key={v.car_model}>
-                    {v.car_model}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="item_list">
-              <div className="item_lists_title">
-                <div className="item_list_title">상세모델</div>
-              </div>
-              <ul className="list_group">
-                {this.state.detailList.map(v => (
-                  <li className="list-group-item" onClick={this.handleDetailClick} key={v.car_detail}>
-                    {v.car_detail}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="item_list">
-              <div className="item_lists_title">
-                <div className="item_list_title">등급</div>
-              </div>
-              <ul className="list_group">
-                {this.state.gradeList.map(v => (
-                  <li className="list-group-item" onClick={this.handleGradeClick} key={v.car_grade}>
-                    {v.car_grade}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="option_and_price">
-            <div className="option">
-              <div className="item_lists_title">
-                <div className="item_list_title">옵션</div>
-              </div>
-              <ul className="list_group">
-                {this.state.optionList.map(v => (
-                  <li
-                    className="list-group-item apply_display_flex_sb"
-                    onClick={this.handleOptionClick}
-                    key={v.car_option}
-                  >
-                    <div>{v.car_option}</div>
-                    <div>{`${v.car_option_price}원`}</div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="price">
-              <div>차량가격 : {`${carPrice.toLocaleString()}원`}</div>
-              <div>옵션가격 : {`${optionPrice.toLocaleString()}원`}</div>
-              <hr />
-              <div>최종가격 : {`${resultPrice.toLocaleString()}원`}</div>
             </div>
           </div>
         </div>

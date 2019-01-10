@@ -103,55 +103,57 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
 
   render() {
     return (
-      <div className="super_user">
-        <div>
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+        <div className="super_user">
           <div>
-            <div className="mb_list mb_list_title">
-              <div className="mb_list_element">아이디</div>
-              <div className="mb_list_element">이름</div>
-              <div className="mb_list_element">이메일</div>
-              <div className="mb_list_element">휴대폰</div>
-              <div className="mb_list_element">회사</div>
-              <div className="mb_list_element">팩스</div>
-              <div className="mb_list_element">등급</div>
-              <div className="mb_list_element">가입일</div>
-              <div className="mb_list_element">수정</div>
-            </div>
-          </div>
-          <div>
-            {this.state.userList.map((member, idx) => (
-              <div className="mb_list" key={member.id}>
-                <div className="mb_list_element">{member.id}</div>
-                <div className="mb_list_element">{member.name}</div>
-                <div className="mb_list_element">{member.email}</div>
-                <div className="mb_list_element">{member.phone}</div>
-                <div className="mb_list_element">{member.company}</div>
-                <div className="mb_list_element">{member.fax}</div>
-                <div className="mb_list_element">{member.level}</div>
-                <div className="mb_list_element">{member.registerDate}</div>
-                <div className="mb_list_element mb_edit_btn" onClick={this.handleEditClick} data-index={idx}>
-                  수정
-                </div>
+            <div>
+              <div className="mb_list mb_list_title">
+                <div className="mb_list_element">아이디</div>
+                <div className="mb_list_element">이름</div>
+                <div className="mb_list_element">이메일</div>
+                <div className="mb_list_element">휴대폰</div>
+                <div className="mb_list_element">회사</div>
+                <div className="mb_list_element">팩스</div>
+                <div className="mb_list_element">등급</div>
+                <div className="mb_list_element">가입일</div>
+                <div className="mb_list_element">수정</div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb_list_nav">
-          <div>
-            <i className="fa fa-angle-double-left" />
-          </div>
-          <div>
-            {Array(this.state.pageCount)
-              .fill(1)
-              .map((v, i) => (
-                <div key={i} data-page={i + 1} onClick={this.handleMemberListNumberClick}>
-                  {i + 1}
+            </div>
+            <div>
+              {this.state.userList.map((member, idx) => (
+                <div className="mb_list" key={member.id}>
+                  <div className="mb_list_element">{member.id}</div>
+                  <div className="mb_list_element">{member.name}</div>
+                  <div className="mb_list_element">{member.email}</div>
+                  <div className="mb_list_element">{member.phone}</div>
+                  <div className="mb_list_element">{member.company}</div>
+                  <div className="mb_list_element">{member.fax}</div>
+                  <div className="mb_list_element">{member.level}</div>
+                  <div className="mb_list_element">{member.registerDate}</div>
+                  <div className="mb_list_element mb_edit_btn" onClick={this.handleEditClick} data-index={idx}>
+                    수정
+                  </div>
                 </div>
               ))}
+            </div>
           </div>
-          <div>
-            <i className="fa fa-angle-double-right" />
+
+          <div className="mb_list_nav">
+            <div>
+              <i className="fa fa-angle-double-left" />
+            </div>
+            <div>
+              {Array(this.state.pageCount)
+                .fill(1)
+                .map((v, i) => (
+                  <div key={i} data-page={i + 1} onClick={this.handleMemberListNumberClick}>
+                    {i + 1}
+                  </div>
+                ))}
+            </div>
+            <div>
+              <i className="fa fa-angle-double-right" />
+            </div>
           </div>
         </div>
       </div>

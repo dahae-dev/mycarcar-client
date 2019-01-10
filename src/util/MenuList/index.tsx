@@ -30,6 +30,7 @@ const superUserMenu = [
 ];
 
 export const getMenus: IGetMenus = signedInLevel => {
+  console.log("signedInLevel : ", signedInLevel);
   const isGuestUser = signedInLevel === 0;
   if (isGuestUser) {
     return guestUserMenu;
