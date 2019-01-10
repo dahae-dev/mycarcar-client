@@ -5,8 +5,6 @@ import axios from "axios";
 
 import Origin from "./Origin/Origin";
 
-interface IRentalProps {}
-
 interface IBrand {
   car_brand: string;
 }
@@ -29,6 +27,7 @@ interface IGrade {
 
 interface IOption {
   car_option: string;
+  car_option_price: number;
 }
 
 interface IRentalStates {
@@ -51,10 +50,35 @@ interface IRentalStates {
 
   option: string;
   optionList: IOption[];
+
+  price: number;
 }
 
-export default class Rental extends Component<IRentalProps, IRentalStates> {
-  constructor(props: IRentalProps) {
+interface ISelectMessages {
+  [key: string]: string;
+}
+
+const selectMessages: ISelectMessages = {
+  none: "정보없음",
+  series: "제조사를 선택해주세요.",
+  model: "시리즈를 선택해주세요.",
+  detail: "모델을 선택해주세요.",
+  grade: "상세모델을 선택해주세요.",
+  option: "등급을 선택해주세요.",
+};
+
+function isInvaildItem(item: string): boolean {
+  for (const msg in selectMessages) {
+    if (item === selectMessages[msg]) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export default class Rental extends Component<{}, IRentalStates> {
+  constructor(props: {}) {
     super(props);
 
     this.state = {
@@ -64,19 +88,21 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       brandList: [{ car_brand: "" }],
 
       series: "",
-      seriesList: [{ car_series: "" }],
+      seriesList: [{ car_series: selectMessages.series }],
 
       model: "",
-      modelList: [{ car_model: "" }],
+      modelList: [{ car_model: selectMessages.model }],
 
       detail: "",
-      detailList: [{ car_detail: "" }],
+      detailList: [{ car_detail: selectMessages.detail }],
 
       grade: "",
-      gradeList: [{ car_grade: "" }],
+      gradeList: [{ car_grade: selectMessages.grade }],
 
       option: "",
-      optionList: [{ car_option: "" }],
+      optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+
+      price: 0,
     };
 
     this.handleOriginClick = this.handleOriginClick.bind(this);
@@ -85,6 +111,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
     this.handleModelClick = this.handleModelClick.bind(this);
     this.handleDetailClick = this.handleDetailClick.bind(this);
     this.handleGradeClick = this.handleGradeClick.bind(this);
+    this.handleOptionClick = this.handleOptionClick.bind(this);
   }
 
   handleOriginClick(origin: string) {
@@ -95,11 +122,11 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
         this.setState({
           brandList,
           origin,
-          seriesList: [{ car_series: "" }],
-          modelList: [{ car_model: "" }],
-          detailList: [{ car_detail: "" }],
-          gradeList: [{ car_grade: "" }],
-          optionList: [{ car_option: "" }],
+          seriesList: [{ car_series: selectMessages.series }],
+          modelList: [{ car_model: selectMessages.model }],
+          detailList: [{ car_detail: selectMessages.detail }],
+          gradeList: [{ car_grade: selectMessages.grade }],
+          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
         });
       })
       .catch((err: Error) => {
@@ -108,9 +135,12 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleBrandClick(e: MouseEvent) {
-    const origin = this.state.origin;
-    const brand = e.currentTarget.textContent || "";
+    const brand = e.currentTarget.textContent || selectMessages.none;
+    if (isInvaildItem(brand)) {
+      return;
+    }
 
+    const origin = this.state.origin;
     const encodedBrand = encodeURI(brand);
 
     axios
@@ -120,10 +150,10 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
         this.setState({
           seriesList,
           brand,
-          modelList: [{ car_model: "" }],
-          detailList: [{ car_detail: "" }],
-          gradeList: [{ car_grade: "" }],
-          optionList: [{ car_option: "" }],
+          modelList: [{ car_model: selectMessages.model }],
+          detailList: [{ car_detail: selectMessages.detail }],
+          gradeList: [{ car_grade: selectMessages.grade }],
+          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
         });
       })
       .catch((err: Error) => {
@@ -132,9 +162,13 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleSeriesClick(e: MouseEvent) {
+    const series = e.currentTarget.textContent || selectMessages.none;
+    if (isInvaildItem(series)) {
+      return;
+    }
+
     const origin = this.state.origin;
     const brand = this.state.brand;
-    const series = e.currentTarget.textContent || "";
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -146,9 +180,9 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
         this.setState({
           modelList,
           series,
-          detailList: [{ car_detail: "" }],
-          gradeList: [{ car_grade: "" }],
-          optionList: [{ car_option: "" }],
+          detailList: [{ car_detail: selectMessages.detail }],
+          gradeList: [{ car_grade: selectMessages.grade }],
+          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
         });
       })
       .catch((err: Error) => {
@@ -157,10 +191,14 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleModelClick(e: MouseEvent) {
+    const model = e.currentTarget.textContent || selectMessages.none;
+    if (isInvaildItem(model)) {
+      return;
+    }
+
     const origin = this.state.origin;
     const brand = this.state.brand;
     const series = this.state.series;
-    const model = e.currentTarget.textContent || "";
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -173,8 +211,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
         this.setState({
           detailList,
           model,
-          gradeList: [{ car_grade: "" }],
-          optionList: [{ car_option: "" }],
+          gradeList: [{ car_grade: selectMessages.grade }],
+          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
         });
       })
       .catch((err: Error) => {
@@ -183,11 +221,15 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleDetailClick(e: MouseEvent) {
+    const detail = e.currentTarget.textContent || selectMessages.none;
+    if (isInvaildItem(detail)) {
+      return;
+    }
+
     const origin = this.state.origin;
     const brand = this.state.brand;
     const series = this.state.series;
     const model = this.state.model;
-    const detail = e.currentTarget.textContent || "";
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -202,7 +244,11 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       )
       .then(res => {
         const gradeList: IGrade[] = res.data.gradeList;
-        this.setState({ gradeList, detail, optionList: [{ car_option: "" }] });
+        this.setState({
+          gradeList,
+          detail,
+          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+        });
       })
       .catch((err: Error) => {
         alert(err.message);
@@ -210,12 +256,16 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleGradeClick(e: MouseEvent) {
+    const grade = e.currentTarget.textContent || selectMessages.none;
+    if (isInvaildItem(grade)) {
+      return;
+    }
+
     const origin = this.state.origin;
     const brand = this.state.brand;
     const series = this.state.series;
     const model = this.state.model;
     const detail = this.state.detail;
-    const grade = e.currentTarget.textContent || "";
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -230,12 +280,22 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
         }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`,
       )
       .then(res => {
+        const price = res.data.car_price;
         const optionList: IOption[] = res.data.optionList;
-        this.setState({ optionList, grade });
+        this.setState({ optionList, grade, price });
       })
       .catch((err: Error) => {
         alert(err.message);
       });
+  }
+
+  handleOptionClick(e: MouseEvent) {
+    const option = e.currentTarget.children[0].textContent || selectMessages.none;
+    if (isInvaildItem(option)) {
+      return;
+    }
+
+    this.setState({ option });
   }
 
   componentDidMount() {
@@ -251,85 +311,124 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   render() {
+    const option = this.state.option;
+    const optionInfo = this.state.optionList.reduce(
+      (accu, curr) => {
+        // console.log(curr.car_option, option);
+        return curr.car_option === option ? curr : accu;
+      },
+      {
+        car_option: selectMessages.none,
+        car_option_price: 0,
+      },
+    );
+
+    const carPrice = this.state.price;
+    const optionPrice = optionInfo.car_option_price;
+
+    const resultPrice = carPrice + optionPrice;
+
     return (
       <div className="rental">
         <h1>
           <i className="fa fa-list-ol">step1</i>
         </h1>
         <div className="select_car">
-          <div>
-            <div>
-              제조사
-              <Origin handleOriginClick={this.handleOriginClick} />
+          <div className="item_lists">
+            <div className="item_list">
+              <div className="item_lists_title">
+                <div className="item_list_title">
+                  <div className="item_list_title">제조사</div>
+                </div>
+                <Origin handleOriginClick={this.handleOriginClick} />
+              </div>
+              <ul className="list_group">
+                {this.state.brandList.map(v => (
+                  <li className="list-group-item" onClick={this.handleBrandClick} key={v.car_brand}>
+                    {v.car_brand}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="list_group list-group">
-              {this.state.brandList.map(v => (
-                <li className="list-group-item" onClick={this.handleBrandClick} key={v.car_brand}>
-                  {v.car_brand}
-                </li>
-              ))}
-            </ul>
+
+            <div className="item_list">
+              <div className="item_lists_title">
+                <div className="item_list_title">시리즈</div>
+              </div>
+              <ul className="list_group">
+                {this.state.seriesList.map(v => (
+                  <li className="list-group-item" onClick={this.handleSeriesClick} key={v.car_series}>
+                    {v.car_series}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="item_list">
+              <div className="item_lists_title">
+                <div className="item_list_title">모델명</div>
+              </div>
+              <ul className="list_group">
+                {this.state.modelList.map(v => (
+                  <li className="list-group-item" onClick={this.handleModelClick} key={v.car_model}>
+                    {v.car_model}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="item_list">
+              <div className="item_lists_title">
+                <div className="item_list_title">상세모델</div>
+              </div>
+              <ul className="list_group">
+                {this.state.detailList.map(v => (
+                  <li className="list-group-item" onClick={this.handleDetailClick} key={v.car_detail}>
+                    {v.car_detail}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="item_list">
+              <div className="item_lists_title">
+                <div className="item_list_title">등급</div>
+              </div>
+              <ul className="list_group">
+                {this.state.gradeList.map(v => (
+                  <li className="list-group-item" onClick={this.handleGradeClick} key={v.car_grade}>
+                    {v.car_grade}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <div>
-            <div>시리즈</div>
-            <ul className="list_group list-group">
-              {this.state.seriesList.map(v => (
-                <li className="list-group-item" onClick={this.handleSeriesClick} key={v.car_series}>
-                  {v.car_series}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="option_and_price">
+            <div className="option">
+              <div className="item_lists_title">
+                <div className="item_list_title">옵션</div>
+              </div>
+              <ul className="list_group">
+                {this.state.optionList.map(v => (
+                  <li
+                    className="list-group-item apply_display_flex_sb"
+                    onClick={this.handleOptionClick}
+                    key={v.car_option}
+                  >
+                    <div>{v.car_option}</div>
+                    <div>{`${v.car_option_price}원`}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          <div>
-            <div>모델명</div>
-            <ul className="list_group list-group">
-              {this.state.modelList.map(v => (
-                <li className="list-group-item" onClick={this.handleModelClick} key={v.car_model}>
-                  {v.car_model}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div>상세모델</div>
-            <ul className="list_group list-group">
-              {this.state.detailList.map(v => (
-                <li className="list-group-item" onClick={this.handleDetailClick} key={v.car_detail}>
-                  {v.car_detail}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div>등급</div>
-            <ul className="list_group list-group">
-              {this.state.gradeList.map(v => (
-                <li className="list-group-item" onClick={this.handleGradeClick} key={v.car_grade}>
-                  {v.car_grade}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div>옵션</div>
-            <ul className="list_group list-group">
-              {this.state.optionList.map(v => (
-                <li className="list-group-item" key={v.car_option}>
-                  {v.car_option}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div>차량가격 : </div>
-            <div>옵션가격 : </div>
-            <div>최종가격 : </div>
+            <div className="price">
+              <div>차량가격 : {`${carPrice}원`}</div>
+              <div>옵션가격 : {`${optionPrice}원`}</div>
+              <hr />
+              <div>최종가격 : {`${resultPrice}원`}</div>
+            </div>
           </div>
         </div>
       </div>

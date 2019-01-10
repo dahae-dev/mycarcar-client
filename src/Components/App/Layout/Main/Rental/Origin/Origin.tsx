@@ -37,13 +37,15 @@ export default class Origin extends Component<IOriginProps, IOriginStates> {
   }
 
   public render() {
+    const isKorea = this.state.isKorea;
+
     return (
-      <div className="Origin">
-        <div className="radio" onClick={this.handleKoreaClick}>
-          국산
+      <div className="origin">
+        <div className={`origin_radio ${isKorea ? "checked_radio" : ""}`} onClick={this.handleKoreaClick}>
+          국산차
         </div>
-        <div className="radio" onClick={this.handleForeignClick}>
-          수입산
+        <div className={`origin_radio ${isKorea ? "" : "checked_radio"}`} onClick={this.handleForeignClick}>
+          수입차
         </div>
       </div>
     );
