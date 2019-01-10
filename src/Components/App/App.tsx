@@ -13,7 +13,7 @@ export interface IHandlePage {
 }
 
 interface IAppState {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
   isSignedIn: boolean;
   signedInId: string;
   signedInLevel: number;
@@ -23,7 +23,7 @@ export default class App extends React.Component<{}, IAppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      isOpen: true,
+      isSidebarOpen: true,
       isSignedIn: localStorage.getItem("x-access-token") ? true : false,
       signedInId: "",
       signedInLevel: 10,
@@ -44,17 +44,17 @@ export default class App extends React.Component<{}, IAppState> {
     // 화면 크기 조절에 따른 토글 사이드바 컨트롤
     addEventListener("resize", () => {
       if (window.innerWidth >= 1280) {
-        this.setState({ isOpen: true });
+        this.setState({ isSidebarOpen: true });
       }
       if (window.innerWidth <= 768) {
-        this.setState({ isOpen: false });
+        this.setState({ isSidebarOpen: false });
       }
     });
   }
 
   // 헤더에 있는 사이드바 토글 버튼 클릭시 각각의 css 적용시켜주는 메서드
   handleSidebar() {
-    this.setState({ isOpen: !this.state.isOpen });
+    this.setState({ isSidebarOpen: !this.state.isSidebarOpen });
   }
 
   // 인증 상태를 관리해주는 메서드
@@ -79,7 +79,7 @@ export default class App extends React.Component<{}, IAppState> {
         <Header handlePage={this.handlePage} handleSidebar={this.handleSidebar} />
 
         <SideBar
-          isOpen={this.state.isOpen}
+          isSidebarOpen={this.state.isSidebarOpen}
           isSignedIn={this.state.isSignedIn}
           signedInId={this.state.signedInId}
           signedInLevel={this.state.signedInLevel}
@@ -89,13 +89,13 @@ export default class App extends React.Component<{}, IAppState> {
         />
 
         <Main
-          isOpen={this.state.isOpen}
+          isSidebarOpen={this.state.isSidebarOpen}
           isSignedIn={this.state.isSignedIn}
           handleAuth={this.handleAuth}
           handlePage={this.handlePage}
         />
 
-        <Footer isOpen={this.state.isOpen} />
+        <Footer isSidebarOpen={this.state.isSidebarOpen} />
       </div>
     );
   }

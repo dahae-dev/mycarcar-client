@@ -13,15 +13,16 @@ import RegisterForm from "./RegisterForm/RegisterForm";
 import RegisterTerms from "./RegisterTerms/RegisterTerms";
 import Rental from "./Rental/Rental";
 import { IHandlePage } from "../../App";
+import SuperUser from "./SuperUser/SuperUser";
 
 interface ICommonAttribute {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
 }
 
 interface IMainProps {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
   isSignedIn: boolean;
 
   handlePage: IHandlePage;
@@ -39,7 +40,7 @@ export default class Main extends React.Component<IMainProps, IMainState> {
     this.state = {
       commonAttribute: {
         handlePage: this.props.handlePage,
-        isOpen: this.props.isOpen,
+        isSidebarOpen: this.props.isSidebarOpen,
       },
     };
   }
@@ -60,6 +61,8 @@ export default class Main extends React.Component<IMainProps, IMainState> {
         return <EditForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
       case "/rental":
         return <Rental {...commonAttribute} />;
+      case "":
+        return <SuperUser {...commonAttribute} />;
       default:
         return <Home {...commonAttribute} />;
     }

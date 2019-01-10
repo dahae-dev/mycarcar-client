@@ -12,7 +12,7 @@ import * as termsContent from "../../../../../util/Terms/terms";
 import { IHandlePage } from "../../../App";
 
 interface IRegisterTermsProps {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
 }
@@ -59,7 +59,7 @@ export default class RegisterTerms extends React.Component<IRegisterTermsProps, 
     const { terms, privatePolicy } = termsContent;
 
     return (
-      <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="terms-form-container">
           <div>
             <div className="terms-logo">

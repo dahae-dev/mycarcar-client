@@ -12,7 +12,7 @@ import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 
 interface IEditFormProps {
-  isOpen: boolean;
+  isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
   handleAuth: (result: boolean, id: string, level: number) => void;
@@ -136,7 +136,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
 
     if (loading) {
       return (
-        <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
+        <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
           <div className="edit-form-container">
             <img className="pre-loader" src={loader} />
           </div>
@@ -145,7 +145,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     }
 
     return (
-      <div id="my-main" className={this.props.isOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="edit-form-container">
           <div>
             <div className="edit-logo">
