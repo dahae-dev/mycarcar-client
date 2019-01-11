@@ -431,7 +431,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
                       key={v.car_option}
                     >
                       <div>{v.car_option}</div>
-                      <div>{`${v.car_option_price.toLocaleString}원`}</div>
+                      <div>{`${v.car_option_price.toLocaleString()}원`}</div>
                     </li>
                   ))}
                 </ul>
