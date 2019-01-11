@@ -9,16 +9,12 @@ import React from "react";
 
 import Status from "./Status/Status";
 import MenuList from "./MenuList/MenuList";
-import { IHandlePage, IHandleAuth } from "../../App";
+import { IHandlePage } from "../../App";
 
 interface ISidebarProps {
   isSidebarOpen: boolean;
-  isSignedIn: boolean;
-  signedInId: string;
-  signedInLevel: number;
 
   handlePage: IHandlePage;
-  handleAuth: IHandleAuth;
   handleSidebar: () => void;
 }
 
@@ -30,13 +26,8 @@ export default class SideBar extends React.Component<ISidebarProps, {}> {
   render() {
     return (
       <div id="my-sidebar" className={this.props.isSidebarOpen ? "show-my-sidebar" : "hide-my-sidebar"}>
-        <Status
-          isSignedIn={this.props.isSignedIn}
-          handleAuth={this.props.handleAuth}
-          handleSidebar={this.props.handleSidebar}
-          handlePage={this.props.handlePage}
-        />
-        <MenuList signedInLevel={this.props.signedInLevel} handlePage={this.props.handlePage} />
+        <Status handleSidebar={this.props.handleSidebar} handlePage={this.props.handlePage} />
+        <MenuList handlePage={this.props.handlePage} />
       </div>
     );
   }

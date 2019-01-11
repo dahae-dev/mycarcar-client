@@ -9,13 +9,12 @@ import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
-import { IHandlePage, IHandleAuth } from "../../../App";
+import { IHandlePage } from "../../../App";
 
 interface IEditFormProps {
   isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
-  handleAuth: IHandleAuth;
 }
 
 interface IPostEdit {
@@ -76,7 +75,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       .catch((err: Error) => {
         // JWT 토큰 기간이 만료된 경우, 에러 처리
         alert("재로그인 한 후 사용 가능합니다.");
-        this.props.handleAuth(false, "", 0);
+        localStorage.removeItem("isSignedIn");
         localStorage.removeItem("x-access-token");
         this.props.handlePage("/login");
       });

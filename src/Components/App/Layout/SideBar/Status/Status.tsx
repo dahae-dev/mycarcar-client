@@ -9,13 +9,10 @@ import React from "react";
 
 import LoginButtons from "./LoginButtons/LoginButtons";
 import RegisterButtons from "./RegisterButtons/RegisterButtons";
-import { IHandlePage, IHandleAuth } from "../../../App";
+import { IHandlePage } from "../../../App";
 
 interface IStatusProps {
-  isSignedIn: boolean;
-
   handlePage: IHandlePage;
-  handleAuth: IHandleAuth;
   handleSidebar: () => void;
 }
 
@@ -26,15 +23,11 @@ export default class Status extends React.Component<IStatusProps, {}> {
 
   render() {
     // 로그인하여 인증이 된 경우, 로그아웃/정보수정 버튼 렌더링
-    if (this.props.isSignedIn) {
+    const isSignedIn = localStorage.getItem("isSignedIn");
+    if (isSignedIn) {
       return (
         <div className="status">
-          <LoginButtons
-            title="로그아웃"
-            handlePage={this.props.handlePage}
-            handleAuth={this.props.handleAuth}
-            handleSidebar={this.props.handleSidebar}
-          />
+          <LoginButtons title="로그아웃" handlePage={this.props.handlePage} handleSidebar={this.props.handleSidebar} />
           <RegisterButtons
             title="정보수정"
             handlePage={this.props.handlePage}
@@ -47,12 +40,7 @@ export default class Status extends React.Component<IStatusProps, {}> {
     // 인증이 안 된 경우, 로그인/회원가입 버튼 렌더링
     return (
       <div className="status">
-        <LoginButtons
-          title="로그인"
-          handlePage={this.props.handlePage}
-          handleAuth={this.props.handleAuth}
-          handleSidebar={this.props.handleSidebar}
-        />
+        <LoginButtons title="로그인" handlePage={this.props.handlePage} handleSidebar={this.props.handleSidebar} />
         <RegisterButtons title="회원가입" handlePage={this.props.handlePage} handleSidebar={this.props.handleSidebar} />
       </div>
     );

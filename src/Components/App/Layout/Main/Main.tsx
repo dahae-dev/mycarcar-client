@@ -12,7 +12,7 @@ import EditForm from "./EditAccount/EditForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
 import RegisterTerms from "./RegisterTerms/RegisterTerms";
 import Rental from "./Rental/Rental";
-import { IHandlePage, IHandleEditUserInfomationBtnClick, IHandleAuth, IEditUserInfomation } from "../../App";
+import { IHandlePage, IHandleEditUserInfomationBtnClick, IEditUserInfomation } from "../../App";
 import SuperUser from "./SuperUser/SuperUser";
 import EditUserInfomation from "./EditUserInfomation/EditUserInfomation";
 
@@ -20,10 +20,8 @@ interface IMainProps {
   editUserInfomation: IEditUserInfomation;
 
   isSidebarOpen: boolean;
-  isSignedIn: boolean;
 
   handlePage: IHandlePage;
-  handleAuth: IHandleAuth;
   handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
 }
 
@@ -42,13 +40,13 @@ export default class Main extends Component<IMainProps> {
 
     switch (pathname) {
       case "/login":
-        return <LoginForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
+        return <LoginForm {...commonAttribute} />;
       case "/terms":
         return <RegisterTerms {...commonAttribute} />;
       case "/register":
         return <RegisterForm {...commonAttribute} />;
       case "/edit_account":
-        return <EditForm {...commonAttribute} handleAuth={this.props.handleAuth} />;
+        return <EditForm {...commonAttribute} />;
       case "/rental":
         return <Rental {...commonAttribute} />;
       case "/admin/user_information_management":

@@ -12,10 +12,6 @@ export interface IHandlePage {
   (pathname: string): void;
 }
 
-export interface IHandleAuth {
-  (result: boolean, id: string, level: number): void;
-}
-
 export interface IEditUserInfomation {
   id: string;
   name: string;
@@ -33,10 +29,6 @@ export interface IHandleEditUserInfomationBtnClick {
 
 interface IAppState {
   isSidebarOpen: boolean;
-  isSignedIn: boolean;
-
-  signedInId: string;
-  signedInLevel: number;
 
   editUserInfomation: IEditUserInfomation;
 }
@@ -46,9 +38,6 @@ export default class App extends React.Component<{}, IAppState> {
     super(props);
     this.state = {
       isSidebarOpen: true,
-      isSignedIn: localStorage.getItem("x-access-token") ? true : false,
-      signedInId: "",
-      signedInLevel: parseInt(localStorage.getItem("isSignedIn") || "0", 10),
       editUserInfomation: {
         id: "",
         name: "",
@@ -62,7 +51,6 @@ export default class App extends React.Component<{}, IAppState> {
     };
 
     this.handleSidebar = this.handleSidebar.bind(this);
-    this.handleAuth = this.handleAuth.bind(this);
     this.handlePage = this.handlePage.bind(this);
     this.handleEditUserInfomationBtnClick = this.handleEditUserInfomationBtnClick.bind(this);
   }
@@ -94,15 +82,6 @@ export default class App extends React.Component<{}, IAppState> {
     this.setState({ isSidebarOpen: !this.state.isSidebarOpen });
   }
 
-  // 인증 상태를 관리해주는 메서드
-  handleAuth(result: boolean, id: string, level: number) {
-    this.setState({
-      isSignedIn: result,
-      signedInId: id,
-      signedInLevel: level,
-    });
-  }
-
   // 사이드바 버튼 클릭 이벤트에 따른 화면 전환을 컨트롤하는 메서드
   handlePage(pathname: string) {
     history.pushState(null, "", pathname);
@@ -117,19 +96,13 @@ export default class App extends React.Component<{}, IAppState> {
 
         <SideBar
           isSidebarOpen={this.state.isSidebarOpen}
-          isSignedIn={this.state.isSignedIn}
-          signedInId={this.state.signedInId}
-          signedInLevel={this.state.signedInLevel}
           handlePage={this.handlePage}
           handleSidebar={this.handleSidebar}
-          handleAuth={this.handleAuth}
         />
 
         <Main
           editUserInfomation={this.state.editUserInfomation}
           isSidebarOpen={this.state.isSidebarOpen}
-          isSignedIn={this.state.isSignedIn}
-          handleAuth={this.handleAuth}
           handlePage={this.handlePage}
           handleEditUserInfomationBtnClick={this.handleEditUserInfomationBtnClick}
         />

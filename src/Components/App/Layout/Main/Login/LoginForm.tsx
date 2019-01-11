@@ -9,13 +9,12 @@ import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
-import { IHandlePage, IHandleAuth } from "../../../App";
+import { IHandlePage } from "../../../App";
 
 interface ILoginFormProps {
   isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
-  handleAuth: IHandleAuth;
 }
 
 interface ILoginFormState {
@@ -60,9 +59,9 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
       .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
       .then(res => {
         // 인증된 경우, 서버로부터 응답받은 JWT 토큰을 localStorage에 저장 후
-        this.props.handleAuth(true, id, res.data.level);
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
-        localStorage.setItem("isSignedIn", res.data.level.toString());
+        localStorage.setItem("isSignedIn", JSON.stringify(true));
+        localStorage.setItem("signedInLevel", JSON.stringify(res.data.level));
 
         // 홈 화면으로 페이지 이동
         setTimeout(() => {
