@@ -62,6 +62,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
         // 인증된 경우, 서버로부터 응답받은 JWT 토큰을 localStorage에 저장 후
         this.props.handleAuth(true, id, res.data.level);
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
+        localStorage.setItem("isSignedIn", res.data.level.toString());
 
         // 홈 화면으로 페이지 이동
         setTimeout(() => {

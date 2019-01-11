@@ -48,7 +48,7 @@ export default class App extends React.Component<{}, IAppState> {
       isSidebarOpen: true,
       isSignedIn: localStorage.getItem("x-access-token") ? true : false,
       signedInId: "",
-      signedInLevel: 0,
+      signedInLevel: parseInt(localStorage.getItem("isSignedIn") || "0", 10),
       editUserInfomation: {
         id: "",
         name: "",
