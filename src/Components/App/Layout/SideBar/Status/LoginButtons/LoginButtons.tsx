@@ -32,6 +32,8 @@ export default class LoginButton extends React.Component<ILoginButtonsProps, {}>
     // 로그아웃 시에는 인증 상태 변경 및 JWT 토큰도 함께 삭제
     localStorage.removeItem("x-access-token");
     localStorage.removeItem("isSignedIn");
+    localStorage.setItem("signedInLevel", JSON.stringify(0));
+
     this.props.handlePage("/");
   }
 
