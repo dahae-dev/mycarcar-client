@@ -15,8 +15,6 @@ import { getMenus } from "../../../../../util/MenuList";
 import { IHandlePage } from "../../../App";
 
 interface IMenuListProps {
-  signedInLevel: number;
-
   handlePage: IHandlePage;
 }
 
@@ -33,10 +31,11 @@ export default class MenuList extends Component<IMenuListProps> {
   }
 
   render() {
+    const signedInLevel = JSON.parse(localStorage.getItem("signedInLevel") || "0");
     return (
       <div className="menu-wrapper">
         <ul className="menu-list">
-          {getMenus(this.props.signedInLevel).map(menu => (
+          {getMenus(signedInLevel).map(menu => (
             <li className={menu.content} onClick={this.handleMenuClick} key={menu.content} data-path={menu.path}>
               <i className={`menu-icon fa fa-${menu.icon}`} />
               {menu.content}
