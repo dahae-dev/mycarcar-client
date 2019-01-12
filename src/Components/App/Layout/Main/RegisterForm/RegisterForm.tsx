@@ -12,8 +12,6 @@ import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 
 interface IRegisterFormProps {
-  isSidebarOpen: boolean;
-
   handlePage: IHandlePage;
 }
 
@@ -93,7 +91,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     const postRegister: IPostRegister = (endpoint, data) => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/api/register/${endpoint}`, data)
-        .then(res => {
+        .then((res) => {
           // 회원가입 처리된 경우, 로그인 페이지로 이동
           alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
           setTimeout(() => {
@@ -119,11 +117,12 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
 
   render() {
     const { checkedValue, company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;
+    const isSidebarOpen = localStorage.getItem("isSidebarOpen") || "true";
 
     // 로딩 중일 때는 pre-loader 렌더링
     if (loading) {
       return (
-        <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+        <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
           <div className="register-form-container">
             <img className="pre-loader" src={loader} />
           </div>
@@ -132,7 +131,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     }
 
     return (
-      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="register-form-container">
           <div>
             <div className="register-logo">

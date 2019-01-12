@@ -12,8 +12,6 @@ import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 
 interface ILoginFormProps {
-  isSidebarOpen: boolean;
-
   handlePage: IHandlePage;
 }
 
@@ -57,7 +55,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
     // 서버에 HTTP post request로 인증 요청
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
-      .then(res => {
+      .then((res) => {
         // 인증된 경우, 서버로부터 응답받은 JWT 토큰을 localStorage에 저장 후
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
         localStorage.setItem("isSignedIn", JSON.stringify(true));
@@ -79,10 +77,11 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
 
   render() {
     const { id, pw, loading, error } = this.state;
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
 
     if (loading) {
       return (
-        <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+        <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
           <div className="login-form-container">
             <img className="pre-loader" src={loader} />
           </div>
@@ -91,7 +90,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
     }
 
     return (
-      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="login-form-container">
           <div>
             <div className="login-logo">

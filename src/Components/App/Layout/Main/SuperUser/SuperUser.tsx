@@ -6,7 +6,6 @@ import { IHandlePage, IHandleEditUserInfomationBtnClick } from "../../../App";
 import axios from "axios";
 
 interface ISuperUserProps {
-  isSidebarOpen: boolean;
   handlePage: IHandlePage;
   handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
 }
@@ -61,7 +60,7 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
 
     const totalCount = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list`, axiosOption)
-      .then(res => {
+      .then((res) => {
         return res.data.totalCount;
       })
       .catch((err: Error) => console.error(err.message));
@@ -70,7 +69,7 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
 
     const userList = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list/1`, axiosOption)
-      .then(res => {
+      .then((res) => {
         return res.data.userList;
       })
       .catch((err: Error) => console.error(err.message));
@@ -87,7 +86,7 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
 
     const userList = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list/${page}`, axiosOption)
-      .then(res => res.data.userList)
+      .then((res) => res.data.userList)
       .catch((err: Error) => console.error(err.message));
 
     this.setState({ userList });
@@ -102,8 +101,9 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
   }
 
   render() {
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
     return (
-      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="super_user">
           <div>
             <div>

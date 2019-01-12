@@ -12,8 +12,6 @@ import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 
 interface IEditFormProps {
-  isSidebarOpen: boolean;
-
   handlePage: IHandlePage;
 }
 
@@ -67,7 +65,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
 
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
-      .then(res => {
+      .then((res) => {
         // 인증된 사용자의 회원 정보를 모두 받아와 입력양식에 뿌려주기
         const data = res.data;
         this.setState({ ...data, loading: false });
@@ -109,7 +107,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     const postEdit: IPostEdit = (endpoint, data) => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
-        .then(res => {
+        .then((res) => {
           // 회원정보 수정 처리에 대한 응답을 받으면 페이지 이동
           alert("회원정보가 정상적으로 수정되었습니다.");
           this.props.handlePage("/");
@@ -132,10 +130,11 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
 
   render() {
     const { company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
 
     if (loading) {
       return (
-        <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+        <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
           <div className="edit-form-container">
             <img className="pre-loader" src={loader} />
           </div>
@@ -144,7 +143,7 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     }
 
     return (
-      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="edit-form-container">
           <div>
             <div className="edit-logo">

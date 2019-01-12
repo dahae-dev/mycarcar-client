@@ -15,11 +15,10 @@ import Rental from "./Rental/Rental";
 import { IHandlePage, IHandleEditUserInfomationBtnClick, IEditUserInfomation } from "../../App";
 import SuperUser from "./SuperUser/SuperUser";
 import EditUserInfomation from "./EditUserInfomation/EditUserInfomation";
+import EstimateList from "./EstimateList/EstimateList";
 
 interface IMainProps {
   editUserInfomation: IEditUserInfomation;
-
-  isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
   handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
@@ -35,7 +34,6 @@ export default class Main extends Component<IMainProps> {
     const pathname = location.pathname;
     const commonAttribute = {
       handlePage: this.props.handlePage,
-      isSidebarOpen: this.props.isSidebarOpen,
     };
 
     switch (pathname) {
@@ -58,6 +56,8 @@ export default class Main extends Component<IMainProps> {
         );
       case "/admin/edit_user_infomation":
         return <EditUserInfomation {...commonAttribute} editUserInfomation={this.props.editUserInfomation} />;
+      case "/estimate_list":
+        return <EstimateList />;
       default:
         return <Home {...commonAttribute} />;
     }
