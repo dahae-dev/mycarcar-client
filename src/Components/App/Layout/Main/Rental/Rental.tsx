@@ -1,9 +1,11 @@
 import "./Rental.css";
 
-import React, { Component, MouseEvent, FormEvent } from "react";
+import React, { Component, MouseEvent, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 
 import Origin from "./Origin/Origin";
+import Capital from "./Capital/Capital";
+import Modal from "./Modal/Modal";
 
 interface IBrand {
   car_brand: string;
@@ -34,7 +36,13 @@ interface IRentalProps {
   isSidebarOpen: boolean;
 }
 
-interface IRentalStates {
+export interface ICapitalList {
+  capital_id: number;
+  capital_name: string;
+  capital_profit: number;
+}
+
+export interface IRentalStates {
   origin: string;
 
   brand: string;
@@ -56,6 +64,17 @@ interface IRentalStates {
   optionList: IOption[];
 
   price: number;
+  optionPrice: number;
+  totalPrice: number;
+
+  rentalPeriod: number;
+  insurancePlan: number;
+  deposit: number;
+  advancePay: number;
+
+  capitalList: ICapitalList[];
+  capital: string;
+  profit: number;
 
   checkedBrand: string;
   checkedSeries: string;
@@ -63,7 +82,21 @@ interface IRentalStates {
   checkedDetail: string;
   checkedGrade: string;
   checkedOption: string;
-  [key: string]: string | number | IBrand[] | ISeries[] | IModel[] | IDetail[] | IGrade[] | IOption[];
+
+  listClicked: boolean;
+  detailClicked: boolean;
+
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | ICapitalList[]
+    | IBrand[]
+    | ISeries[]
+    | IModel[]
+    | IDetail[]
+    | IGrade[]
+    | IOption[];
 }
 
 interface ISelectMessages {
@@ -115,13 +148,27 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
 
       price: 0,
+      optionPrice: 0,
+      totalPrice: 0,
+
+      rentalPeriod: 0,
+      insurancePlan: 0,
+      deposit: 0,
+      advancePay: 0,
+
+      capitalList: [],
+      capital: "",
+      profit: 0,
 
       checkedBrand: "",
       checkedSeries: "",
       checkedModel: "",
       checkedDetail: "",
       checkedGrade: "",
-      checkedOption: ""
+      checkedOption: "",
+
+      listClicked: false,
+      detailClicked: false
     };
 
     this.handleOriginClick = this.handleOriginClick.bind(this);
@@ -132,7 +179,11 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
     this.handleGradeClick = this.handleGradeClick.bind(this);
     this.handleOptionClick = this.handleOptionClick.bind(this);
 
+    this.handleEstimate = this.handleEstimate.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    this.handleModal = this.handleModal.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
 
   handleCheck(e: FormEvent<HTMLInputElement>) {
@@ -140,7 +191,53 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
     this.setState({ [name]: value });
   }
 
+  handleSelect(e: ChangeEvent<HTMLSelectElement>) {
+    const { id, value } = e.currentTarget;
+    const numericValue = Number(value);
+    this.setState({ [id]: numericValue });
+  }
+
+  handleModal(e: MouseEvent<HTMLInputElement>) {
+    const capital = e.currentTarget.dataset.capital as string;
+    const profit = Number(e.currentTarget.dataset.profit);
+    this.setState({ detailClicked: true, capital, profit });
+  }
+
+  handleSave() {
+    const body: object = {
+      origin: this.state.origin,
+      brand: this.state.brand,
+      series: this.state.series,
+      model: this.state.model,
+      detail: this.state.detail,
+      grade: this.state.grade,
+      option: this.state.option,
+
+      carPrice: this.state.price,
+      carOptionPrice: this.state.optionPrice,
+
+      capital: this.state.capital,
+      finalPrice: this.state.totalPrice * (1 + this.state.profit / 100) + this.state.insurancePlan,
+
+      rentalPeriod: this.state.rentalPeriod,
+      insurancePlan: this.state.insurancePlan,
+      deposit: this.state.deposit,
+      advancePay: this.state.advancePay
+    };
+
+    const config: object = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    };
+
+    axios.post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config).then((res) => {
+      console.log(res);
+      this.setState({ detailClicked: false });
+    });
+  }
+
   handleOriginClick(origin: string) {
+    this.setState({ listClicked: false });
+
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
       .then((res) => {
@@ -162,6 +259,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleBrandClick(e: MouseEvent) {
+    this.setState({ listClicked: false });
+
     const brand = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(brand)) {
       return;
@@ -190,6 +289,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleSeriesClick(e: MouseEvent) {
+    this.setState({ listClicked: false });
+
     const series = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(series)) {
       return;
@@ -220,6 +321,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleModelClick(e: MouseEvent) {
+    this.setState({ listClicked: false });
+
     const model = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(model)) {
       return;
@@ -251,6 +354,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleDetailClick(e: MouseEvent) {
+    this.setState({ listClicked: false });
+
     const detail = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(detail)) {
       return;
@@ -287,6 +392,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleGradeClick(e: MouseEvent) {
+    this.setState({ listClicked: false });
+
     const grade = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(grade)) {
       return;
@@ -321,13 +428,42 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   handleOptionClick(e: MouseEvent) {
+    this.setState({ listClicked: false });
+
     const option = e.currentTarget.children[1].children[0].textContent || selectMessages.none;
+    const optionInfo = this.state.optionList.reduce(
+      (accu, curr) => {
+        return curr.car_option === option ? curr : accu;
+      },
+      {
+        car_option: selectMessages.none,
+        car_option_price: 0
+      }
+    );
+
+    const optionPrice = optionInfo.car_option_price;
 
     if (isInvaildItem(option)) {
       return;
     }
 
-    this.setState({ option });
+    this.setState({ option, optionPrice, totalPrice: this.state.price + optionPrice });
+  }
+
+  handleEstimate(e: MouseEvent) {
+    const { price, rentalPeriod, insurancePlan } = this.state;
+    if (price === 0 || rentalPeriod === 0 || insurancePlan === 0) {
+      return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
+    }
+
+    this.setState({ listClicked: true });
+
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/capital-profit`)
+      .then((res) => {
+        this.setState({ capitalList: res.data.capitalList });
+      })
+      .catch((err) => alert(err.message));
   }
 
   componentDidMount() {
@@ -340,32 +476,36 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       .catch((err: Error) => {
         alert(err.message);
       });
+
+    const modal = document.getElementById("my-modal") as HTMLElement;
+    window.onclick = (e) => {
+      if (e.target === modal) {
+        this.setState({ detailClicked: false });
+      }
+    };
   }
 
   render() {
-    const option = this.state.option;
-    const optionInfo = this.state.optionList.reduce(
-      (accu, curr) => {
-        return curr.car_option === option ? curr : accu;
-      },
-      {
-        car_option: selectMessages.none,
-        car_option_price: 0
-      }
-    );
-
-    const carPrice = this.state.price;
-    const optionPrice = optionInfo.car_option_price;
-
-    const resultPrice = carPrice + optionPrice;
+    const {
+      price,
+      optionPrice,
+      totalPrice,
+      capitalList,
+      rentalPeriod,
+      insurancePlan,
+      deposit,
+      advancePay,
+      listClicked,
+      detailClicked
+    } = this.state;
 
     return (
       <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
-        <h1>
-          <i className="fa fa-cab" />
-          장기렌트
-        </h1>
         <div className="select_car">
+          <h1>
+            <i className="fa fa-cab" />
+            장기렌트
+          </h1>
           <div className="item_lists">
             <div className="item_list">
               <div className="item_lists_title">
@@ -505,18 +645,85 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
               </ul>
             </div>
 
+            <div className="rent-condition">
+              <div className="item_lists_title">
+                <div className="item_list_title">렌탈조건</div>
+              </div>
+              <ul className="list_group">
+                <li className="list-group-item apply_display_flex_sb">
+                  <label htmlFor="rentalPeriod">렌탈기간</label>
+                  <select id="rentalPeriod" value={this.state.rentalPeriod} onChange={this.handleSelect} required>
+                    <option hidden>선택</option>
+                    <option value="12">12개월</option>
+                    <option value="24">24개월</option>
+                    <option value="36">36개월</option>
+                    <option value="48">48개월</option>
+                    <option value="60">60개월</option>
+                  </select>
+                </li>
+                <li className="list-group-item apply_display_flex_sb">
+                  <label htmlFor="insurancePlan">보험담보</label>
+                  <select id="insurancePlan" value={this.state.insurancePlan} onChange={this.handleSelect} required>
+                    <option hidden>선택</option>
+                    <option value="1000000">21세 이상</option>
+                    <option value="600000">26세 이상</option>
+                  </select>
+                </li>
+                <li className="list-group-item apply_display_flex_sb">
+                  <label htmlFor="deposit">보증금</label>
+                  <select id="deposit" value={this.state.deposit} onChange={this.handleSelect} required>
+                    <option hidden>선택</option>
+                    <option value="0">0%</option>
+                    <option value="0.1">10%</option>
+                    <option value="0.2">20%</option>
+                    <option value="0.3">30%</option>
+                  </select>
+                </li>
+                <li className="list-group-item apply_display_flex_sb">
+                  <label htmlFor="advancePay">선납금</label>
+                  <select id="advancePay" value={this.state.advancePay} onChange={this.handleSelect} required>
+                    <option hidden>선택</option>
+                    <option value="0">0%</option>
+                    <option value="0.1">10%</option>
+                    <option value="0.2">20%</option>
+                    <option value="0.3">30%</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+
             <div className="price">
               <div>
-                차량가격 : <span>{`${carPrice.toLocaleString()}원`}</span>
+                차량가격 : <span>{`${price.toLocaleString()}원`}</span>
               </div>
               <div>
                 옵션가격 : <span>{`${optionPrice.toLocaleString()}원`}</span>
               </div>
               <hr />
               <div>
-                최종가격 : <span>{`${resultPrice.toLocaleString()}원`}</span>
+                합 계 : <span>{`${totalPrice.toLocaleString()}원`}</span>
               </div>
             </div>
+          </div>
+
+          <div className="btn-container">
+            <input type="button" value="견적 확인" disabled={listClicked} onClick={this.handleEstimate} />
+          </div>
+
+          <div className={"capital-list-container " + (listClicked ? "" : "display-none")}>
+            <Capital
+              totalPrice={totalPrice}
+              capitalList={capitalList}
+              rentalPeriod={rentalPeriod}
+              insurancePlan={insurancePlan}
+              deposit={deposit}
+              advancePay={advancePay}
+              handleModal={this.handleModal}
+            />
+          </div>
+
+          <div id="my-modal" className={detailClicked ? "show-my-modal" : "display-none"}>
+            <Modal handleSave={this.handleSave} rentalData={this.state} />
           </div>
         </div>
       </div>
