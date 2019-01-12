@@ -1,0 +1,43 @@
+.capital-list-container {
+  background-color: white;
+  margin: 3%;
+  padding: 3%;
+}
+
+.capital-list-head {
+  color: white;
+  background-color: #718389;
+  padding: 1% 0;
+}
+
+.capital-list-content {
+  padding: 1% 0;
+  border-bottom: 1px solid #dde7ee;
+}
+
+.capital-list-head,
+.capital-list-content {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+}
+
+.capital-list-head > *,
+.capital-list-content > * {
+  width: 10%;
+  font-size: 16px;
+  padding: 5px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.capital-list-content input[type="button"] {
+  width: 30%;
+  padding: 2% 4%;
+  border-radius: 4px;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: white;
+}
