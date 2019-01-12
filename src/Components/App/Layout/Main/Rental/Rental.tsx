@@ -217,7 +217,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       carOptionPrice: this.state.optionPrice,
 
       capital: this.state.capital,
-      finalPrice: this.state.totalPrice * (1 + this.state.profit / 100) + this.state.insurancePlan,
+      carFinalPrice: this.state.totalPrice * (1 + this.state.profit / 100) + this.state.insurancePlan,
 
       rentalPeriod: this.state.rentalPeriod,
       insurancePlan: this.state.insurancePlan,
@@ -230,8 +230,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
     };
 
     axios.post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config).then((res) => {
-      console.log(res);
       this.setState({ detailClicked: false });
+      alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.")
     });
   }
 
