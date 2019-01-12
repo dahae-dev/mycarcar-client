@@ -8,6 +8,12 @@ interface IEstimateListStates {}
 
 export default class EstimateList extends Component<IEstimateListProps, IEstimateListStates> {
   render() {
-    return <div className="estimate_list">estimate_list page</div>;
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
+
+    return (
+      <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
+        <div className="estimate_list">estimate_list page</div>;
+      </div>
+    );
   }
 }

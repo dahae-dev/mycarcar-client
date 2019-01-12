@@ -32,10 +32,6 @@ interface IOption {
   car_option_price: number;
 }
 
-interface IRentalProps {
-  isSidebarOpen: boolean;
-}
-
 export interface ICapitalList {
   capital_id: number;
   capital_name: string;
@@ -109,7 +105,7 @@ const selectMessages: ISelectMessages = {
   model: "시리즈를 선택해주세요.",
   detail: "모델을 선택해주세요.",
   grade: "상세모델을 선택해주세요.",
-  option: "등급을 선택해주세요."
+  option: "등급을 선택해주세요.",
 };
 
 function isInvaildItem(item: string): boolean {
@@ -122,8 +118,8 @@ function isInvaildItem(item: string): boolean {
   return false;
 }
 
-export default class Rental extends Component<IRentalProps, IRentalStates> {
-  constructor(props: IRentalProps) {
+export default class Rental extends Component<{}, IRentalStates> {
+  constructor(props: {}) {
     super(props);
 
     this.state = {
@@ -168,7 +164,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       checkedOption: "",
 
       listClicked: false,
-      detailClicked: false
+      detailClicked: false,
     };
 
     this.handleOriginClick = this.handleOriginClick.bind(this);
@@ -222,16 +218,16 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       rentalPeriod: this.state.rentalPeriod,
       insurancePlan: this.state.insurancePlan,
       deposit: this.state.deposit,
-      advancePay: this.state.advancePay
+      advancePay: this.state.advancePay,
     };
 
     const config: object = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+      headers: { "x-access-token": localStorage.getItem("x-access-token") },
     };
 
     axios.post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config).then((res) => {
       this.setState({ detailClicked: false });
-      alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.")
+      alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.");
     });
   }
 
@@ -250,7 +246,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
           detailList: [{ car_detail: selectMessages.detail }],
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -280,7 +276,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
           detailList: [{ car_detail: selectMessages.detail }],
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -312,7 +308,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
           detailList: [{ car_detail: selectMessages.detail }],
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -345,7 +341,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
           model,
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -375,7 +371,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       .get(
         `${
           process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`
+        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`,
       )
       .then((res) => {
         const gradeList: IGrade[] = res.data.gradeList;
@@ -383,7 +379,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
           gradeList,
           detail,
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0
+          price: 0,
         });
       })
       .catch((err: Error) => {
@@ -415,7 +411,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       .get(
         `${
           process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`
+        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`,
       )
       .then((res) => {
         const price = res.data.car_price;
@@ -437,8 +433,8 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       },
       {
         car_option: selectMessages.none,
-        car_option_price: 0
-      }
+        car_option_price: 0,
+      },
     );
 
     const optionPrice = optionInfo.car_option_price;
@@ -486,6 +482,7 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
   }
 
   render() {
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
     const {
       price,
       optionPrice,
@@ -496,11 +493,11 @@ export default class Rental extends Component<IRentalProps, IRentalStates> {
       deposit,
       advancePay,
       listClicked,
-      detailClicked
+      detailClicked,
     } = this.state;
 
     return (
-      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="select_car">
           <h1>
             <i className="fa fa-cab" />

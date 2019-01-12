@@ -12,8 +12,6 @@ import MenuList from "./MenuList/MenuList";
 import { IHandlePage } from "../../App";
 
 interface ISidebarProps {
-  isSidebarOpen: boolean;
-
   handlePage: IHandlePage;
   handleSidebar: () => void;
 }
@@ -24,8 +22,10 @@ export default class SideBar extends React.Component<ISidebarProps, {}> {
   }
 
   render() {
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
+
     return (
-      <div id="my-sidebar" className={this.props.isSidebarOpen ? "show-my-sidebar" : "hide-my-sidebar"}>
+      <div id="my-sidebar" className={isSidebarOpen ? "show-my-sidebar" : "hide-my-sidebar"}>
         <Status handleSidebar={this.props.handleSidebar} handlePage={this.props.handlePage} />
         <MenuList handlePage={this.props.handlePage} />
       </div>

@@ -20,8 +20,6 @@ import EstimateList from "./EstimateList/EstimateList";
 interface IMainProps {
   editUserInfomation: IEditUserInfomation;
 
-  isSidebarOpen: boolean;
-
   handlePage: IHandlePage;
   handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
 }
@@ -36,7 +34,6 @@ export default class Main extends Component<IMainProps> {
     const pathname = location.pathname;
     const commonAttribute = {
       handlePage: this.props.handlePage,
-      isSidebarOpen: this.props.isSidebarOpen,
     };
 
     switch (pathname) {

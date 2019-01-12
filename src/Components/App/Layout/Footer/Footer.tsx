@@ -5,18 +5,11 @@
 import "./Footer.css";
 import React from "react";
 
-interface IFooterProps {
-  isSidebarOpen: boolean;
-}
-
-export default class Footer extends React.Component<IFooterProps> {
-  constructor(props: IFooterProps) {
-    super(props);
-  }
-
+export default class Footer extends React.Component {
   render() {
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
     return (
-      <div id="my-footer" className={this.props.isSidebarOpen ? "" : "my-footer-margin-left"}>
+      <div id="my-footer" className={isSidebarOpen ? "" : "my-footer-margin-left"}>
         <div id="ft-copy">
           Copyright &copy; <b>mycarcar.com</b> All rights reserved.
         </div>

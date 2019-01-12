@@ -7,7 +7,6 @@ import { IEditUserInfomation, IHandlePage } from "../../../App";
 
 interface IEditUserInfomationProps {
   editUserInfomation: IEditUserInfomation;
-  isSidebarOpen: boolean;
 
   handlePage: IHandlePage;
 }
@@ -63,7 +62,7 @@ export default class EditUserInfomation extends Component<IEditUserInfomationPro
     const axiosData = this.state;
     axios
       .patch(`${process.env.REACT_APP_API_URL}/api/admin/user-list/update`, axiosData, axiosOption)
-      .then(res => {
+      .then((res) => {
         alert("수정되었습니다.");
         this.props.handlePage("/admin/user_information_management");
       })
@@ -76,8 +75,10 @@ export default class EditUserInfomation extends Component<IEditUserInfomationPro
   }
 
   render() {
+    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
+
     return (
-      <div id="my-main" className={this.props.isSidebarOpen ? "" : "my-main-margin-left"}>
+      <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
         <div className="edit_user_infomation">
           <div>
             <form className="edit_user_info_form" onSubmit={this.handleOnSubmit}>

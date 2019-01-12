@@ -28,8 +28,6 @@ export interface IHandleEditUserInfomationBtnClick {
 }
 
 interface IAppState {
-  isSidebarOpen: boolean;
-
   editUserInfomation: IEditUserInfomation;
 }
 
@@ -37,7 +35,6 @@ export default class App extends React.Component<{}, IAppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      isSidebarOpen: true,
       editUserInfomation: {
         id: "",
         name: "",
@@ -65,10 +62,12 @@ export default class App extends React.Component<{}, IAppState> {
     // 화면 크기 조절에 따른 토글 사이드바 컨트롤
     addEventListener("resize", () => {
       if (window.innerWidth >= 1280) {
-        this.setState({ isSidebarOpen: true });
+        localStorage.setItem("isSidebarOpen", JSON.stringify(true));
+        this.forceUpdate();
       }
       if (window.innerWidth <= 768) {
-        this.setState({ isSidebarOpen: false });
+        localStorage.setItem("isSidebarOpen", JSON.stringify(false));
+        this.forceUpdate();
       }
     });
   }
@@ -79,7 +78,11 @@ export default class App extends React.Component<{}, IAppState> {
 
   // 헤더에 있는 사이드바 토글 버튼 클릭시 각각의 css 적용시켜주는 메서드
   handleSidebar() {
-    this.setState({ isSidebarOpen: !this.state.isSidebarOpen });
+    let isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
+    isSidebarOpen = JSON.stringify(!isSidebarOpen);
+
+    localStorage.setItem("isSidebarOpen", isSidebarOpen);
+    this.forceUpdate();
   }
 
   // 사이드바 버튼 클릭 이벤트에 따른 화면 전환을 컨트롤하는 메서드
@@ -94,20 +97,15 @@ export default class App extends React.Component<{}, IAppState> {
       <div className="grid-container">
         <Header handlePage={this.handlePage} handleSidebar={this.handleSidebar} />
 
-        <SideBar
-          isSidebarOpen={this.state.isSidebarOpen}
-          handlePage={this.handlePage}
-          handleSidebar={this.handleSidebar}
-        />
+        <SideBar handlePage={this.handlePage} handleSidebar={this.handleSidebar} />
 
         <Main
           editUserInfomation={this.state.editUserInfomation}
-          isSidebarOpen={this.state.isSidebarOpen}
           handlePage={this.handlePage}
           handleEditUserInfomationBtnClick={this.handleEditUserInfomationBtnClick}
         />
 
-        <Footer isSidebarOpen={this.state.isSidebarOpen} />
+        <Footer />
       </div>
     );
   }
