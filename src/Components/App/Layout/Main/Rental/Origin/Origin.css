@@ -3,15 +3,19 @@
 
   background-color: white;
   color: #1465b1;
-  
+
   border: solid 1px #1560a7;
+}
+
+.origin_radio {
+  width: 50px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .checked_radio {
   background-color: #1560a7;
   color: white;
-}
-
-.origin_radio {
-  padding: 5px;
 }

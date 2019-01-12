@@ -17,3 +17,11 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+input[type="submit"],
+input[type="button"],
+button,
+a,
+li {
+  cursor: pointer;
+}
