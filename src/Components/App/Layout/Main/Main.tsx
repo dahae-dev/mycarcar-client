@@ -32,34 +32,34 @@ export default class Main extends Component<IMainProps> {
   // url 주소창의 endpoint에 따른 화면 전환
   render() {
     const pathname = location.pathname;
-    const commonAttribute = {
-      handlePage: this.props.handlePage,
-    };
+    const handlePage = this.props.handlePage;
 
     switch (pathname) {
+      case "/":
+        return <Home />;
       case "/login":
-        return <LoginForm {...commonAttribute} />;
+        return <LoginForm handlePage={handlePage} />;
       case "/terms":
-        return <RegisterTerms {...commonAttribute} />;
+        return <RegisterTerms handlePage={handlePage} />;
       case "/register":
-        return <RegisterForm {...commonAttribute} />;
+        return <RegisterForm handlePage={handlePage} />;
       case "/edit_account":
-        return <EditForm {...commonAttribute} />;
+        return <EditForm handlePage={handlePage} />;
       case "/rental":
-        return <Rental {...commonAttribute} />;
+        return <Rental />;
       case "/admin/user_information_management":
         return (
           <SuperUser
-            {...commonAttribute}
+            handlePage={handlePage}
             handleEditUserInfomationBtnClick={this.props.handleEditUserInfomationBtnClick}
           />
         );
       case "/admin/edit_user_infomation":
-        return <EditUserInfomation {...commonAttribute} editUserInfomation={this.props.editUserInfomation} />;
+        return <EditUserInfomation handlePage={handlePage} editUserInfomation={this.props.editUserInfomation} />;
       case "/estimate_list":
         return <EstimateList />;
       default:
-        return <Home {...commonAttribute} />;
+        return <Home />;
     }
   }
 }
