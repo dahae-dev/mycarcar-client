@@ -17,7 +17,7 @@ import SuperUser from "./SuperUser/SuperUser";
 import EditUserInfomation from "./EditUserInfomation/EditUserInfomation";
 import { NotFound } from "./NotFound/NotFound";
 import EstimateForm from "./EstimateForm/EstimateForm";
-import EstimateList from "./EstimateList/EstimateList";
+import { EstimateList } from "./EstimateList/EstimateList";
 
 interface IMainProps {
   editUserInfomation: IEditUserInfomation;
