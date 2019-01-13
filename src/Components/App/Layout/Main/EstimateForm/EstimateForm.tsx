@@ -1,8 +1,8 @@
 import "./EstimateForm.css";
 
 import React, { Component } from "react";
-import { EstimateFormHeader } from "./EstimateFormHeader/EstimateFormHeader";
 import EstimateFormMain from "./EstimateFormMain/EstimateFormMain";
+import { MainHeader } from "../MainHeader/MainHeader";
 
 export default class EstimateForm extends Component {
   render() {
@@ -10,8 +10,8 @@ export default class EstimateForm extends Component {
 
     return (
       <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
-        <div className="estimate_form">
-          <EstimateFormHeader />
+        <MainHeader title="견적서보기" />
+        <div className="estimate_container">
           <EstimateFormMain />
         </div>
       </div>
