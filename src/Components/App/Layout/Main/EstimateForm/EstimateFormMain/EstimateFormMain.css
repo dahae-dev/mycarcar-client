@@ -1,0 +1,84 @@
+.estimate_form_main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+
+  overflow-y: auto;
+}
+
+.estimate_form {
+  padding: 30px;
+
+  background-color: white;
+}
+
+.estimate_form_main {
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.estimated_date {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.estimate_form_client_infomation1 {
+  display: flex;
+}
+
+.estimate_form_client_infomation1 > *:nth-child(2n+1) {
+  width: 25%;
+}
+
+.estimate_form_client_infomation1 > *:nth-child(2n) {
+  width: 75%;
+}
+
+
+.estimate_form_client_infomation2 {
+  display: flex;
+}
+
+.estimate_form_client_infomation2 > *:nth-child(3n+1) {
+  width: 25%;
+}
+
+.estimate_form_client_infomation2 > *:nth-child(3n+2) {
+  width: 50%;
+}
+
+.estimate_form_client_infomation2 > *:nth-child(3n) {
+  width: 25%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.estimate_form_infomation_title {
+  color: #1465b1;
+  margin-bottom: 10px;
+}
+
+.estimate_form_label {
+  background-color: #f2f2f2;
+  font-weight: bold;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+
+.estimate_form_info_content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}

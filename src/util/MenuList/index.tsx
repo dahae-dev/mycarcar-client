@@ -15,10 +15,7 @@ const guestUserMenu = [
 
 const nomalUserMenu = [...guestUserMenu, { icon: "calculator", content: "견적내역보기", path: "/estimate_list" }];
 
-const capitalUserMenu = [
-  ...nomalUserMenu,
-  { icon: "television", content: "차량정보관리", path: "/vehicle_information_registration" },
-];
+const capitalUserMenu = [...nomalUserMenu, { icon: "television", content: "견적서보기(임시)", path: "/estimate_form" }];
 
 const superUserMenu = [
   ...capitalUserMenu,
