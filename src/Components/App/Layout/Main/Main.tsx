@@ -15,8 +15,8 @@ import Rental from "./Rental/Rental";
 import { IHandlePage, IHandleEditUserInfomationBtnClick, IEditUserInfomation } from "../../App";
 import SuperUser from "./SuperUser/SuperUser";
 import EditUserInfomation from "./EditUserInfomation/EditUserInfomation";
-import EstimateList from "./EstimateList/EstimateList";
 import { NotFound } from "./NotFound/NotFound";
+import EstimateForm from "./EstimateForm/EstimateForm";
 
 interface IMainProps {
   editUserInfomation: IEditUserInfomation;
@@ -57,8 +57,8 @@ export default class Main extends Component<IMainProps> {
         );
       case "/admin/edit_user_infomation":
         return <EditUserInfomation handlePage={handlePage} editUserInfomation={this.props.editUserInfomation} />;
-      case "/estimate_list":
-        return <EstimateList />;
+      case "/estimate_form":
+        return <EstimateForm />;
       default:
         return <NotFound />;
     }
