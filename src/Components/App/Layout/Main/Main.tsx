@@ -59,7 +59,7 @@ export default class Main extends Component<IMainProps> {
       case "/admin/edit_user_infomation":
         return <EditUserInfomation handlePage={handlePage} editUserInfomation={this.props.editUserInfomation} />;
       case "/estimate_list":
-        return <EstimateList />;
+        return <EstimateList handlePage={handlePage} />;
       case "/estimate_form":
         return <EstimateForm />;
       default:

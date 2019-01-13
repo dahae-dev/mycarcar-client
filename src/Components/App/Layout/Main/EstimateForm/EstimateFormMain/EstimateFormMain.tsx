@@ -2,8 +2,63 @@ import "./EstimateFormMain.css";
 
 import React, { Component } from "react";
 
+interface IEstimateInfo {
+  at_date: string;
+  capital: string;
+  car_advance_pay: number;
+  car_brand: string;
+  car_deposit: number;
+  car_detail: string;
+  car_estimate_no: number;
+  car_final_price: number;
+  car_grade: string;
+  car_insurance_plan: number;
+  car_model: string;
+  car_option: string;
+  car_option_price: number;
+  car_origin: string;
+  car_price: number;
+  car_rental_period: number;
+  car_series: string;
+  mb_email: string;
+  mb_id: string;
+  mb_name: string;
+  mb_phone: string;
+}
+
 export default class EstimateFormMain extends Component {
   render() {
+    const estimateInfo: IEstimateInfo = JSON.parse(
+      sessionStorage.getItem("estimateInfo") ||
+        `
+      {
+        "at_date": ""
+        "capital": ""
+        "car_advance_pay": 0
+        "car_brand": ""
+        "car_deposit": 0
+        "car_detail": ""
+        "car_estimate_no": 0
+        "car_final_price": 0
+        "car_grade": ""
+        "car_insurance_plan": 0
+        "car_model": ""
+        "car_option": ""
+        "car_option_price": 0
+        "car_origin": ""
+        "car_price": 0
+        "car_rental_period": 0
+        "car_series": ""
+        "mb_email": ""
+        "mb_id": ""
+        "mb_name": ""
+        "mb_phone": ""
+      }`,
+    );
+    const carModel = `${estimateInfo.car_brand} ${estimateInfo.car_series} ${estimateInfo.car_model} ${
+      estimateInfo.car_detail
+    } ${estimateInfo.car_grade}`;
+
     return (
       <div className="estimate_form_main">
         <div className="estimate_form">
@@ -21,15 +76,15 @@ export default class EstimateFormMain extends Component {
             <div className="estimate_form_info_label_contents">
               <div className="estimate_form_client_infomation1">
                 <div className="estimate_form_label">이름</div>
-                <div className="estimate_form_info_content">홍길동</div>
+                <div className="estimate_form_info_content">{estimateInfo.mb_name}</div>
               </div>
               <div className="estimate_form_client_infomation1">
                 <div className="estimate_form_label">연락처</div>
-                <div className="estimate_form_info_content">010-0000-0000</div>
+                <div className="estimate_form_info_content">{estimateInfo.mb_phone}</div>
               </div>
               <div className="estimate_form_client_infomation1">
                 <div className="estimate_form_label">이메일</div>
-                <div className="estimate_form_info_content">gildong@codestates.com</div>
+                <div className="estimate_form_info_content">{estimateInfo.mb_email}</div>
               </div>
             </div>
           </div>
@@ -44,11 +99,11 @@ export default class EstimateFormMain extends Component {
             <div className="estimate_form_info_label_contents">
               <div className="estimate_form_client_infomation1">
                 <div className="estimate_form_label">모델</div>
-                <div className="estimate_form_info_content">스파크_1.0_가솔린_5인승_LS</div>
+                <div className="estimate_form_info_content">{carModel}</div>
               </div>
               <div className="estimate_form_client_infomation1">
                 <div className="estimate_form_label">옵션</div>
-                <div className="estimate_form_info_content">오토(C-TECH)</div>
+                <div className="estimate_form_info_content">{estimateInfo.car_option}</div>
               </div>
             </div>
           </div>
@@ -62,24 +117,15 @@ export default class EstimateFormMain extends Component {
             </div>
             <div className="estimate_form_info_label_contents">
               <div className="estimate_form_client_infomation1">
-                <div className="estimate_form_label">렌트종류</div>
-                <div className="estimate_form_info_content">BNK캐피탈</div>
+                <div className="estimate_form_label">업체명</div>
+                <div className="estimate_form_info_content">{estimateInfo.capital}</div>
               </div>
               <div className="estimate_form_client_infomation1">
                 <div className="estimate_form_label">기간</div>
-                <div className="estimate_form_info_content">36개월</div>
-              </div>
-              <div className="estimate_form_client_infomation1">
-                <div className="estimate_form_label">약정거리</div>
-                <div className="estimate_form_info_content">2만km/년</div>
-              </div>
-              <div className="estimate_form_client_infomation1">
-                <div className="estimate_form_label">만기처리</div>
-                <div className="estimate_form_info_content">36개월</div>
-              </div>
-              <div className="estimate_form_client_infomation1">
-                <div className="estimate_form_label">보험담보</div>
-                <div className="estimate_form_info_content">26세</div>
+                <div className="estimate_form_info_content">
+                  {estimateInfo.car_rental_period}
+                  개월
+                </div>
               </div>
             </div>
           </div>
@@ -94,18 +140,18 @@ export default class EstimateFormMain extends Component {
             <div className="estimate_form_info_label_contents">
               <div className="estimate_form_client_infomation2">
                 <div className="estimate_form_label">기본가격</div>
-                <div className="estimate_form_info_content">_</div>
-                <div className="estimate_form_info_content">10,570,000원</div>
+                <div className="estimate_form_info_content">{}</div>
+                <div className="estimate_form_info_content">{estimateInfo.car_price.toLocaleString()}원</div>
               </div>
               <div className="estimate_form_client_infomation2">
                 <div className="estimate_form_label">옵션</div>
-                <div className="estimate_form_info_content">오토(C-TECH) 래더 패키지 버튼 시동</div>
-                <div className="estimate_form_info_content">1,800,000원</div>
+                <div className="estimate_form_info_content">{estimateInfo.car_option}</div>
+                <div className="estimate_form_info_content">{estimateInfo.car_option_price.toLocaleString()}원</div>
               </div>
               <div className="estimate_form_client_infomation2">
                 <div className="estimate_form_label">최종가격</div>
-                <div className="estimate_form_info_content">_</div>
-                <div className="estimate_form_info_content">13,300,000원</div>
+                <div className="estimate_form_info_content">{}</div>
+                <div className="estimate_form_info_content">{estimateInfo.car_final_price.toLocaleString()}원</div>
               </div>
             </div>
           </div>
@@ -119,31 +165,28 @@ export default class EstimateFormMain extends Component {
             </div>
             <div className="estimate_form_client_infomation2">
               <div className="estimate_form_label">보증금</div>
-              <div className="estimate_form_info_content">10%</div>
-              <div className="estimate_form_info_content">1,330,000원</div>
+              <div className="estimate_form_info_content">{estimateInfo.car_deposit}%</div>
+              <div className="estimate_form_info_content">
+                {(estimateInfo.car_final_price * estimateInfo.car_deposit).toLocaleString()}원
+              </div>
             </div>
             <div className="estimate_form_client_infomation2">
               <div className="estimate_form_label">선납급</div>
-              <div className="estimate_form_info_content">10%</div>
-              <div className="estimate_form_info_content">1,330,000원</div>
-            </div>
-
-            <div className="estimate_form_client_infomation2">
-              <div className="estimate_form_label">추가용품</div>
-              <div className="estimate_form_info_content">선택안함</div>
-              <div className="estimate_form_info_content">0원</div>
-            </div>
-
-            <div className="estimate_form_client_infomation2">
-              <div className="estimate_form_label">초기부담금</div>
-              <div className="estimate_form_info_content">_</div>
-              <div className="estimate_form_info_content">2,660,000원</div>
+              <div className="estimate_form_info_content">{estimateInfo.car_advance_pay}%</div>
+              <div className="estimate_form_info_content">
+                {(estimateInfo.car_final_price * estimateInfo.car_advance_pay).toLocaleString()}원
+              </div>
             </div>
 
             <div className="estimate_form_client_infomation2">
               <div className="estimate_form_label">월 렌트료</div>
-              <div className="estimate_form_info_content">_</div>
-              <div className="estimate_form_info_content">0원</div>
+              <div className="estimate_form_info_content">
+                {estimateInfo.car_rental_period}
+                개월
+              </div>
+              <div className="estimate_form_info_content">
+                {(estimateInfo.car_final_price / estimateInfo.car_rental_period).toLocaleString()}원
+              </div>
             </div>
           </div>
 
