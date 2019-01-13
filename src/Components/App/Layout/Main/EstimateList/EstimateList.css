@@ -1,8 +1,5 @@
-:root {
-  --estimate_list-header-height1: 60px;
-}
-
 .estimate_list {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }

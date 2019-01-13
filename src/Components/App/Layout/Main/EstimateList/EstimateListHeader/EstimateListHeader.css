@@ -1,5 +1,5 @@
 .estimate_header {
-  height: var(--estimate_list-header-height1);
+  height: 60px;
   background-color: white;
 
   display: flex;
@@ -11,7 +11,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* width: 150px; */
 }
 
 .estimate_header_left {
@@ -28,7 +27,6 @@
   justify-content: center;
   align-items: center;
   margin-right: 5px;
-  
 }
 
 .estimate_header_left > * {
