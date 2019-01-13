@@ -16,6 +16,7 @@ import { IHandlePage, IHandleEditUserInfomationBtnClick, IEditUserInfomation } f
 import SuperUser from "./SuperUser/SuperUser";
 import EditUserInfomation from "./EditUserInfomation/EditUserInfomation";
 import EstimateList from "./EstimateList/EstimateList";
+import { NotFound } from "./NotFound/NotFound";
 
 interface IMainProps {
   editUserInfomation: IEditUserInfomation;
@@ -59,7 +60,7 @@ export default class Main extends Component<IMainProps> {
       case "/estimate_list":
         return <EstimateList />;
       default:
-        return <Home />;
+        return <NotFound />;
     }
   }
 }
