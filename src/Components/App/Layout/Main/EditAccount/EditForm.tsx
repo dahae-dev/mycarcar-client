@@ -45,9 +45,6 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
       loading: false,
       error: ""
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -71,12 +68,12 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
       });
   }
 
-  handleChange(e: FormEvent<HTMLInputElement>) {
+  handleChange = (e: FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-  }
+  };
 
-  handleSubmit(e: FormEvent<HTMLFormElement>) {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;
@@ -111,7 +108,7 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
     if (this.state.company !== null) {
       postEdit(`company`, { company, id, pw, name, email, phone, fax });
     }
-  }
+  };
 
   render() {
     const { company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;

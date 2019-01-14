@@ -41,21 +41,18 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
           level: 0,
           company: "정보없음",
           fax: "000-000-0000",
-          registerDate: "정보없음",
-        },
+          registerDate: "정보없음"
+        }
       ],
 
       totalCount: 1,
-      pageCount: 1,
+      pageCount: 1
     };
-
-    this.handleMemberListNumberClick = this.handleMemberListNumberClick.bind(this);
-    this.handleEditClick = this.handleEditClick.bind(this);
   }
 
   async componentDidMount() {
     const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") },
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
     const totalCount = await axios
@@ -77,11 +74,11 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
     this.setState({ totalCount, userList, pageCount });
   }
 
-  async handleMemberListNumberClick(e: MouseEvent) {
+  handleMemberListNumberClick = async (e: MouseEvent) => {
     const page = e.currentTarget.textContent || "-1";
 
     const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") },
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
     const userList = await axios
@@ -90,15 +87,15 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
       .catch((err: Error) => console.error(err.message));
 
     this.setState({ userList });
-  }
+  };
 
-  handleEditClick(e: MouseEvent) {
+  handleEditClick = (e: MouseEvent) => {
     const userListIdx = parseInt(e.currentTarget.getAttribute("data-index") || "-1", 10);
     const editUserInfomation = this.state.userList[userListIdx];
 
     history.pushState("", "", "/admin/edit_user_infomation");
     this.props.handleEditUserInfomationBtnClick(editUserInfomation);
-  }
+  };
 
   render() {
     const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");

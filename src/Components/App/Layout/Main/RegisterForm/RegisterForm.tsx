@@ -47,28 +47,23 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
       loading: false,
       error: ""
     };
-
-    this.handleCheck = this.handleCheck.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleCheck(e: FormEvent<HTMLInputElement>) {
+  handleCheck = (e: FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     this.setState({ checkedValue: value });
-  }
+  };
 
-  handleChange(e: FormEvent<HTMLInputElement>) {
+  handleChange = (e: FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-  }
-  handleSelect(e: ChangeEvent<HTMLSelectElement>) {
+  };
+  handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
     this.setState({ company: value });
-  }
+  };
 
-  handleSubmit(e: FormEvent<HTMLFormElement>) {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;
@@ -101,7 +96,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     if (this.state.checkedValue === "협력사") {
       postRegister(`company`, { company, id, pw, name, email, phone, fax });
     }
-  }
+  };
 
   render() {
     const { checkedValue, company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;

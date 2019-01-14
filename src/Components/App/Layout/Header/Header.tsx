@@ -12,13 +12,11 @@ interface IHeaderProps {
 export default class Header extends React.Component<IHeaderProps> {
   constructor(props: IHeaderProps) {
     super(props);
-
-    this.handleLogoClick = this.handleLogoClick.bind(this);
   }
 
-  handleLogoClick() {
+  handleLogoClick = () => {
     this.props.handlePage("/");
-  }
+  };
 
   render() {
     return (

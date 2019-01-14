@@ -29,17 +29,14 @@ export default class LoginForm extends Component<ILoginFormProps, ILoginFormStat
       loading: false,
       error: ""
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e: FormEvent<HTMLInputElement>) {
+  handleChange = (e: FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-  }
+  };
 
-  handleSubmit(e: FormEvent<HTMLFormElement>) {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { id, pw } = this.state;
@@ -63,7 +60,7 @@ export default class LoginForm extends Component<ILoginFormProps, ILoginFormStat
           error: "아이디 또는 패스워드가 일치하지 않습니다."
         });
       });
-  }
+  };
 
   render() {
     const { id, pw, loading, error } = this.state;

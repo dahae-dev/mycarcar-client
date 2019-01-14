@@ -11,11 +11,9 @@ interface IRegisterButtonsProps {
 export default class RegisterButton extends Component<IRegisterButtonsProps> {
   constructor(props: IRegisterButtonsProps) {
     super(props);
-
-    this.handlePage = this.handlePage.bind(this);
   }
 
-  handlePage() {
+  handlePage = () => {
     if (window.innerWidth <= 768) {
       this.props.handleSidebar();
     }
@@ -26,7 +24,7 @@ export default class RegisterButton extends Component<IRegisterButtonsProps> {
     }
 
     this.props.handlePage("/edit_account");
-  }
+  };
 
   render() {
     return (
