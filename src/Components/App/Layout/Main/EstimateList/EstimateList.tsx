@@ -13,7 +13,7 @@ export const EstimateList = (props: IEstimateListProps) => {
 
   return (
     <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
-      <MainHeader title="견적내역" />
+      <MainHeader title="견적내역" icon="calculator" />
       <EstimateContent handlePage={props.handlePage} />
     </div>
   );

@@ -6,6 +6,7 @@ import axios from "axios";
 import Origin from "./Origin/Origin";
 import { Capital } from "./Capital/Capital";
 import { Modal } from "./Modal/Modal";
+import { MainHeader } from "../MainHeader/MainHeader";
 
 interface IBrand {
   car_brand: string;
@@ -495,11 +496,8 @@ export default class Rental extends Component<{}, IRentalStates> {
 
     return (
       <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
+        <MainHeader title="장기렌트" icon="car" />
         <div className="select_car">
-          <h1>
-            <i className="fa fa-cab" />
-            장기렌트
-          </h1>
           <div className="item_lists">
             <div className="item_list">
               <div className="item_lists_title">

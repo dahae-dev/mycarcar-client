@@ -9,7 +9,7 @@ import RegisterForm from "./RegisterForm/RegisterForm";
 import RegisterTerms from "./RegisterTerms/RegisterTerms";
 import Rental from "./Rental/Rental";
 import { IHandlePage, IHandleEditUserInfomationBtnClick, IEditUserInfomation } from "../../App";
-import SuperUser from "./SuperUser/SuperUser";
+import SuperAdmin from "./SuperAdmin/SuperAdmin";
 import { NotFound } from "./NotFound/NotFound";
 import { EstimateForm } from "./EstimateForm/EstimateForm";
 import { EstimateList } from "./EstimateList/EstimateList";
@@ -40,7 +40,7 @@ const Main = (props: IMainProps) => {
       return <Rental />;
     case "/admin/user_information_management":
       return (
-        <SuperUser handlePage={handlePage} handleEditUserInfomationBtnClick={props.handleEditUserInfomationBtnClick} />
+        <SuperAdmin handlePage={handlePage} handleEditUserInfomationBtnClick={props.handleEditUserInfomationBtnClick} />
       );
     case "/estimate_list":
       return <EstimateList handlePage={handlePage} />;

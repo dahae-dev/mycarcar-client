@@ -1,11 +1,12 @@
-import "./SuperUser.css";
+import "./SuperAdmin.css";
 
 import React, { Component, MouseEvent } from "react";
 import { IHandlePage, IHandleEditUserInfomationBtnClick } from "../../../App";
+import { MainHeader } from "../MainHeader/MainHeader";
 
 import axios from "axios";
 
-interface ISuperUserProps {
+interface ISuperAdminProps {
   handlePage: IHandlePage;
   handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
 }
@@ -21,14 +22,14 @@ interface IMemberList {
   registerDate: string;
 }
 
-interface ISuperUserStates {
+interface ISuperAdminStates {
   userList: IMemberList[];
   totalCount: number;
   pageCount: number;
 }
 
-export default class SuperUser extends Component<ISuperUserProps, ISuperUserStates> {
-  constructor(props: ISuperUserProps) {
+export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminStates> {
+  constructor(props: ISuperAdminProps) {
     super(props);
 
     this.state = {
@@ -101,6 +102,7 @@ export default class SuperUser extends Component<ISuperUserProps, ISuperUserStat
     const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
     return (
       <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
+        <MainHeader title="회원정보관리" icon="television" />
         <div className="super_user">
           <div>
             <div>

@@ -9,7 +9,7 @@ export const EstimateForm = () => {
 
   return (
     <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
-      <MainHeader title="견적서보기" />
+      <MainHeader title="견적서보기" icon="calculator" />
       <div className="estimate_container">
         <EstimateFormMain />
       </div>
