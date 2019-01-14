@@ -1,8 +1,8 @@
 import "./Capital.css";
 
-import React, { Component, MouseEvent } from "react";
+import React, { MouseEvent } from "react";
 
-import { ICapitalList } from "../Rental";
+import { ICapitalList, ABOVE21, ABOVE26 } from "../Rental";
 
 interface ICapitalProps {
   totalPrice: number;
@@ -17,7 +17,7 @@ interface ICapitalProps {
 
 export const Capital = (props: ICapitalProps) => {
   const { totalPrice, capitalList, rentalPeriod, insurancePlan, deposit, advancePay } = props;
-  const insurancePrice = insurancePlan === "21세 이상" ? 1000000 : 600000;
+  const insurancePrice = insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26;
 
   return (
     <div className="capital-list">

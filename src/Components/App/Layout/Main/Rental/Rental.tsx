@@ -119,6 +119,9 @@ function isInvaildItem(item: string): boolean {
   return false;
 }
 
+export const ABOVE21 = 1000000;
+export const ABOVE26 = 600000;
+
 export default class Rental extends Component<{}, IRentalStates> {
   constructor(props: {}) {
     super(props);
@@ -207,7 +210,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       capital: this.state.capital,
       carFinalPrice: Math.floor(
         this.state.totalPrice * (1 + this.state.profit / 100) +
-          (this.state.insurancePlan === "21세 이상" ? 1000000 : 600000)
+          (this.state.insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26)
       ),
 
       rentalPeriod: this.state.rentalPeriod,

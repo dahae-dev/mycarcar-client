@@ -2,7 +2,7 @@ import "./Modal.css";
 
 import React from "react";
 
-import { IRentalStates } from "../Rental";
+import { IRentalStates, ABOVE21, ABOVE26 } from "../Rental";
 
 interface IModalProps {
   rentalData: IRentalStates;
@@ -24,7 +24,7 @@ export const Modal = (props: IModalProps) => {
     deposit,
     advancePay
   } = props.rentalData;
-  const insurancePrice = insurancePlan === "21세 이상" ? 1000000 : 600000;
+  const insurancePrice = insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26;
 
   const finalRent = totalPrice * (1 + profit / 100) + insurancePrice;
   const depositPercentage = deposit * 100;
