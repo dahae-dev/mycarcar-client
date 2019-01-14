@@ -40,9 +40,9 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
           car_detail: "",
           car_grade: "",
           car_option: "",
-          at_date: "",
-        },
-      ],
+          at_date: ""
+        }
+      ]
     };
 
     this.handleViewBtnClick = this.handleViewBtnClick.bind(this);
@@ -50,7 +50,7 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
 
   componentDidMount() {
     const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") },
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
     axios
@@ -58,7 +58,7 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
       .then((res) => {
         const estimateList = res.data.estimateList;
         this.setState({
-          estimateList,
+          estimateList
         });
       })
       .catch(() => console.error("Fail : Getting estimate list"));
@@ -68,7 +68,7 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
     const estimateNo = e.currentTarget.getAttribute("data-estimate-no") || "0";
 
     const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") },
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
     await axios
@@ -103,7 +103,7 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
             } ${estimate.car_grade} ${estimate.car_option}`;
 
             const atDate = new Date(estimate.at_date);
-            const parseDate = `${atDate.getFullYear()} / ${atDate.getMonth() + 1} / ${atDate.getDay()}`;
+            const parseDate = `${atDate.getFullYear()} / ${atDate.getMonth() + 1} / ${atDate.getDate()}`;
 
             return (
               <div className="estimate_list_row" key={estimate.at_date}>

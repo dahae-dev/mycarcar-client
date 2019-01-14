@@ -53,16 +53,19 @@ export default class EstimateFormMain extends Component {
         "mb_id": ""
         "mb_name": ""
         "mb_phone": ""
-      }`,
+      }`
     );
     const carModel = `${estimateInfo.car_brand} ${estimateInfo.car_series} ${estimateInfo.car_model} ${
       estimateInfo.car_detail
     } ${estimateInfo.car_grade}`;
 
+    const atDate = new Date(estimateInfo.at_date);
+    const parseDate = `${atDate.getFullYear()} / ${atDate.getMonth() + 1} / ${atDate.getDate()}`;
+
     return (
       <div className="estimate_form_main">
         <div className="estimate_form">
-          <div className="estimated_date">견적일자 : 2019 / 01 / 13</div>
+          <div className="estimated_date">견적일자 : {parseDate}</div>
 
           <h1>견적서</h1>
 
