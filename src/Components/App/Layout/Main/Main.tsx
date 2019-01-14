@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 - 레이아웃 메인 컴포넌트. 주로 이 컴포넌트의 내용이 업데이트되며 렌더링 됨.
- */
-
 import "./Main.css";
 
 import React, { Component } from "react";
@@ -27,11 +23,6 @@ interface IMainProps {
 }
 
 export default class Main extends Component<IMainProps> {
-  constructor(props: IMainProps) {
-    super(props);
-  }
-
-  // url 주소창의 endpoint에 따른 화면 전환
   render() {
     const pathname = location.pathname;
     const handlePage = this.props.handlePage;

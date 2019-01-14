@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 - 전반적인 레이아웃 및 하위 컴포넌트들을 감싸고 있는 최상위 컴포넌트
- */
-
 import "./App.css";
 
 import React from "react";
@@ -43,8 +39,8 @@ export default class App extends React.Component<{}, IAppState> {
         level: -1,
         company: "",
         fax: "",
-        registerDate: "",
-      },
+        registerDate: ""
+      }
     };
 
     this.handleSidebar = this.handleSidebar.bind(this);
@@ -52,14 +48,11 @@ export default class App extends React.Component<{}, IAppState> {
     this.handleEditUserInfomationBtnClick = this.handleEditUserInfomationBtnClick.bind(this);
   }
 
-  // App 컴포넌트 마운트 시 호출되는 리액트 라이프사이클 메서드
   componentDidMount() {
-    // 브라우저의 back, forward 이벤트 발생시, url에 맞는 화면 전환 컨트롤
     onpopstate = () => {
       this.forceUpdate();
     };
 
-    // 화면 크기 조절에 따른 토글 사이드바 컨트롤
     addEventListener("resize", () => {
       if (window.innerWidth >= 1280) {
         localStorage.setItem("isSidebarOpen", JSON.stringify(true));
@@ -76,7 +69,6 @@ export default class App extends React.Component<{}, IAppState> {
     this.setState({ editUserInfomation });
   }
 
-  // 헤더에 있는 사이드바 토글 버튼 클릭시 각각의 css 적용시켜주는 메서드
   handleSidebar() {
     let isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
     isSidebarOpen = JSON.stringify(!isSidebarOpen);
@@ -85,13 +77,11 @@ export default class App extends React.Component<{}, IAppState> {
     this.forceUpdate();
   }
 
-  // 사이드바 버튼 클릭 이벤트에 따른 화면 전환을 컨트롤하는 메서드
   handlePage(pathname: string) {
     history.pushState(null, "", pathname);
     this.forceUpdate();
   }
 
-  // 레이아웃 컴포넌트 렌더링
   render() {
     return (
       <div className="grid-container">

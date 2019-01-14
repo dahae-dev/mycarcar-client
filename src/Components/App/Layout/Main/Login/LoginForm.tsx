@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 -로그인 입력양식 컴포넌트
- */
-
 import "./LoginForm.css";
 
 import React from "react";
@@ -31,20 +27,18 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
       id: "",
       pw: "",
       loading: false,
-      error: "",
+      error: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // 사용자 입력값 받아와 state에 저장
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
   }
 
-  // 사용자로부터 입력받은 값으로 로그인 처리
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -52,25 +46,21 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
 
     this.setState({ loading: true });
 
-    // 서버에 HTTP post request로 인증 요청
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
       .then((res) => {
-        // 인증된 경우, 서버로부터 응답받은 JWT 토큰을 localStorage에 저장 후
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
         localStorage.setItem("isSignedIn", JSON.stringify(true));
         localStorage.setItem("signedInLevel", JSON.stringify(res.data.level));
 
-        // 홈 화면으로 페이지 이동
         setTimeout(() => {
           this.props.handlePage("/");
         }, 500);
       })
-      .catch((err: Error) => {
-        // DB 상의 데이터와 일치하지 않는 경우, 에러 처리
+      .catch(() => {
         this.setState({
           loading: false,
-          error: "아이디 또는 패스워드가 일치하지 않습니다.",
+          error: "아이디 또는 패스워드가 일치하지 않습니다."
         });
       });
   }

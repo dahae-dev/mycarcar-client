@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 - 회원정보수정 양식 컴포넌트
- */
-
 import "./EditForm.css";
 
 import React from "react";
@@ -47,18 +43,16 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       phone: "",
       fax: "",
       loading: false,
-      error: "",
+      error: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // 컴포넌트가 마운트된 직후 서버에 HTTP get request 요청하여 사용자 데이터 받아오기
   componentDidMount() {
-    // localStorage에 저장된 JWT 토큰을 헤더에 실어 전달
-    const config: object = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") },
+    const config = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
     this.setState({ loading: true });
@@ -66,12 +60,10 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
       .then((res) => {
-        // 인증된 사용자의 회원 정보를 모두 받아와 입력양식에 뿌려주기
         const data = res.data;
         this.setState({ ...data, loading: false });
       })
-      .catch((err: Error) => {
-        // JWT 토큰 기간이 만료된 경우, 에러 처리
+      .catch(() => {
         alert("재로그인 한 후 사용 가능합니다.");
         localStorage.removeItem("isSignedIn");
         localStorage.removeItem("x-access-token");
@@ -79,13 +71,11 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       });
   }
 
-  // 사용자가 수정한 입력값 받아와 state에 저장
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
   }
 
-  // 사용자로부터 입력받은 값으로 비밀번호 일치 여부 우선 확인
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -98,17 +88,14 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
 
     this.setState({ loading: true });
 
-    // 인증된 상태에서는 서버에 HTTP request를 할 때마다 헤더에 JWT 토큰을 실어서 함께 보내줘야 함
-    const config: object = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") },
+    const config = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    // 사용자가 수정한 값과 함께 서버에 HTTP post request 요청
     const postEdit: IPostEdit = (endpoint, data) => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
         .then((res) => {
-          // 회원정보 수정 처리에 대한 응답을 받으면 페이지 이동
           alert("회원정보가 정상적으로 수정되었습니다.");
           this.props.handlePage("/");
         })
@@ -117,12 +104,10 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
         });
     };
 
-    // 일반 회원인 경우 HTTP request 요청
     if (this.state.company === null) {
       postEdit(`user`, { id, pw, name, email, phone });
     }
 
-    // 협력사 회원인 경우 HTTP request 요청
     if (this.state.company !== null) {
       postEdit(`company`, { company, id, pw, name, email, phone, fax });
     }
@@ -154,7 +139,9 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
                 <i className="fa fa-user" />
                 회원정보수정
               </div>
+
               <hr />
+
               <form className="edit-form-input" method="post" onSubmit={this.handleSubmit}>
                 <div id="company-input-container" className={this.state.company === null ? "input-hidden" : ""}>
                   <label htmlFor="company">회사명</label>

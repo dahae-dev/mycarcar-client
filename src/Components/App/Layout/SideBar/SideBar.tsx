@@ -1,8 +1,3 @@
-/**
- * 1주차 다해 - 레이아웃 좌측 사이드바 컴포넌트.
- * 인증 상태에 따라 변경되는 로그인/로그아웃, 회원가입/정보수정 버튼이 있는 Status 컴포넌트와 MenuList 컴포넌트 렌더링
- */
-
 import "./SideBar.css";
 
 import React from "react";

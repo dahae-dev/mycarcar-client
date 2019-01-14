@@ -1,8 +1,3 @@
-/**
- * 1주차 다해 - 인증 상태에 따라 각각 다른 버튼이 렌더링 되는 컴포넌트
- * 로그인 시 로그인된 아이디 및 권한 그룹에 대한 표시도 여기서 이루어져야함
- */
-
 import "./Status.css";
 
 import React from "react";
@@ -22,7 +17,6 @@ export default class Status extends React.Component<IStatusProps, {}> {
   }
 
   render() {
-    // 로그인하여 인증이 된 경우, 로그아웃/정보수정 버튼 렌더링
     const isSignedIn = localStorage.getItem("isSignedIn");
     if (isSignedIn) {
       return (
