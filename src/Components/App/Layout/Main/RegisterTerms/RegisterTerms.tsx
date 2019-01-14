@@ -1,9 +1,8 @@
 import "./RegisterTerms.css";
 
-import React from "react";
+import React, { Component, FormEvent } from "react";
 
 import logo from "assets/img/logo_basic.png";
-
 import * as termsContent from "../../../../../util/Terms/terms";
 import { IHandlePage } from "../../../App";
 
@@ -16,7 +15,7 @@ interface IRegisterTermsState {
   isCheckedSnd: boolean;
 }
 
-export default class RegisterTerms extends React.Component<IRegisterTermsProps, IRegisterTermsState> {
+export default class RegisterTerms extends Component<IRegisterTermsProps, IRegisterTermsState> {
   constructor(props: IRegisterTermsProps) {
     super(props);
 
@@ -30,14 +29,14 @@ export default class RegisterTerms extends React.Component<IRegisterTermsProps, 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChangeFst(e: React.FormEvent<HTMLInputElement>) {
+  handleChangeFst(e: FormEvent<HTMLInputElement>) {
     this.setState({ isCheckedFst: e.currentTarget.checked });
   }
-  handleChangeSnd(e: React.FormEvent<HTMLInputElement>) {
+  handleChangeSnd(e: FormEvent<HTMLInputElement>) {
     this.setState({ isCheckedSnd: e.currentTarget.checked });
   }
 
-  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!this.state.isCheckedFst || !this.state.isCheckedSnd) {

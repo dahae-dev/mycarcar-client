@@ -1,6 +1,6 @@
 import "./EditForm.css";
 
-import React from "react";
+import React, { Component, FormEvent } from "react";
 import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
@@ -29,7 +29,7 @@ interface IEditFormState {
   [key: string]: string | boolean;
 }
 
-export default class EditForm extends React.Component<IEditFormProps, IEditFormState> {
+export default class EditForm extends Component<IEditFormProps, IEditFormState> {
   constructor(props: IEditFormProps) {
     super(props);
 
@@ -71,12 +71,12 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       });
   }
 
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  handleChange(e: FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
   }
 
-  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;

@@ -1,6 +1,6 @@
 import "./SideBar.css";
 
-import React from "react";
+import React, { Component } from "react";
 
 import Status from "./Status/Status";
 import MenuList from "./MenuList/MenuList";
@@ -11,7 +11,7 @@ interface ISidebarProps {
   handleSidebar: () => void;
 }
 
-export default class SideBar extends React.Component<ISidebarProps, {}> {
+export default class SideBar extends Component<ISidebarProps, {}> {
   constructor(props: ISidebarProps) {
     super(props);
   }

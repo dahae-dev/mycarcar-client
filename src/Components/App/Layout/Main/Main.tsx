@@ -10,7 +10,6 @@ import RegisterTerms from "./RegisterTerms/RegisterTerms";
 import Rental from "./Rental/Rental";
 import { IHandlePage, IHandleEditUserInfomationBtnClick, IEditUserInfomation } from "../../App";
 import SuperUser from "./SuperUser/SuperUser";
-import EditUserInfomation from "./EditUserInfomation/EditUserInfomation";
 import { NotFound } from "./NotFound/NotFound";
 import EstimateForm from "./EstimateForm/EstimateForm";
 import { EstimateList } from "./EstimateList/EstimateList";
@@ -47,8 +46,6 @@ export default class Main extends Component<IMainProps> {
             handleEditUserInfomationBtnClick={this.props.handleEditUserInfomationBtnClick}
           />
         );
-      case "/admin/edit_user_infomation":
-        return <EditUserInfomation handlePage={handlePage} editUserInfomation={this.props.editUserInfomation} />;
       case "/estimate_list":
         return <EstimateList handlePage={handlePage} />;
       case "/estimate_form":

@@ -1,6 +1,6 @@
 import "./App.css";
 
-import React from "react";
+import React, { Component } from "react";
 
 import { Header, SideBar, Main, Footer } from "./Layout";
 
@@ -27,7 +27,7 @@ interface IAppState {
   editUserInfomation: IEditUserInfomation;
 }
 
-export default class App extends React.Component<{}, IAppState> {
+export default class App extends Component<{}, IAppState> {
   constructor(props: {}) {
     super(props);
     this.state = {

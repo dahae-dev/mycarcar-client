@@ -1,6 +1,6 @@
 import "./Modal.css";
 
-import React from "react";
+import React, { Component } from "react";
 
 import { IRentalStates } from "../Rental";
 
@@ -9,7 +9,7 @@ interface IModalProps {
   handleSave: () => void;
 }
 
-export default class Modal extends React.Component<IModalProps> {
+export default class Modal extends Component<IModalProps> {
   constructor(props: IModalProps) {
     super(props);
   }

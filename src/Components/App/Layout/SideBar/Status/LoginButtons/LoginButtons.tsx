@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { IHandlePage } from "../../../../App";
 
 interface ILoginButtonsProps {
@@ -7,7 +7,7 @@ interface ILoginButtonsProps {
   handleSidebar: () => void;
 }
 
-export default class LoginButton extends React.Component<ILoginButtonsProps, {}> {
+export default class LoginButton extends Component<ILoginButtonsProps, {}> {
   constructor(props: ILoginButtonsProps) {
     super(props);
 

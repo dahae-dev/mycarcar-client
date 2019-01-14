@@ -1,6 +1,6 @@
 import "./Capital.css";
 
-import React, { MouseEvent } from "react";
+import React, { Component, MouseEvent } from "react";
 
 import { ICapitalList } from "../Rental";
 
@@ -15,7 +15,7 @@ interface ICapitalProps {
   handleModal: (e: MouseEvent<HTMLInputElement>) => void;
 }
 
-export default class Capital extends React.Component<ICapitalProps> {
+export default class Capital extends Component<ICapitalProps> {
   constructor(props: ICapitalProps) {
     super(props);
   }

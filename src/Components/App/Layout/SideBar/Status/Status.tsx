@@ -31,7 +31,6 @@ export default class Status extends React.Component<IStatusProps, {}> {
       );
     }
 
-    // 인증이 안 된 경우, 로그인/회원가입 버튼 렌더링
     return (
       <div className="status">
         <LoginButtons title="로그인" handlePage={this.props.handlePage} handleSidebar={this.props.handleSidebar} />
