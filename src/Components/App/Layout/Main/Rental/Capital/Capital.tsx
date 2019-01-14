@@ -11,7 +11,7 @@ interface ICapitalProps {
   totalPrice: number;
   capitalList: ICapitalList[];
   rentalPeriod: number;
-  insurancePlan: number;
+  insurancePlan: string;
   deposit: number;
   advancePay: number;
   handleModal: (e: MouseEvent<HTMLInputElement>) => void;
@@ -24,6 +24,7 @@ export default class Capital extends React.Component<ICapitalProps> {
 
   public render() {
     const { totalPrice, capitalList, rentalPeriod, insurancePlan, deposit, advancePay } = this.props;
+    const insurancePrice = insurancePlan === "21세 이상" ? 1000000 : 600000;
 
     return (
       <div className="capital-list">
@@ -34,21 +35,26 @@ export default class Capital extends React.Component<ICapitalProps> {
           <div>견적서 보기</div>
         </div>
         {capitalList
-          .sort((a, b) => (a.capital_profit > b.capital_profit ? 1 : b.capital_profit > a.capital_profit ? -1 : 0))
           .map((capital) => {
-            const finalRent = totalPrice * (1 + capital.capital_profit / 100) + insurancePlan;
+            const randomProfit = (Math.random() * 0.01 + 0.02).toString();
+            const profit = Number(Number.parseFloat(randomProfit).toFixed(3)) * 100;
+            return { name: capital.capital_name, profit };
+          })
+          .sort((a, b) => (a.profit > b.profit ? 1 : b.profit > a.profit ? -1 : 0))
+          .map((capital) => {
+            const finalRent = totalPrice * (1 + capital.profit / 100) + insurancePrice;
             const monthlyRend = (finalRent - (finalRent * deposit + finalRent * advancePay)) / rentalPeriod;
             return (
-              <div className="capital-list-content" key={capital.capital_name}>
-                <div>{capital.capital_name}</div>
-                <div>{`${finalRent.toLocaleString()}원`}</div>
+              <div className="capital-list-content" key={capital.name}>
+                <div>{capital.name}</div>
+                <div>{`${Math.floor(finalRent).toLocaleString()}원`}</div>
                 <div>{`${Math.floor(monthlyRend).toLocaleString()}원`}</div>
                 <div>
                   <input
                     type="button"
                     value="보기"
-                    data-capital={capital.capital_name}
-                    data-profit={capital.capital_profit}
+                    data-capital={capital.name}
+                    data-profit={capital.profit}
                     onClick={this.props.handleModal}
                   />
                 </div>
