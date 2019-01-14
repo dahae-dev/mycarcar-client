@@ -219,7 +219,10 @@ export default class Rental extends Component<{}, IRentalStates> {
       carOptionPrice: this.state.optionPrice,
 
       capital: this.state.capital,
-      carFinalPrice: this.state.totalPrice * (1 + this.state.profit / 100) + this.state.insurancePlan,
+      carFinalPrice: Math.floor(
+        this.state.totalPrice * (1 + this.state.profit / 100) +
+          (this.state.insurancePlan === "21세 이상" ? 1000000 : 600000)
+      ),
 
       rentalPeriod: this.state.rentalPeriod,
       insurancePlan: this.state.insurancePlan,
