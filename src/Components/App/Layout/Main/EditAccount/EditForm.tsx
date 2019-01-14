@@ -11,10 +11,6 @@ interface IEditFormProps {
   handlePage: IHandlePage;
 }
 
-interface IPostEdit {
-  (endpoint: string, data: object): void;
-}
-
 interface IEditFormState {
   company: string;
   id: string;
@@ -27,6 +23,10 @@ interface IEditFormState {
   loading: boolean;
   error: string;
   [key: string]: string | boolean;
+}
+
+interface IPatchEdit {
+  (endpoint: string, data: object): void;
 }
 
 export default class EditForm extends Component<IEditFormProps, IEditFormState> {
@@ -89,9 +89,9 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    const postEdit: IPostEdit = (endpoint, data) => {
+    const patchEdit: IPatchEdit = (endpoint, data) => {
       axios
-        .post(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
+        .patch(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
         .then((res) => {
           alert("회원정보가 정상적으로 수정되었습니다.");
           this.props.handlePage("/");
@@ -102,11 +102,11 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
     };
 
     if (this.state.company === null) {
-      postEdit(`user`, { id, pw, name, email, phone });
+      patchEdit(`user`, { id, pw, name, email, phone });
     }
 
     if (this.state.company !== null) {
-      postEdit(`company`, { company, id, pw, name, email, phone, fax });
+      patchEdit(`company`, { company, id, pw, name, email, phone, fax });
     }
   };
 
