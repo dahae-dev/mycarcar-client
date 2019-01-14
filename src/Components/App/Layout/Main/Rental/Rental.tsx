@@ -257,6 +257,8 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          optionPrice: 0,
+          totalPrice: 0,
           listClicked: false
         });
       })
@@ -286,6 +288,8 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          optionPrice: 0,
+          totalPrice: 0,
           listClicked: false
         });
       })
@@ -317,6 +321,8 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          optionPrice: 0,
+          totalPrice: 0,
           listClicked: false
         });
       })
@@ -349,6 +355,8 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          optionPrice: 0,
+          totalPrice: 0,
           listClicked: false
         });
       })
@@ -386,6 +394,8 @@ export default class Rental extends Component<{}, IRentalStates> {
           detail,
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          optionPrice: 0,
+          totalPrice: 0,
           listClicked: false
         });
       })
@@ -421,7 +431,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       .then((res) => {
         const price = res.data.car_price;
         const optionList: IOption[] = res.data.optionList;
-        this.setState({ optionList, grade, price, listClicked: false });
+        this.setState({ optionList, grade, price, optionPrice: 0, totalPrice: price, listClicked: false });
       })
       .catch((err: Error) => {
         alert(err.message);
