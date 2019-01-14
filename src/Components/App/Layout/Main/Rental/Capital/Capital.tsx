@@ -1,9 +1,6 @@
-/**
- * 3주차 다해 - 장기렌트 page에서 견적확인 시 캐피탈사별 견적 리스트를 보여주는 컴포넌트
- */
+import "./Capital.css";
 
 import React, { MouseEvent } from "react";
-import "./Capital.css";
 
 import { ICapitalList } from "../Rental";
 
@@ -14,6 +11,7 @@ interface ICapitalProps {
   insurancePlan: string;
   deposit: number;
   advancePay: number;
+
   handleModal: (e: MouseEvent<HTMLInputElement>) => void;
 }
 

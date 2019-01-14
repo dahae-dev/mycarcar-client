@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 - 회원가입 이용약관 컴포넌트
- */
-
 import "./RegisterTerms.css";
 
 import React from "react";
@@ -26,7 +22,7 @@ export default class RegisterTerms extends React.Component<IRegisterTermsProps, 
 
     this.state = {
       isCheckedFst: false,
-      isCheckedSnd: false,
+      isCheckedSnd: false
     };
 
     this.handleChangeFst = this.handleChangeFst.bind(this);
@@ -34,7 +30,6 @@ export default class RegisterTerms extends React.Component<IRegisterTermsProps, 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // 각 이용약관 체크박스 동의 체크 여부 확인
   handleChangeFst(e: React.FormEvent<HTMLInputElement>) {
     this.setState({ isCheckedFst: e.currentTarget.checked });
   }
@@ -42,7 +37,6 @@ export default class RegisterTerms extends React.Component<IRegisterTermsProps, 
     this.setState({ isCheckedSnd: e.currentTarget.checked });
   }
 
-  // 이용약관 동의 여부 확인 후 회원가입 양식으로 이동
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 

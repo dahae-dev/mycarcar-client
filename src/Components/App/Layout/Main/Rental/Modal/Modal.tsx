@@ -1,9 +1,6 @@
-/**
- * 3주차 다해 - 장기렌트 page에서 캐피탈사별 견적서를 보여주는 모달 컴포넌트
- */
-
-import * as React from "react";
 import "./Modal.css";
+
+import React from "react";
 
 import { IRentalStates } from "../Rental";
 

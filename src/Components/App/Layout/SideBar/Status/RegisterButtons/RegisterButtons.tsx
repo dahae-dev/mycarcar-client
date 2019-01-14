@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 - 회원가입 or 정보수정 버튼 컴포넌트
- */
-
 import React from "react";
 import { IHandlePage } from "../../../../App";
 
@@ -19,7 +15,6 @@ export default class RegisterButton extends React.Component<IRegisterButtonsProp
     this.handlePage = this.handlePage.bind(this);
   }
 
-  // 회원가입 or 정보수정 버튼 클릭에 따른 화면 전환을 컨트롤하는 메서드
   handlePage() {
     if (window.innerWidth <= 768) {
       this.props.handleSidebar();

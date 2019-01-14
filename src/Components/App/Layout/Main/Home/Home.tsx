@@ -1,8 +1,3 @@
-/**
- * 1주차 다해 - 홈 화면 백그라운드 이미지가 렌더링 되는 컴포넌트
- * 추가) 부트스트랩을 이용한 슬라이드쇼 적용
- */
-
 import React from "react";
 import { Carousel } from "react-bootstrap";
 

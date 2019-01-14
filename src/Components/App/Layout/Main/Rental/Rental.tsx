@@ -200,13 +200,13 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleModal(e: MouseEvent<HTMLInputElement>) {
-    const capital = e.currentTarget.dataset.capital as string;
-    const profit = Number(e.currentTarget.dataset.profit);
+    const capital = e.currentTarget.dataset.capital || "";
+    const profit = parseFloat(e.currentTarget.dataset.profit || "0");
     this.setState({ detailClicked: true, capital, profit });
   }
 
   handleSave() {
-    const body: object = {
+    const body = {
       origin: this.state.origin,
       brand: this.state.brand,
       series: this.state.series,
@@ -230,8 +230,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       advancePay: this.state.advancePay
     };
 
-    const config: object = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    const config = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
 
     axios
@@ -280,6 +280,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}`)
       .then((res) => {
         const seriesList: ISeries[] = res.data.seriesList;
+
         this.setState({
           seriesList,
           brand,
@@ -459,7 +460,7 @@ export default class Rental extends Component<{}, IRentalStates> {
     this.setState({ option, optionPrice, totalPrice: this.state.price + optionPrice, listClicked: false });
   }
 
-  handleEstimate(e: MouseEvent) {
+  handleEstimate() {
     const { price, rentalPeriod, insurancePlan } = this.state;
     if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
       return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
@@ -484,7 +485,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         alert(err.message);
       });
 
-    const modal = document.getElementById("my-modal") as HTMLElement;
+    const modal = document.getElementById("my-modal");
     window.onclick = (e) => {
       if (e.target === modal) {
         this.setState({ detailClicked: false });

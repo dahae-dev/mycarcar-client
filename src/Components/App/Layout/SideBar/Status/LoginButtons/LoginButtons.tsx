@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 - 로그인 or 로그아웃 버튼 컴포넌트
- */
-
 import React from "react";
 import { IHandlePage } from "../../../../App";
 
@@ -18,7 +14,6 @@ export default class LoginButton extends React.Component<ILoginButtonsProps, {}>
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-  // 로그인 or 로그아웃 버튼 클릭에 따른 화면 전환을 컨트롤하는 메서드
   handleOnClick() {
     if (window.innerWidth <= 768) {
       this.props.handleSidebar();
@@ -29,7 +24,6 @@ export default class LoginButton extends React.Component<ILoginButtonsProps, {}>
       return this.props.handlePage("/login");
     }
 
-    // 로그아웃 시에는 인증 상태 변경 및 JWT 토큰도 함께 삭제
     localStorage.removeItem("x-access-token");
     localStorage.removeItem("isSignedIn");
     localStorage.setItem("signedInLevel", JSON.stringify(0));

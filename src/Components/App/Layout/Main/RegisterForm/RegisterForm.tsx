@@ -1,7 +1,3 @@
-/**
- * 1주차 다해 - 회원가입 입력양식 컴포넌트
- */
-
 import "./RegisterForm.css";
 
 import React, { FormEvent, ChangeEvent } from "react";
@@ -49,7 +45,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
       phone: "",
       fax: "",
       loading: false,
-      error: "",
+      error: ""
     };
 
     this.handleCheck = this.handleCheck.bind(this);
@@ -58,13 +54,11 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // 일반회원인지, 협력사인지에 따라 입력양식 다르게 렌더링 되도록
   handleCheck(e: FormEvent<HTMLInputElement>) {
     const { value } = e.currentTarget;
     this.setState({ checkedValue: value });
   }
 
-  // 사용자로부터 입력값 받아와 state에 저장
   handleChange(e: FormEvent<HTMLInputElement>) {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
@@ -74,7 +68,6 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     this.setState({ company: value });
   }
 
-  // 사용자로부터 입력받은 값으로 비밀번호 일치 여부 우선 확인
   handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -87,29 +80,24 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
 
     this.setState({ loading: true });
 
-    // 서버에 HTTP post request를 요청할 함수
     const postRegister: IPostRegister = (endpoint, data) => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/api/register/${endpoint}`, data)
-        .then((res) => {
-          // 회원가입 처리된 경우, 로그인 페이지로 이동
+        .then(() => {
           alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
           setTimeout(() => {
             this.props.handlePage("/login");
           }, 1000);
         })
-        .catch((err: Error) => {
-          // 이미 가입된 회원의 경우, 에러 처리
+        .catch(() => {
           this.setState({ loading: false, error: "이미 가입된 회원입니다." });
         });
     };
 
-    // 일반 회원인 경우 HTTP request 요청
     if (this.state.checkedValue === "개인") {
       postRegister(`user`, { id, pw, name, email, phone });
     }
 
-    // 협력사 회원인 경우 HTTP request 요청
     if (this.state.checkedValue === "협력사") {
       postRegister(`company`, { company, id, pw, name, email, phone, fax });
     }
@@ -119,7 +107,6 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
     const { checkedValue, company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;
     const isSidebarOpen = localStorage.getItem("isSidebarOpen") || "true";
 
-    // 로딩 중일 때는 pre-loader 렌더링
     if (loading) {
       return (
         <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
