@@ -64,7 +64,7 @@ export interface IRentalStates {
   totalPrice: number;
 
   rentalPeriod: number;
-  insurancePlan: number;
+  insurancePlan: string;
   deposit: number;
   advancePay: number;
 
@@ -105,7 +105,7 @@ const selectMessages: ISelectMessages = {
   model: "시리즈를 선택해주세요.",
   detail: "모델을 선택해주세요.",
   grade: "상세모델을 선택해주세요.",
-  option: "등급을 선택해주세요.",
+  option: "등급을 선택해주세요."
 };
 
 function isInvaildItem(item: string): boolean {
@@ -148,7 +148,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       totalPrice: 0,
 
       rentalPeriod: 0,
-      insurancePlan: 0,
+      insurancePlan: "",
       deposit: 0,
       advancePay: 0,
 
@@ -164,7 +164,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       checkedOption: "",
 
       listClicked: false,
-      detailClicked: false,
+      detailClicked: false
     };
 
     this.handleOriginClick = this.handleOriginClick.bind(this);
@@ -177,7 +177,8 @@ export default class Rental extends Component<{}, IRentalStates> {
 
     this.handleEstimate = this.handleEstimate.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
+    this.handleSelectNumber = this.handleSelectNumber.bind(this);
+    this.handleSelectString = this.handleSelectString.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.handleSave = this.handleSave.bind(this);
   }
@@ -187,10 +188,15 @@ export default class Rental extends Component<{}, IRentalStates> {
     this.setState({ [name]: value });
   }
 
-  handleSelect(e: ChangeEvent<HTMLSelectElement>) {
+  handleSelectNumber(e: ChangeEvent<HTMLSelectElement>) {
     const { id, value } = e.currentTarget;
     const numericValue = Number(value);
     this.setState({ [id]: numericValue });
+  }
+
+  handleSelectString(e: ChangeEvent<HTMLSelectElement>) {
+    const { id, value } = e.currentTarget;
+    this.setState({ [id]: value });
   }
 
   handleModal(e: MouseEvent<HTMLInputElement>) {
@@ -218,22 +224,23 @@ export default class Rental extends Component<{}, IRentalStates> {
       rentalPeriod: this.state.rentalPeriod,
       insurancePlan: this.state.insurancePlan,
       deposit: this.state.deposit,
-      advancePay: this.state.advancePay,
+      advancePay: this.state.advancePay
     };
 
     const config: object = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") },
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    axios.post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config).then((res) => {
-      this.setState({ detailClicked: false });
-      alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.");
-    });
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config)
+      .then((res) => {
+        this.setState({ detailClicked: false });
+        alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.");
+      })
+      .catch((err) => alert(err.message));
   }
 
   handleOriginClick(origin: string) {
-    this.setState({ listClicked: false });
-
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
       .then((res) => {
@@ -247,6 +254,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          listClicked: false
         });
       })
       .catch((err: Error) => {
@@ -255,8 +263,6 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleBrandClick(e: MouseEvent) {
-    this.setState({ listClicked: false });
-
     const brand = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(brand)) {
       return;
@@ -277,6 +283,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          listClicked: false
         });
       })
       .catch((err: Error) => {
@@ -285,8 +292,6 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleSeriesClick(e: MouseEvent) {
-    this.setState({ listClicked: false });
-
     const series = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(series)) {
       return;
@@ -309,6 +314,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          listClicked: false
         });
       })
       .catch((err: Error) => {
@@ -317,8 +323,6 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleModelClick(e: MouseEvent) {
-    this.setState({ listClicked: false });
-
     const model = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(model)) {
       return;
@@ -342,6 +346,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           gradeList: [{ car_grade: selectMessages.grade }],
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          listClicked: false
         });
       })
       .catch((err: Error) => {
@@ -350,8 +355,6 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleDetailClick(e: MouseEvent) {
-    this.setState({ listClicked: false });
-
     const detail = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(detail)) {
       return;
@@ -371,7 +374,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       .get(
         `${
           process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`,
+        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`
       )
       .then((res) => {
         const gradeList: IGrade[] = res.data.gradeList;
@@ -380,6 +383,7 @@ export default class Rental extends Component<{}, IRentalStates> {
           detail,
           optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
           price: 0,
+          listClicked: false
         });
       })
       .catch((err: Error) => {
@@ -388,8 +392,6 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleGradeClick(e: MouseEvent) {
-    this.setState({ listClicked: false });
-
     const grade = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(grade)) {
       return;
@@ -411,12 +413,12 @@ export default class Rental extends Component<{}, IRentalStates> {
       .get(
         `${
           process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`,
+        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`
       )
       .then((res) => {
         const price = res.data.car_price;
         const optionList: IOption[] = res.data.optionList;
-        this.setState({ optionList, grade, price });
+        this.setState({ optionList, grade, price, listClicked: false });
       })
       .catch((err: Error) => {
         alert(err.message);
@@ -424,8 +426,6 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleOptionClick(e: MouseEvent) {
-    this.setState({ listClicked: false });
-
     const option = e.currentTarget.children[1].children[0].textContent || selectMessages.none;
     const optionInfo = this.state.optionList.reduce(
       (accu, curr) => {
@@ -433,8 +433,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       },
       {
         car_option: selectMessages.none,
-        car_option_price: 0,
-      },
+        car_option_price: 0
+      }
     );
 
     const optionPrice = optionInfo.car_option_price;
@@ -443,21 +443,19 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    this.setState({ option, optionPrice, totalPrice: this.state.price + optionPrice });
+    this.setState({ option, optionPrice, totalPrice: this.state.price + optionPrice, listClicked: false });
   }
 
   handleEstimate(e: MouseEvent) {
     const { price, rentalPeriod, insurancePlan } = this.state;
-    if (price === 0 || rentalPeriod === 0 || insurancePlan === 0) {
+    if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
       return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
     }
-
-    this.setState({ listClicked: true });
 
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/capital-profit`)
       .then((res) => {
-        this.setState({ capitalList: res.data.capitalList });
+        this.setState({ capitalList: res.data.capitalList, listClicked: true });
       })
       .catch((err) => alert(err.message));
   }
@@ -493,7 +491,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       deposit,
       advancePay,
       listClicked,
-      detailClicked,
+      detailClicked
     } = this.state;
 
     return (
@@ -649,7 +647,7 @@ export default class Rental extends Component<{}, IRentalStates> {
               <ul className="list_group">
                 <li className="list-group-item apply_display_flex_sb">
                   <label htmlFor="rentalPeriod">렌탈기간</label>
-                  <select id="rentalPeriod" value={this.state.rentalPeriod} onChange={this.handleSelect} required>
+                  <select id="rentalPeriod" value={this.state.rentalPeriod} onChange={this.handleSelectNumber} required>
                     <option hidden>선택</option>
                     <option value="12">12개월</option>
                     <option value="24">24개월</option>
@@ -660,15 +658,20 @@ export default class Rental extends Component<{}, IRentalStates> {
                 </li>
                 <li className="list-group-item apply_display_flex_sb">
                   <label htmlFor="insurancePlan">보험담보</label>
-                  <select id="insurancePlan" value={this.state.insurancePlan} onChange={this.handleSelect} required>
+                  <select
+                    id="insurancePlan"
+                    value={this.state.insurancePlan}
+                    onChange={this.handleSelectString}
+                    required
+                  >
                     <option hidden>선택</option>
-                    <option value="1000000">21세 이상</option>
-                    <option value="600000">26세 이상</option>
+                    <option value="21세 이상">21세 이상</option>
+                    <option value="26세 이상">26세 이상</option>
                   </select>
                 </li>
                 <li className="list-group-item apply_display_flex_sb">
                   <label htmlFor="deposit">보증금</label>
-                  <select id="deposit" value={this.state.deposit} onChange={this.handleSelect} required>
+                  <select id="deposit" value={this.state.deposit} onChange={this.handleSelectNumber} required>
                     <option hidden>선택</option>
                     <option value="0">0%</option>
                     <option value="0.1">10%</option>
@@ -678,7 +681,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 </li>
                 <li className="list-group-item apply_display_flex_sb">
                   <label htmlFor="advancePay">선납금</label>
-                  <select id="advancePay" value={this.state.advancePay} onChange={this.handleSelect} required>
+                  <select id="advancePay" value={this.state.advancePay} onChange={this.handleSelectNumber} required>
                     <option hidden>선택</option>
                     <option value="0">0%</option>
                     <option value="0.1">10%</option>

@@ -32,8 +32,9 @@ export default class Modal extends React.Component<IModalProps> {
       deposit,
       advancePay
     } = this.props.rentalData;
+    const insurancePrice = insurancePlan === "21세 이상" ? 1000000 : 600000;
 
-    const finalRent = totalPrice * (1 + profit / 100) + insurancePlan;
+    const finalRent = totalPrice * (1 + profit / 100) + insurancePrice;
     const depositPercentage = deposit * 100;
     const depositPrice = finalRent * deposit;
     const advancePayPercentage = advancePay * 100;
@@ -78,7 +79,7 @@ export default class Modal extends React.Component<IModalProps> {
               <div className="capital-table-content">
                 <div>{capital}</div>
                 <div>{`${rentalPeriod}개월`}</div>
-                <div>{insurancePlan === 600000 ? "26세 이상" : "21세 이상"}</div>
+                <div>{insurancePlan}</div>
                 <div>{`${finalRent.toLocaleString()}원`}</div>
               </div>
             </div>
@@ -96,10 +97,10 @@ export default class Modal extends React.Component<IModalProps> {
                 <div>월 렌탈료</div>
               </div>
               <div className="capital-table-content">
-                <div>{`(${depositPercentage}%) ${depositPrice.toLocaleString()}원`}</div>
-                <div>{`(${advancePayPercentage}%) ${advancePayPrice.toLocaleString()}원`}</div>
-                <div>{`${initialPrice.toLocaleString()}원`}</div>
-                <div>{`${monthlyRent.toLocaleString()}원`}</div>
+                <div>{`(${depositPercentage}%) ${Math.floor(depositPrice).toLocaleString()}원`}</div>
+                <div>{`(${advancePayPercentage}%) ${Math.floor(advancePayPrice).toLocaleString()}원`}</div>
+                <div>{`${Math.floor(initialPrice).toLocaleString()}원`}</div>
+                <div>{`${Math.floor(monthlyRent).toLocaleString()}원`}</div>
               </div>
             </div>
           </div>
