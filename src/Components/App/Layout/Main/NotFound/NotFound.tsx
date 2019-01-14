@@ -1,6 +1,6 @@
 import "./NotFound.css";
 
-import notFound from "assets/img/404-Not-Found.jpg";
+import notFound from "assets/img/404-Not-Found.jpeg";
 
 import React from "react";
 
