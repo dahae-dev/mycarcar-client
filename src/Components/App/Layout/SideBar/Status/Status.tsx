@@ -11,31 +11,23 @@ interface IStatusProps {
   handleSidebar: () => void;
 }
 
-export default class Status extends React.Component<IStatusProps, {}> {
-  constructor(props: IStatusProps) {
-    super(props);
-  }
-
-  render() {
-    const isSignedIn = localStorage.getItem("isSignedIn");
-    if (isSignedIn) {
-      return (
-        <div className="status">
-          <LoginButtons title="로그아웃" handlePage={this.props.handlePage} handleSidebar={this.props.handleSidebar} />
-          <RegisterButtons
-            title="정보수정"
-            handlePage={this.props.handlePage}
-            handleSidebar={this.props.handleSidebar}
-          />
-        </div>
-      );
-    }
-
+const Status = (props: IStatusProps) => {
+  const isSignedIn = localStorage.getItem("isSignedIn");
+  if (isSignedIn) {
     return (
       <div className="status">
-        <LoginButtons title="로그인" handlePage={this.props.handlePage} handleSidebar={this.props.handleSidebar} />
-        <RegisterButtons title="회원가입" handlePage={this.props.handlePage} handleSidebar={this.props.handleSidebar} />
+        <LoginButtons title="로그아웃" handlePage={props.handlePage} handleSidebar={props.handleSidebar} />
+        <RegisterButtons title="정보수정" handlePage={props.handlePage} handleSidebar={props.handleSidebar} />
       </div>
     );
   }
-}
+
+  return (
+    <div className="status">
+      <LoginButtons title="로그인" handlePage={props.handlePage} handleSidebar={props.handleSidebar} />
+      <RegisterButtons title="회원가입" handlePage={props.handlePage} handleSidebar={props.handleSidebar} />
+    </div>
+  );
+};
+
+export default Status;

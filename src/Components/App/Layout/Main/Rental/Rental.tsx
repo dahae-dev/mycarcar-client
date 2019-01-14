@@ -4,8 +4,8 @@ import React, { Component, MouseEvent, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 
 import Origin from "./Origin/Origin";
-import Capital from "./Capital/Capital";
-import Modal from "./Modal/Modal";
+import { Capital } from "./Capital/Capital";
+import { Modal } from "./Modal/Modal";
 
 interface IBrand {
   car_brand: string;
