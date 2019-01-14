@@ -12,14 +12,12 @@ interface IMenuListProps {
 export default class MenuList extends Component<IMenuListProps> {
   constructor(props: IMenuListProps) {
     super(props);
-
-    this.handleMenuClick = this.handleMenuClick.bind(this);
   }
 
-  handleMenuClick(e: MouseEvent) {
+  handleMenuClick = (e: MouseEvent) => {
     const pathname = e.currentTarget.getAttribute("data-path") || "/";
     this.props.handlePage(pathname);
-  }
+  };
 
   render() {
     const signedInLevel = JSON.parse(localStorage.getItem("signedInLevel") || "0");

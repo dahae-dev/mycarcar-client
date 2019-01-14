@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { IHandlePage } from "../../../../App";
 
 interface ILoginButtonsProps {
@@ -7,14 +7,12 @@ interface ILoginButtonsProps {
   handleSidebar: () => void;
 }
 
-export default class LoginButton extends React.Component<ILoginButtonsProps, {}> {
+export default class LoginButton extends Component<ILoginButtonsProps, {}> {
   constructor(props: ILoginButtonsProps) {
     super(props);
-
-    this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-  handleOnClick() {
+  handleOnClick = () => {
     if (window.innerWidth <= 768) {
       this.props.handleSidebar();
     }
@@ -29,7 +27,7 @@ export default class LoginButton extends React.Component<ILoginButtonsProps, {}>
     localStorage.setItem("signedInLevel", JSON.stringify(0));
 
     this.props.handlePage("/");
-  }
+  };
 
   render() {
     return (

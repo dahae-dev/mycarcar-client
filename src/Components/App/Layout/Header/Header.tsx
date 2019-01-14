@@ -1,7 +1,7 @@
 import "./Header.css";
 
-import logo from "assets/img/logo.png";
 import React from "react";
+import logo from "assets/img/logo.png";
 import { IHandlePage } from "../../App";
 
 interface IHeaderProps {
@@ -12,13 +12,11 @@ interface IHeaderProps {
 export default class Header extends React.Component<IHeaderProps> {
   constructor(props: IHeaderProps) {
     super(props);
-
-    this.handleLogoClick = this.handleLogoClick.bind(this);
   }
 
-  handleLogoClick() {
+  handleLogoClick = () => {
     this.props.handlePage("/");
-  }
+  };
 
   render() {
     return (

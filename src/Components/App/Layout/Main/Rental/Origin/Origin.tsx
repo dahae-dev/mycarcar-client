@@ -15,26 +15,23 @@ export default class Origin extends Component<IOriginProps, IOriginStates> {
     super(props);
 
     this.state = {
-      isKorea: true,
+      isKorea: true
     };
-
-    this.handleKoreaClick = this.handleKoreaClick.bind(this);
-    this.handleForeignClick = this.handleForeignClick.bind(this);
   }
 
-  handleKoreaClick(e: MouseEvent) {
+  handleKoreaClick = (e: MouseEvent) => {
     this.props.handleOriginClick("korea");
     this.setState({
-      isKorea: true,
+      isKorea: true
     });
-  }
+  };
 
-  handleForeignClick(e: MouseEvent) {
+  handleForeignClick = (e: MouseEvent) => {
     this.props.handleOriginClick("foreign");
     this.setState({
-      isKorea: false,
+      isKorea: false
     });
-  }
+  };
 
   public render() {
     const isKorea = this.state.isKorea;

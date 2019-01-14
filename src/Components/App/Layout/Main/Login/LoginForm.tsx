@@ -1,6 +1,6 @@
 import "./LoginForm.css";
 
-import React from "react";
+import React, { Component, FormEvent } from "react";
 import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
@@ -19,7 +19,7 @@ interface ILoginFormState {
   [key: string]: string | boolean;
 }
 
-export default class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
+export default class LoginForm extends Component<ILoginFormProps, ILoginFormState> {
   constructor(props: ILoginFormProps) {
     super(props);
 
@@ -29,17 +29,14 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
       loading: false,
       error: ""
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  handleChange = (e: FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-  }
+  };
 
-  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { id, pw } = this.state;
@@ -63,7 +60,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
           error: "아이디 또는 패스워드가 일치하지 않습니다."
         });
       });
-  }
+  };
 
   render() {
     const { id, pw, loading, error } = this.state;

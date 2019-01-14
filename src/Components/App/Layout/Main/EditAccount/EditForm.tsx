@@ -1,6 +1,6 @@
 import "./EditForm.css";
 
-import React from "react";
+import React, { Component, FormEvent } from "react";
 import axios from "axios";
 
 import logo from "assets/img/logo_basic.png";
@@ -9,10 +9,6 @@ import { IHandlePage } from "../../../App";
 
 interface IEditFormProps {
   handlePage: IHandlePage;
-}
-
-interface IPostEdit {
-  (endpoint: string, data: object): void;
 }
 
 interface IEditFormState {
@@ -29,7 +25,11 @@ interface IEditFormState {
   [key: string]: string | boolean;
 }
 
-export default class EditForm extends React.Component<IEditFormProps, IEditFormState> {
+interface IPatchEdit {
+  (endpoint: string, data: object): void;
+}
+
+export default class EditForm extends Component<IEditFormProps, IEditFormState> {
   constructor(props: IEditFormProps) {
     super(props);
 
@@ -45,9 +45,6 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       loading: false,
       error: ""
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -71,12 +68,12 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       });
   }
 
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  handleChange = (e: FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-  }
+  };
 
-  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;
@@ -92,9 +89,9 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    const postEdit: IPostEdit = (endpoint, data) => {
+    const patchEdit: IPatchEdit = (endpoint, data) => {
       axios
-        .post(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
+        .patch(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
         .then((res) => {
           alert("회원정보가 정상적으로 수정되었습니다.");
           this.props.handlePage("/");
@@ -105,13 +102,13 @@ export default class EditForm extends React.Component<IEditFormProps, IEditFormS
     };
 
     if (this.state.company === null) {
-      postEdit(`user`, { id, pw, name, email, phone });
+      patchEdit(`user`, { id, pw, name, email, phone });
     }
 
     if (this.state.company !== null) {
-      postEdit(`company`, { company, id, pw, name, email, phone, fax });
+      patchEdit(`company`, { company, id, pw, name, email, phone, fax });
     }
-  }
+  };
 
   render() {
     const { company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;

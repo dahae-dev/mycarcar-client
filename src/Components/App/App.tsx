@@ -1,6 +1,6 @@
 import "./App.css";
 
-import React from "react";
+import React, { Component } from "react";
 
 import { Header, SideBar, Main, Footer } from "./Layout";
 
@@ -27,7 +27,7 @@ interface IAppState {
   editUserInfomation: IEditUserInfomation;
 }
 
-export default class App extends React.Component<{}, IAppState> {
+export default class App extends Component<{}, IAppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -42,10 +42,6 @@ export default class App extends React.Component<{}, IAppState> {
         registerDate: ""
       }
     };
-
-    this.handleSidebar = this.handleSidebar.bind(this);
-    this.handlePage = this.handlePage.bind(this);
-    this.handleEditUserInfomationBtnClick = this.handleEditUserInfomationBtnClick.bind(this);
   }
 
   componentDidMount() {
@@ -65,22 +61,22 @@ export default class App extends React.Component<{}, IAppState> {
     });
   }
 
-  handleEditUserInfomationBtnClick(editUserInfomation: IEditUserInfomation) {
+  handleEditUserInfomationBtnClick = (editUserInfomation: IEditUserInfomation) => {
     this.setState({ editUserInfomation });
-  }
+  };
 
-  handleSidebar() {
+  handleSidebar = () => {
     let isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
     isSidebarOpen = JSON.stringify(!isSidebarOpen);
 
     localStorage.setItem("isSidebarOpen", isSidebarOpen);
     this.forceUpdate();
-  }
+  };
 
-  handlePage(pathname: string) {
+  handlePage = (pathname: string) => {
     history.pushState(null, "", pathname);
     this.forceUpdate();
-  }
+  };
 
   render() {
     return (

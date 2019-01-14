@@ -4,8 +4,9 @@ import React, { Component, MouseEvent, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 
 import Origin from "./Origin/Origin";
-import Capital from "./Capital/Capital";
-import Modal from "./Modal/Modal";
+import { Capital } from "./Capital/Capital";
+import { Modal } from "./Modal/Modal";
+import { MainHeader } from "../MainHeader/MainHeader";
 
 interface IBrand {
   car_brand: string;
@@ -118,6 +119,9 @@ function isInvaildItem(item: string): boolean {
   return false;
 }
 
+export const ABOVE21 = 1000000;
+export const ABOVE26 = 600000;
+
 export default class Rental extends Component<{}, IRentalStates> {
   constructor(props: {}) {
     super(props);
@@ -166,46 +170,31 @@ export default class Rental extends Component<{}, IRentalStates> {
       listClicked: false,
       detailClicked: false
     };
-
-    this.handleOriginClick = this.handleOriginClick.bind(this);
-    this.handleBrandClick = this.handleBrandClick.bind(this);
-    this.handleSeriesClick = this.handleSeriesClick.bind(this);
-    this.handleModelClick = this.handleModelClick.bind(this);
-    this.handleDetailClick = this.handleDetailClick.bind(this);
-    this.handleGradeClick = this.handleGradeClick.bind(this);
-    this.handleOptionClick = this.handleOptionClick.bind(this);
-
-    this.handleEstimate = this.handleEstimate.bind(this);
-    this.handleCheck = this.handleCheck.bind(this);
-    this.handleSelectNumber = this.handleSelectNumber.bind(this);
-    this.handleSelectString = this.handleSelectString.bind(this);
-    this.handleModal = this.handleModal.bind(this);
-    this.handleSave = this.handleSave.bind(this);
   }
 
-  handleCheck(e: FormEvent<HTMLInputElement>) {
+  handleCheck = (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
     this.setState({ [name]: value });
-  }
+  };
 
-  handleSelectNumber(e: ChangeEvent<HTMLSelectElement>) {
+  handleSelectNumber = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
     const numericValue = Number(value);
     this.setState({ [id]: numericValue });
-  }
+  };
 
-  handleSelectString(e: ChangeEvent<HTMLSelectElement>) {
+  handleSelectString = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
     this.setState({ [id]: value });
-  }
+  };
 
-  handleModal(e: MouseEvent<HTMLInputElement>) {
+  handleModal = (e: MouseEvent<HTMLInputElement>) => {
     const capital = e.currentTarget.dataset.capital || "";
     const profit = parseFloat(e.currentTarget.dataset.profit || "0");
     this.setState({ detailClicked: true, capital, profit });
-  }
+  };
 
-  handleSave() {
+  handleSave = () => {
     const body = {
       origin: this.state.origin,
       brand: this.state.brand,
@@ -221,7 +210,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       capital: this.state.capital,
       carFinalPrice: Math.floor(
         this.state.totalPrice * (1 + this.state.profit / 100) +
-          (this.state.insurancePlan === "21세 이상" ? 1000000 : 600000)
+          (this.state.insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26)
       ),
 
       rentalPeriod: this.state.rentalPeriod,
@@ -241,9 +230,9 @@ export default class Rental extends Component<{}, IRentalStates> {
         alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.");
       })
       .catch((err) => alert(err.message));
-  }
+  };
 
-  handleOriginClick(origin: string) {
+  handleOriginClick = (origin: string) => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
       .then((res) => {
@@ -265,9 +254,9 @@ export default class Rental extends Component<{}, IRentalStates> {
       .catch((err: Error) => {
         alert(err.message);
       });
-  }
+  };
 
-  handleBrandClick(e: MouseEvent) {
+  handleBrandClick = (e: MouseEvent) => {
     const brand = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(brand)) {
       return;
@@ -297,9 +286,9 @@ export default class Rental extends Component<{}, IRentalStates> {
       .catch((err: Error) => {
         alert(err.message);
       });
-  }
+  };
 
-  handleSeriesClick(e: MouseEvent) {
+  handleSeriesClick = (e: MouseEvent) => {
     const series = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(series)) {
       return;
@@ -330,9 +319,9 @@ export default class Rental extends Component<{}, IRentalStates> {
       .catch((err: Error) => {
         alert(err.message);
       });
-  }
+  };
 
-  handleModelClick(e: MouseEvent) {
+  handleModelClick = (e: MouseEvent) => {
     const model = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(model)) {
       return;
@@ -364,9 +353,9 @@ export default class Rental extends Component<{}, IRentalStates> {
       .catch((err: Error) => {
         alert(err.message);
       });
-  }
+  };
 
-  handleDetailClick(e: MouseEvent) {
+  handleDetailClick = (e: MouseEvent) => {
     const detail = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(detail)) {
       return;
@@ -403,9 +392,9 @@ export default class Rental extends Component<{}, IRentalStates> {
       .catch((err: Error) => {
         alert(err.message);
       });
-  }
+  };
 
-  handleGradeClick(e: MouseEvent) {
+  handleGradeClick = (e: MouseEvent) => {
     const grade = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(grade)) {
       return;
@@ -437,9 +426,9 @@ export default class Rental extends Component<{}, IRentalStates> {
       .catch((err: Error) => {
         alert(err.message);
       });
-  }
+  };
 
-  handleOptionClick(e: MouseEvent) {
+  handleOptionClick = (e: MouseEvent) => {
     const option = e.currentTarget.children[1].children[0].textContent || selectMessages.none;
     const optionInfo = this.state.optionList.reduce(
       (accu, curr) => {
@@ -458,9 +447,9 @@ export default class Rental extends Component<{}, IRentalStates> {
     }
 
     this.setState({ option, optionPrice, totalPrice: this.state.price + optionPrice, listClicked: false });
-  }
+  };
 
-  handleEstimate() {
+  handleEstimate = () => {
     const { price, rentalPeriod, insurancePlan } = this.state;
     if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
       return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
@@ -472,7 +461,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         this.setState({ capitalList: res.data.capitalList, listClicked: true });
       })
       .catch((err) => alert(err.message));
-  }
+  };
 
   componentDidMount() {
     axios
@@ -510,11 +499,8 @@ export default class Rental extends Component<{}, IRentalStates> {
 
     return (
       <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
+        <MainHeader title="장기렌트" icon="car" />
         <div className="select_car">
-          <h1>
-            <i className="fa fa-cab" />
-            장기렌트
-          </h1>
           <div className="item_lists">
             <div className="item_list">
               <div className="item_lists_title">

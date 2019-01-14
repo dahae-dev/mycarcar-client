@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { IHandlePage } from "../../../../App";
 
 interface IRegisterButtonsProps {
@@ -8,14 +8,12 @@ interface IRegisterButtonsProps {
   handleSidebar: () => void;
 }
 
-export default class RegisterButton extends React.Component<IRegisterButtonsProps> {
+export default class RegisterButton extends Component<IRegisterButtonsProps> {
   constructor(props: IRegisterButtonsProps) {
     super(props);
-
-    this.handlePage = this.handlePage.bind(this);
   }
 
-  handlePage() {
+  handlePage = () => {
     if (window.innerWidth <= 768) {
       this.props.handleSidebar();
     }
@@ -26,7 +24,7 @@ export default class RegisterButton extends React.Component<IRegisterButtonsProp
     }
 
     this.props.handlePage("/edit_account");
-  }
+  };
 
   render() {
     return (

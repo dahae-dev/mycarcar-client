@@ -11,19 +11,15 @@ interface ISidebarProps {
   handleSidebar: () => void;
 }
 
-export default class SideBar extends React.Component<ISidebarProps, {}> {
-  constructor(props: ISidebarProps) {
-    super(props);
-  }
+const SideBar = (props: ISidebarProps) => {
+  const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
 
-  render() {
-    const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
+  return (
+    <div id="my-sidebar" className={isSidebarOpen ? "show-my-sidebar" : "hide-my-sidebar"}>
+      <Status handleSidebar={props.handleSidebar} handlePage={props.handlePage} />
+      <MenuList handlePage={props.handlePage} />
+    </div>
+  );
+};
 
-    return (
-      <div id="my-sidebar" className={isSidebarOpen ? "show-my-sidebar" : "hide-my-sidebar"}>
-        <Status handleSidebar={this.props.handleSidebar} handlePage={this.props.handlePage} />
-        <MenuList handlePage={this.props.handlePage} />
-      </div>
-    );
-  }
-}
+export default SideBar;
