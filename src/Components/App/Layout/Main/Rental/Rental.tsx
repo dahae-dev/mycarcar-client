@@ -41,49 +41,53 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   handleCheck = (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
-    this.setState({ radioState: { [name]: value } });
+    this.setState({ ...this.state, radioState: { ...this.state.radioState, [name]: value } });
   };
 
   handleSelectNumber = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
     const numericValue = Number(value);
-    this.setState({ [id]: numericValue });
+    this.setState({ ...this.state, radioState: { ...this.state.radioState, [id]: numericValue } });
   };
 
   handleSelectString = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
-    this.setState({ [id]: value });
+    this.setState({ ...this.state, [id]: value });
   };
 
   handleModal = (e: MouseEvent<HTMLInputElement>) => {
     const capital = e.currentTarget.dataset.capital || "";
     const profit = parseFloat(e.currentTarget.dataset.profit || "0");
-    this.setState({ detailClicked: true, capital, profit });
+    this.setState({
+      ...this.state,
+      displayState: { ...this.state.displayState, detailClicked: true },
+      capitalInfoState: { ...this.state.capitalInfoState, capital, profit }
+    });
   };
 
   handleSave = () => {
     const body = {
-      origin: this.state.origin,
-      brand: this.state.brand,
-      series: this.state.series,
-      model: this.state.model,
-      detail: this.state.detail,
-      grade: this.state.grade,
-      option: this.state.option,
+      origin: this.state.carInfoState.origin,
+      brand: this.state.carInfoState.brand,
+      series: this.state.carInfoState.series,
+      model: this.state.carInfoState.model,
+      detail: this.state.carInfoState.detail,
+      grade: this.state.carInfoState.grade,
+      option: this.state.carInfoState.option,
 
-      carPrice: this.state.price,
-      carOptionPrice: this.state.optionPrice,
+      carPrice: this.state.priceInfoState.price,
+      carOptionPrice: this.state.priceInfoState.optionPrice,
 
-      capital: this.state.capital,
+      capital: this.state.capitalInfoState.capital,
       carFinalPrice: Math.floor(
-        this.state.totalPrice * (1 + this.state.profit / 100) +
-          (this.state.insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26)
+        this.state.priceInfoState.totalPrice * (1 + this.state.capitalInfoState.profit / 100) +
+          (this.state.rentalTermsState.insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26)
       ),
 
-      rentalPeriod: this.state.rentalPeriod,
-      insurancePlan: this.state.insurancePlan,
-      deposit: this.state.deposit,
-      advancePay: this.state.advancePay
+      rentalPeriod: this.state.rentalTermsState.rentalPeriod,
+      insurancePlan: this.state.rentalTermsState.insurancePlan,
+      deposit: this.state.rentalTermsState.deposit,
+      advancePay: this.state.rentalTermsState.advancePay
     };
 
     const config = {
@@ -93,7 +97,7 @@ export default class Rental extends Component<{}, IRentalStates> {
     axios
       .post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config)
       .then((res) => {
-        this.setState({ detailClicked: false });
+        this.setState({ ...this.state, displayState: { ...this.state.displayState, detailClicked: false } });
         alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.");
       })
       .catch((err) => alert(err.message));
@@ -105,17 +109,21 @@ export default class Rental extends Component<{}, IRentalStates> {
       .then((res) => {
         const brandList: IBrand[] = res.data.brandList;
         this.setState({
-          brandList,
-          origin,
-          seriesList: [{ car_series: selectMessages.series }],
-          modelList: [{ car_model: selectMessages.model }],
-          detailList: [{ car_detail: selectMessages.detail }],
-          gradeList: [{ car_grade: selectMessages.grade }],
-          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0,
-          optionPrice: 0,
-          totalPrice: 0,
-          listClicked: false
+          ...this.state,
+          carInfoState: {
+            ...this.state.carInfoState,
+            brandList,
+            origin,
+            seriesList: [{ car_series: selectMessages.series }],
+            modelList: [{ car_model: selectMessages.model }],
+            detailList: [{ car_detail: selectMessages.detail }],
+            gradeList: [{ car_grade: selectMessages.grade }],
+            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+            price: 0,
+            optionPrice: 0,
+            totalPrice: 0,
+            listClicked: false
+          }
         });
       })
       .catch((err: Error) => {
@@ -129,7 +137,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const origin = this.state.origin;
+    const origin = this.state.carInfoState.origin;
     const encodedBrand = encodeURI(brand);
 
     axios
@@ -138,16 +146,20 @@ export default class Rental extends Component<{}, IRentalStates> {
         const seriesList: ISeries[] = res.data.seriesList;
 
         this.setState({
-          seriesList,
-          brand,
-          modelList: [{ car_model: selectMessages.model }],
-          detailList: [{ car_detail: selectMessages.detail }],
-          gradeList: [{ car_grade: selectMessages.grade }],
-          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0,
-          optionPrice: 0,
-          totalPrice: 0,
-          listClicked: false
+          ...this.state,
+          carInfoState: {
+            ...this.state.carInfoState,
+            seriesList,
+            brand,
+            modelList: [{ car_model: selectMessages.model }],
+            detailList: [{ car_detail: selectMessages.detail }],
+            gradeList: [{ car_grade: selectMessages.grade }],
+            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+            price: 0,
+            optionPrice: 0,
+            totalPrice: 0,
+            listClicked: false
+          }
         });
       })
       .catch((err: Error) => {
@@ -161,8 +173,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const origin = this.state.origin;
-    const brand = this.state.brand;
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -172,15 +184,19 @@ export default class Rental extends Component<{}, IRentalStates> {
       .then((res) => {
         const modelList: IModel[] = res.data.modelList;
         this.setState({
-          modelList,
-          series,
-          detailList: [{ car_detail: selectMessages.detail }],
-          gradeList: [{ car_grade: selectMessages.grade }],
-          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0,
-          optionPrice: 0,
-          totalPrice: 0,
-          listClicked: false
+          ...this.state,
+          carInfoState: {
+            ...this.state.carInfoState,
+            modelList,
+            series,
+            detailList: [{ car_detail: selectMessages.detail }],
+            gradeList: [{ car_grade: selectMessages.grade }],
+            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+            price: 0,
+            optionPrice: 0,
+            totalPrice: 0,
+            listClicked: false
+          }
         });
       })
       .catch((err: Error) => {
@@ -194,9 +210,9 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const origin = this.state.origin;
-    const brand = this.state.brand;
-    const series = this.state.series;
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
+    const series = this.state.carInfoState.series;
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -207,14 +223,18 @@ export default class Rental extends Component<{}, IRentalStates> {
       .then((res) => {
         const detailList: IDetail[] = res.data.detailList;
         this.setState({
-          detailList,
-          model,
-          gradeList: [{ car_grade: selectMessages.grade }],
-          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0,
-          optionPrice: 0,
-          totalPrice: 0,
-          listClicked: false
+          ...this.state,
+          carInfoState: {
+            ...this.state.carInfoState,
+            detailList,
+            model,
+            gradeList: [{ car_grade: selectMessages.grade }],
+            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+            price: 0,
+            optionPrice: 0,
+            totalPrice: 0,
+            listClicked: false
+          }
         });
       })
       .catch((err: Error) => {
@@ -228,10 +248,10 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const origin = this.state.origin;
-    const brand = this.state.brand;
-    const series = this.state.series;
-    const model = this.state.model;
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
+    const series = this.state.carInfoState.series;
+    const model = this.state.carInfoState.model;
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -247,13 +267,17 @@ export default class Rental extends Component<{}, IRentalStates> {
       .then((res) => {
         const gradeList: IGrade[] = res.data.gradeList;
         this.setState({
-          gradeList,
-          detail,
-          optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-          price: 0,
-          optionPrice: 0,
-          totalPrice: 0,
-          listClicked: false
+          ...this.state,
+          carInfoState: {
+            ...this.state.carInfoState,
+            gradeList,
+            detail,
+            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
+            price: 0,
+            optionPrice: 0,
+            totalPrice: 0,
+            listClicked: false
+          }
         });
       })
       .catch((err: Error) => {
@@ -267,11 +291,11 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const origin = this.state.origin;
-    const brand = this.state.brand;
-    const series = this.state.series;
-    const model = this.state.model;
-    const detail = this.state.detail;
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
+    const series = this.state.carInfoState.series;
+    const model = this.state.carInfoState.model;
+    const detail = this.state.carInfoState.detail;
 
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
@@ -288,7 +312,24 @@ export default class Rental extends Component<{}, IRentalStates> {
       .then((res) => {
         const price = res.data.car_price;
         const optionList: IOption[] = res.data.optionList;
-        this.setState({ optionList, grade, price, optionPrice: 0, totalPrice: price, listClicked: false });
+        this.setState({
+          ...this.state,
+          carInfoState: {
+            ...this.state.carInfoState,
+            optionList,
+            grade
+          },
+          priceInfoState: {
+            ...this.state.priceInfoState,
+            price,
+            optionPrice: 0,
+            totalPrice: price
+          },
+          displayState: {
+            ...this.state.displayState,
+            listClicked: false
+          }
+        });
       })
       .catch((err: Error) => {
         alert(err.message);
@@ -297,7 +338,7 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   handleOptionClick = (e: MouseEvent<HTMLLIElement>) => {
     const option = e.currentTarget.children[1].children[0].textContent || selectMessages.none;
-    const optionInfo = this.state.optionList.reduce(
+    const optionInfo = this.state.carInfoState.optionList.reduce(
       (accu, curr) => {
         return curr.car_option === option ? curr : accu;
       },
@@ -313,11 +354,27 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    this.setState({ option, optionPrice, totalPrice: this.state.price + optionPrice, listClicked: false });
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        option
+      },
+      priceInfoState: {
+        ...this.state.priceInfoState,
+        optionPrice,
+        totalPrice: this.state.priceInfoState.price + optionPrice
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      }
+    });
   };
 
   handleEstimate = () => {
-    const { price, rentalPeriod, insurancePlan } = this.state;
+    const { price } = this.state.priceInfoState;
+    const { rentalPeriod, insurancePlan } = this.state.rentalTermsState;
     if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
       return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
     }
@@ -325,7 +382,17 @@ export default class Rental extends Component<{}, IRentalStates> {
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/capital-profit`)
       .then((res) => {
-        this.setState({ capitalList: res.data.capitalList, listClicked: true });
+        this.setState({
+          ...this.state,
+          capitalInfoState: {
+            ...this.state.capitalInfoState,
+            capitalList: res.data.capitalList
+          },
+          displayState: {
+            ...this.state.displayState,
+            listClicked: true
+          }
+        });
       })
       .catch((err) => alert(err.message));
   };
@@ -335,7 +402,13 @@ export default class Rental extends Component<{}, IRentalStates> {
       .get(`${process.env.REACT_APP_API_URL}/api/rental/korea`)
       .then((res) => {
         const brandList: IBrand[] = res.data.brandList;
-        this.setState({ brandList });
+        this.setState({
+          ...this.state,
+          carInfoState: {
+            ...this.state.carInfoState,
+            brandList
+          }
+        });
       })
       .catch((err: Error) => {
         alert(err.message);
@@ -344,25 +417,23 @@ export default class Rental extends Component<{}, IRentalStates> {
     const modal = document.getElementById("my-modal");
     window.onclick = (e) => {
       if (e.target === modal) {
-        this.setState({ detailClicked: false });
+        this.setState({
+          ...this.state,
+          displayState: {
+            ...this.state.displayState,
+            detailClicked: false
+          }
+        });
       }
     };
   }
 
   render() {
     const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
-    const {
-      price,
-      optionPrice,
-      totalPrice,
-      capitalList,
-      rentalPeriod,
-      insurancePlan,
-      deposit,
-      advancePay,
-      listClicked,
-      detailClicked
-    } = this.state;
+    const { price, optionPrice, totalPrice } = this.state.priceInfoState;
+    const { capitalList } = this.state.capitalInfoState;
+    const { rentalPeriod, insurancePlan, deposit, advancePay } = this.state.rentalTermsState;
+    const { listClicked, detailClicked } = this.state.displayState;
 
     return (
       <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
@@ -377,14 +448,14 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <Origin handleOriginClick={this.handleOriginClick} />
               </div>
               <ul className="list_group">
-                {this.state.brandList.map((v) => (
+                {this.state.carInfoState.brandList.map((v) => (
                   <li className="list-group-item" onClick={this.handleBrandClick} key={v.car_brand}>
                     <input
                       type="radio"
                       name="checkedBrand"
                       id={v.car_brand}
                       value={v.car_brand}
-                      checked={this.state.checkedBrand === v.car_brand}
+                      checked={this.state.radioState.checkedBrand === v.car_brand}
                       onChange={this.handleCheck}
                     />
                     <label htmlFor={v.car_brand}>{v.car_brand}</label>
@@ -398,14 +469,14 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">시리즈</div>
               </div>
               <ul className="list_group">
-                {this.state.seriesList.map((v) => (
+                {this.state.carInfoState.seriesList.map((v) => (
                   <li className="list-group-item" onClick={this.handleSeriesClick} key={v.car_series}>
                     <input
                       type="radio"
                       name="checkedSeries"
                       id={v.car_series}
                       value={v.car_series}
-                      checked={this.state.checkedSeries === v.car_series}
+                      checked={this.state.radioState.checkedSeries === v.car_series}
                       onChange={this.handleCheck}
                     />
                     <label htmlFor={v.car_series}>{v.car_series}</label>
@@ -419,14 +490,14 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">모델명</div>
               </div>
               <ul className="list_group">
-                {this.state.modelList.map((v) => (
+                {this.state.carInfoState.modelList.map((v) => (
                   <li className="list-group-item" onClick={this.handleModelClick} key={v.car_model}>
                     <input
                       type="radio"
                       name="checkedModel"
                       id={v.car_model}
                       value={v.car_model}
-                      checked={this.state.checkedModel === v.car_model}
+                      checked={this.state.radioState.checkedModel === v.car_model}
                       onChange={this.handleCheck}
                     />
                     <label htmlFor={v.car_model}>{v.car_model}</label>
@@ -440,14 +511,14 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">상세모델</div>
               </div>
               <ul className="list_group">
-                {this.state.detailList.map((v) => (
+                {this.state.carInfoState.detailList.map((v) => (
                   <li className="list-group-item" onClick={this.handleDetailClick} key={v.car_detail}>
                     <input
                       type="radio"
                       name="checkedDetail"
                       id={v.car_detail}
                       value={v.car_detail}
-                      checked={this.state.checkedDetail === v.car_detail}
+                      checked={this.state.radioState.checkedDetail === v.car_detail}
                       onChange={this.handleCheck}
                     />
                     <label htmlFor={v.car_detail}>{v.car_detail}</label>
@@ -461,14 +532,14 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">등급</div>
               </div>
               <ul className="list_group">
-                {this.state.gradeList.map((v) => (
+                {this.state.carInfoState.gradeList.map((v) => (
                   <li className="list-group-item" onClick={this.handleGradeClick} key={v.car_grade}>
                     <input
                       type="radio"
                       name="checkedGrade"
                       id={v.car_grade}
                       value={v.car_grade}
-                      checked={this.state.checkedGrade === v.car_grade}
+                      checked={this.state.radioState.checkedGrade === v.car_grade}
                       onChange={this.handleCheck}
                     />
                     <label htmlFor={v.car_grade}>{v.car_grade}</label>
@@ -484,7 +555,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">옵션</div>
               </div>
               <ul className="list_group">
-                {this.state.optionList.map((v) => (
+                {this.state.carInfoState.optionList.map((v) => (
                   <li
                     className="list-group-item apply_display_flex_sb"
                     onClick={this.handleOptionClick}
@@ -495,7 +566,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                       name="checkedOption"
                       id={v.car_option}
                       value={v.car_option}
-                      checked={this.state.checkedOption === v.car_option}
+                      checked={this.state.radioState.checkedOption === v.car_option}
                       onChange={this.handleCheck}
                     />
                     <label htmlFor={v.car_option}>
@@ -514,7 +585,12 @@ export default class Rental extends Component<{}, IRentalStates> {
               <ul className="list_group">
                 <li className="list-group-item apply_display_flex_sb">
                   <label htmlFor="rentalPeriod">렌탈기간</label>
-                  <select id="rentalPeriod" value={this.state.rentalPeriod} onChange={this.handleSelectNumber} required>
+                  <select
+                    id="rentalPeriod"
+                    value={this.state.rentalTermsState.rentalPeriod}
+                    onChange={this.handleSelectNumber}
+                    required
+                  >
                     <option hidden>선택</option>
                     <option value="12">12개월</option>
                     <option value="24">24개월</option>
@@ -527,7 +603,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                   <label htmlFor="insurancePlan">보험담보</label>
                   <select
                     id="insurancePlan"
-                    value={this.state.insurancePlan}
+                    value={this.state.rentalTermsState.insurancePlan}
                     onChange={this.handleSelectString}
                     required
                   >
@@ -538,7 +614,12 @@ export default class Rental extends Component<{}, IRentalStates> {
                 </li>
                 <li className="list-group-item apply_display_flex_sb">
                   <label htmlFor="deposit">보증금</label>
-                  <select id="deposit" value={this.state.deposit} onChange={this.handleSelectNumber} required>
+                  <select
+                    id="deposit"
+                    value={this.state.rentalTermsState.deposit}
+                    onChange={this.handleSelectNumber}
+                    required
+                  >
                     <option hidden>선택</option>
                     <option value="0">0%</option>
                     <option value="0.1">10%</option>
@@ -548,7 +629,12 @@ export default class Rental extends Component<{}, IRentalStates> {
                 </li>
                 <li className="list-group-item apply_display_flex_sb">
                   <label htmlFor="advancePay">선납금</label>
-                  <select id="advancePay" value={this.state.advancePay} onChange={this.handleSelectNumber} required>
+                  <select
+                    id="advancePay"
+                    value={this.state.rentalTermsState.advancePay}
+                    onChange={this.handleSelectNumber}
+                    required
+                  >
                     <option hidden>선택</option>
                     <option value="0">0%</option>
                     <option value="0.1">10%</option>
