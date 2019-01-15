@@ -25,21 +25,21 @@ const Main = (props: IMainProps) => {
   switch (pathname) {
     case "/":
       return <Home />;
-    case "/login":
+    case "/user/login":
       return <LoginForm handlePage={handlePage} />;
-    case "/terms":
+    case "/user/terms":
       return <RegisterTerms handlePage={handlePage} />;
-    case "/register":
+    case "/user/register":
       return <RegisterForm handlePage={handlePage} />;
-    case "/edit_account":
+    case "/user/edit":
       return <EditForm handlePage={handlePage} />;
     case "/rental":
       return <Rental />;
-    case "/admin/user_information_management":
+    case "/admin/edit":
       return <SuperAdmin handlePage={handlePage} />;
-    case "/estimate_list":
+    case "/estimate/list":
       return <EstimateList handlePage={handlePage} />;
-    case "/estimate_form":
+    case "/estimate/form":
       return <EstimateForm />;
     default:
       return <NotFound />;
