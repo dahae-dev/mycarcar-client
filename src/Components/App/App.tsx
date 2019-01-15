@@ -8,40 +8,9 @@ export interface IHandlePage {
   (pathname: string): void;
 }
 
-export interface IEditUserInfomation {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  level: number;
-  company: string;
-  fax: string;
-  registerDate: string;
-}
-
-export interface IHandleEditUserInfomationBtnClick {
-  (editUserInfomation: IEditUserInfomation): void;
-}
-
-interface IAppState {
-  editUserInfomation: IEditUserInfomation;
-}
-
-export default class App extends Component<{}, IAppState> {
+export default class App extends Component {
   constructor(props: {}) {
     super(props);
-    this.state = {
-      editUserInfomation: {
-        id: "",
-        name: "",
-        email: "",
-        phone: "",
-        level: -1,
-        company: "",
-        fax: "",
-        registerDate: ""
-      }
-    };
   }
 
   componentDidMount() {
@@ -60,10 +29,6 @@ export default class App extends Component<{}, IAppState> {
       }
     });
   }
-
-  handleEditUserInfomationBtnClick = (editUserInfomation: IEditUserInfomation) => {
-    this.setState({ editUserInfomation });
-  };
 
   handleSidebar = () => {
     let isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
@@ -85,11 +50,7 @@ export default class App extends Component<{}, IAppState> {
 
         <SideBar handlePage={this.handlePage} handleSidebar={this.handleSidebar} />
 
-        <Main
-          editUserInfomation={this.state.editUserInfomation}
-          handlePage={this.handlePage}
-          handleEditUserInfomationBtnClick={this.handleEditUserInfomationBtnClick}
-        />
+        <Main handlePage={this.handlePage} />
 
         <Footer />
       </div>
