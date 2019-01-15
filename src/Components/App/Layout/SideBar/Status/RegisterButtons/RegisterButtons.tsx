@@ -20,10 +20,10 @@ export default class RegisterButton extends Component<IRegisterButtonsProps> {
 
     const status = this.props.title === "회원가입";
     if (status) {
-      return this.props.handlePage("/terms");
+      return this.props.handlePage("/user/terms");
     }
 
-    this.props.handlePage("/edit_account");
+    this.props.handlePage("/user/edit");
   };
 
   render() {

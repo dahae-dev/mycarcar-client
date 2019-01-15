@@ -13,14 +13,11 @@ const guestUserMenu = [
   { icon: "cab", content: "장기렌트", path: "/rental" }
 ];
 
-const nomalUserMenu = [...guestUserMenu, { icon: "calculator", content: "견적내역보기", path: "/estimate_list" }];
+const nomalUserMenu = [...guestUserMenu, { icon: "calculator", content: "견적내역보기", path: "/estimate/list" }];
 
 const capitalUserMenu = [...nomalUserMenu];
 
-const superAdminMenu = [
-  ...capitalUserMenu,
-  { icon: "television", content: "회원정보관리", path: "/admin/user_information_management" }
-];
+const superAdminMenu = [...capitalUserMenu, { icon: "television", content: "회원정보관리", path: "/admin/edit" }];
 
 export const getMenus: IGetMenus = (signedInLevel) => {
   const isGuestUser = signedInLevel === 0;

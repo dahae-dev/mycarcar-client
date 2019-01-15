@@ -81,7 +81,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
         .then(() => {
           alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
           setTimeout(() => {
-            this.props.handlePage("/login");
+            this.props.handlePage("/user/login");
           }, 1000);
         })
         .catch(() => {

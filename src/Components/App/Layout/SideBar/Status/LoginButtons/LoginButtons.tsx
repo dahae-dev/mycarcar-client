@@ -19,7 +19,7 @@ export default class LoginButton extends Component<ILoginButtonsProps, {}> {
 
     const status = this.props.title === "로그인";
     if (status) {
-      return this.props.handlePage("/login");
+      return this.props.handlePage("/user/login");
     }
 
     localStorage.removeItem("x-access-token");

@@ -39,7 +39,7 @@ export default class RegisterTerms extends Component<IRegisterTermsProps, IRegis
       alert("회원가입약관 및 개인정보처리방침에 동의해야 회원가입이 가능합니다.");
       return;
     }
-    this.props.handlePage("/register");
+    this.props.handlePage("/user/register");
   };
 
   render() {

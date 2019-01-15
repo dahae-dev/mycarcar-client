@@ -64,7 +64,7 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
         alert("재로그인 한 후 사용 가능합니다.");
         localStorage.removeItem("isSignedIn");
         localStorage.removeItem("x-access-token");
-        this.props.handlePage("/login");
+        this.props.handlePage("/user/login");
       });
   }
 
