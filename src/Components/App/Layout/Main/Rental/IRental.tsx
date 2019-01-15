@@ -89,9 +89,7 @@ export interface IRentalStates {
   priceInfoState: IPriceInfoState;
   rentalTermsState: IRentalTermsState;
   capitalInfoState: ICapitalInfoState;
-  radioState: {
-    [key: string]: string;
-  };
+  radioState: IRadioState;
   displayState: IDisplayState;
 }
 

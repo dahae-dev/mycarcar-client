@@ -1,4 +1,5 @@
 import { selectMessages } from "./Rental";
+import { IRentalStates } from "./IRental";
 
 const carInfoState = {
   origin: "korea",
@@ -55,7 +56,7 @@ const displayState = {
   detailClicked: false
 };
 
-export const RENTAL_INITIAL_STATE = {
+export const RENTAL_INITIAL_STATE: IRentalStates = {
   carInfoState,
   priceInfoState,
   rentalTermsState,
