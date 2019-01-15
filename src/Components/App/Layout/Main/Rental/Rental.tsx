@@ -7,100 +7,10 @@ import Origin from "./Origin/Origin";
 import { Capital } from "./Capital/Capital";
 import { Modal } from "./Modal/Modal";
 import { MainHeader } from "../MainHeader/MainHeader";
+import { RENTAL_INITIAL_STATE } from "./RentalInitialState";
+import { IRentalStates, ISelectMessages, IBrand, ISeries, IModel, IDetail, IGrade, IOption } from "./IRental";
 
-interface IBrand {
-  car_brand: string;
-}
-
-interface ISeries {
-  car_series: string;
-}
-
-interface IModel {
-  car_model: string;
-}
-
-interface IDetail {
-  car_detail: string;
-}
-
-interface IGrade {
-  car_grade: string;
-}
-
-interface IOption {
-  car_option: string;
-  car_option_price: number;
-}
-
-export interface ICapitalList {
-  capital_id: number;
-  capital_name: string;
-  capital_profit: number;
-}
-
-export interface IRentalStates {
-  origin: string;
-
-  brand: string;
-  brandList: IBrand[];
-
-  series: string;
-  seriesList: ISeries[];
-
-  model: string;
-  modelList: IModel[];
-
-  detail: string;
-  detailList: IDetail[];
-
-  grade: string;
-  gradeList: IGrade[];
-
-  option: string;
-  optionList: IOption[];
-
-  price: number;
-  optionPrice: number;
-  totalPrice: number;
-
-  rentalPeriod: number;
-  insurancePlan: string;
-  deposit: number;
-  advancePay: number;
-
-  capitalList: ICapitalList[];
-  capital: string;
-  profit: number;
-
-  checkedBrand: string;
-  checkedSeries: string;
-  checkedModel: string;
-  checkedDetail: string;
-  checkedGrade: string;
-  checkedOption: string;
-
-  listClicked: boolean;
-  detailClicked: boolean;
-
-  [key: string]:
-    | string
-    | number
-    | boolean
-    | ICapitalList[]
-    | IBrand[]
-    | ISeries[]
-    | IModel[]
-    | IDetail[]
-    | IGrade[]
-    | IOption[];
-}
-
-interface ISelectMessages {
-  [key: string]: string;
-}
-
-const selectMessages: ISelectMessages = {
+export const selectMessages: ISelectMessages = {
   none: "정보없음",
   series: "제조사를 선택해주세요.",
   model: "시리즈를 선택해주세요.",
@@ -126,55 +36,12 @@ export default class Rental extends Component<{}, IRentalStates> {
   constructor(props: {}) {
     super(props);
 
-    this.state = {
-      origin: "korea",
-
-      brand: "",
-      brandList: [{ car_brand: "" }],
-
-      series: "",
-      seriesList: [{ car_series: selectMessages.series }],
-
-      model: "",
-      modelList: [{ car_model: selectMessages.model }],
-
-      detail: "",
-      detailList: [{ car_detail: selectMessages.detail }],
-
-      grade: "",
-      gradeList: [{ car_grade: selectMessages.grade }],
-
-      option: "",
-      optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-
-      price: 0,
-      optionPrice: 0,
-      totalPrice: 0,
-
-      rentalPeriod: 0,
-      insurancePlan: "",
-      deposit: 0,
-      advancePay: 0,
-
-      capitalList: [],
-      capital: "",
-      profit: 0,
-
-      checkedBrand: "",
-      checkedSeries: "",
-      checkedModel: "",
-      checkedDetail: "",
-      checkedGrade: "",
-      checkedOption: "",
-
-      listClicked: false,
-      detailClicked: false
-    };
+    this.state = RENTAL_INITIAL_STATE;
   }
 
   handleCheck = (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
+    this.setState({ radioState: { [name]: value } });
   };
 
   handleSelectNumber = (e: ChangeEvent<HTMLSelectElement>) => {
