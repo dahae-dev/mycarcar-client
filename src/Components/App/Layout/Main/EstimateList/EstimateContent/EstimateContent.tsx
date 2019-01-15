@@ -62,8 +62,8 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
       .catch(() => console.error("Fail : Getting estimate list"));
   }
 
-  handleViewBtnClick = async (e: MouseEvent) => {
-    const estimateNo = e.currentTarget.getAttribute("data-estimate-no") || "0";
+  handleViewBtnClick = async (e: MouseEvent<HTMLButtonElement>) => {
+    const estimateNo = e.currentTarget.dataset.estimateNo || "0";
 
     const axiosOption = {
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
@@ -77,7 +77,7 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
       })
       .catch(() => console.error("Fail : Getting estimate infomation"));
 
-    this.props.handlePage("/estimate_form");
+    this.props.handlePage("/estimate/form");
   };
 
   render() {

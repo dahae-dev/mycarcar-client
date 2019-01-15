@@ -256,7 +256,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       });
   };
 
-  handleBrandClick = (e: MouseEvent) => {
+  handleBrandClick = (e: MouseEvent<HTMLLIElement>) => {
     const brand = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(brand)) {
       return;
@@ -288,7 +288,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       });
   };
 
-  handleSeriesClick = (e: MouseEvent) => {
+  handleSeriesClick = (e: MouseEvent<HTMLLIElement>) => {
     const series = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(series)) {
       return;
@@ -321,7 +321,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       });
   };
 
-  handleModelClick = (e: MouseEvent) => {
+  handleModelClick = (e: MouseEvent<HTMLLIElement>) => {
     const model = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(model)) {
       return;
@@ -355,7 +355,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       });
   };
 
-  handleDetailClick = (e: MouseEvent) => {
+  handleDetailClick = (e: MouseEvent<HTMLLIElement>) => {
     const detail = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(detail)) {
       return;
@@ -394,7 +394,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       });
   };
 
-  handleGradeClick = (e: MouseEvent) => {
+  handleGradeClick = (e: MouseEvent<HTMLLIElement>) => {
     const grade = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(grade)) {
       return;
@@ -428,7 +428,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       });
   };
 
-  handleOptionClick = (e: MouseEvent) => {
+  handleOptionClick = (e: MouseEvent<HTMLLIElement>) => {
     const option = e.currentTarget.children[1].children[0].textContent || selectMessages.none;
     const optionInfo = this.state.optionList.reduce(
       (accu, curr) => {

@@ -14,8 +14,8 @@ export default class MenuList extends Component<IMenuListProps> {
     super(props);
   }
 
-  handleMenuClick = (e: MouseEvent) => {
-    const pathname = e.currentTarget.getAttribute("data-path") || "/";
+  handleMenuClick = (e: MouseEvent<HTMLLIElement>) => {
+    const pathname = e.currentTarget.dataset.path || "/";
     this.props.handlePage(pathname);
   };
 
