@@ -1,14 +1,14 @@
 import "./SuperAdmin.css";
 
-import React, { Component, MouseEvent } from "react";
-import { IHandlePage, IHandleEditUserInfomationBtnClick } from "../../../App";
+import React, { Component, MouseEvent, ChangeEvent } from "react";
+import loader from "assets/preloader/Spinner.gif";
+import { IHandlePage } from "../../../App";
 import { MainHeader } from "../MainHeader/MainHeader";
 
 import axios from "axios";
 
 interface ISuperAdminProps {
   handlePage: IHandlePage;
-  handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
 }
 
 interface IMemberList {
@@ -20,12 +20,14 @@ interface IMemberList {
   company: string;
   fax: string;
   registerDate: string;
+  [key: string]: string | number;
 }
 
 interface ISuperAdminStates {
   userList: IMemberList[];
   totalCount: number;
   pageCount: number;
+  loading: boolean;
 }
 
 export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminStates> {
@@ -38,7 +40,7 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
           id: "정보없음",
           name: "정보없음",
           email: "정보없음@codestates.com",
-          phone: "정보없음",
+          phone: "000-0000-0000",
           level: 0,
           company: "정보없음",
           fax: "000-000-0000",
@@ -47,11 +49,15 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
       ],
 
       totalCount: 1,
-      pageCount: 1
+      pageCount: 1,
+
+      loading: false
     };
   }
 
   async componentDidMount() {
+    this.setState({ loading: true });
+
     const axiosOption = {
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
@@ -67,15 +73,13 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
 
     const userList = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list/1`, axiosOption)
-      .then((res) => {
-        return res.data.userList;
-      })
+      .then((res) => res.data.userList)
       .catch((err: Error) => console.error(err.message));
 
-    this.setState({ totalCount, userList, pageCount });
+    this.setState({ totalCount, pageCount, userList, loading: false });
   }
 
-  handleMemberListNumberClick = async (e: MouseEvent) => {
+  handlePagination = async (e: MouseEvent<HTMLDivElement>) => {
     const page = e.currentTarget.textContent || "-1";
 
     const axiosOption = {
@@ -90,54 +94,87 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
     this.setState({ userList });
   };
 
-  handleEditClick = (e: MouseEvent) => {
-    const userListIdx = parseInt(e.currentTarget.getAttribute("data-index") || "-1", 10);
-    const editUserInfomation = this.state.userList[userListIdx];
+  handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.currentTarget;
+    const index = parseInt(e.currentTarget.dataset.index || "-1", 10);
 
-    history.pushState("", "", "/admin/edit_user_infomation");
-    this.props.handleEditUserInfomationBtnClick(editUserInfomation);
+    this.setState((state) => {
+      const userList = state.userList.map((user, i) =>
+        i === index ? Object.assign({}, user, { level: value }) : user
+      );
+
+      return { userList };
+    });
+  };
+
+  handleEditClick = (e: MouseEvent<HTMLDivElement>) => {
+    const index = parseInt(e.currentTarget.dataset.index || "-1", 10);
+    const editUserInfo = this.state.userList[index];
+
+    const axiosOption = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    };
+
+    axios
+      .patch(`${process.env.REACT_APP_API_URL}/api/admin/user-list/update`, editUserInfo, axiosOption)
+      .then(() => alert("회원정보가 정상적으로 수정되었습니다."))
+      .catch((err) => console.log(err.message));
   };
 
   render() {
     const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
+
+    if (this.state.loading) {
+      return (
+        <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
+          <div className="super-admin-loader-container">
+            <img className="pre-loader" src={loader} />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
         <MainHeader title="회원정보관리" icon="television" />
-        <div className="super_user">
-          <div>
-            <div>
-              <div className="mb_list mb_list_title">
-                <div className="mb_list_element">아이디</div>
-                <div className="mb_list_element">이름</div>
-                <div className="mb_list_element">이메일</div>
-                <div className="mb_list_element">휴대폰</div>
-                <div className="mb_list_element">회사</div>
-                <div className="mb_list_element">팩스</div>
-                <div className="mb_list_element">등급</div>
-                <div className="mb_list_element">가입일</div>
-                <div className="mb_list_element">수정</div>
-              </div>
+        <div className="super-admin-container">
+          <div className="super-admin-list">
+            <div className="super-admin-list-head">
+              <div className="super-admin-list-element">아이디</div>
+              <div className="super-admin-list-element">이름</div>
+              <div className="super-admin-list-element">이메일</div>
+              <div className="super-admin-list-element">휴대폰</div>
+              <div className="super-admin-list-element">회사</div>
+              <div className="super-admin-list-element">팩스</div>
+              <div className="super-admin-list-element">등급</div>
+              <div className="super-admin-list-element">가입일</div>
+              <div className="super-admin-list-element">수정</div>
             </div>
-            <div>
-              {this.state.userList.map((member, idx) => (
-                <div className="mb_list" key={member.id}>
-                  <div className="mb_list_element">{member.id}</div>
-                  <div className="mb_list_element">{member.name}</div>
-                  <div className="mb_list_element">{member.email}</div>
-                  <div className="mb_list_element">{member.phone}</div>
-                  <div className="mb_list_element">{member.company}</div>
-                  <div className="mb_list_element">{member.fax}</div>
-                  <div className="mb_list_element">{member.level}</div>
-                  <div className="mb_list_element">{member.registerDate}</div>
-                  <div className="mb_list_element mb_edit_btn" onClick={this.handleEditClick} data-index={idx}>
-                    수정
-                  </div>
+
+            {this.state.userList.map((member, idx) => (
+              <div className="super-admin-list-content" key={member.id}>
+                <div className="super-admin-list-element">{member.id}</div>
+                <div className="super-admin-list-element">{member.name}</div>
+                <div className="super-admin-list-element">{member.email}</div>
+                <div className="super-admin-list-element">{member.phone}</div>
+                <div className="super-admin-list-element">{member.company}</div>
+                <div className="super-admin-list-element">{member.fax}</div>
+                <div className="super-admin-list-element">
+                  <select value={member.level} data-index={idx} onChange={this.handleLevelChange} required>
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                  </select>
                 </div>
-              ))}
-            </div>
+                <div className="super-admin-list-element">{member.registerDate.slice(0, 10)}</div>
+                <div className="super-admin-list-element">
+                  <input type="button" onClick={this.handleEditClick} data-index={idx} value="수정" />
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div className="mb_list_nav">
+          <div className="super-admin-pagination">
             <div>
               <i className="fa fa-angle-double-left" />
             </div>
@@ -145,7 +182,7 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
               {Array(this.state.pageCount)
                 .fill(1)
                 .map((v, i) => (
-                  <div key={i} data-page={i + 1} onClick={this.handleMemberListNumberClick}>
+                  <div key={i} data-page={i + 1} onClick={this.handlePagination}>
                     {i + 1}
                   </div>
                 ))}

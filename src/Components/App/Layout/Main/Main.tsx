@@ -1,6 +1,6 @@
 import "./Main.css";
 
-import React, { Component } from "react";
+import React from "react";
 
 import Home from "./Home/Home";
 import LoginForm from "./Login/LoginForm";
@@ -8,17 +8,14 @@ import EditForm from "./EditAccount/EditForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
 import RegisterTerms from "./RegisterTerms/RegisterTerms";
 import Rental from "./Rental/Rental";
-import { IHandlePage, IHandleEditUserInfomationBtnClick, IEditUserInfomation } from "../../App";
 import SuperAdmin from "./SuperAdmin/SuperAdmin";
 import { NotFound } from "./NotFound/NotFound";
 import { EstimateForm } from "./EstimateForm/EstimateForm";
 import { EstimateList } from "./EstimateList/EstimateList";
+import { IHandlePage } from "../../App";
 
 interface IMainProps {
-  editUserInfomation: IEditUserInfomation;
-
   handlePage: IHandlePage;
-  handleEditUserInfomationBtnClick: IHandleEditUserInfomationBtnClick;
 }
 
 const Main = (props: IMainProps) => {
@@ -39,9 +36,7 @@ const Main = (props: IMainProps) => {
     case "/rental":
       return <Rental />;
     case "/admin/user_information_management":
-      return (
-        <SuperAdmin handlePage={handlePage} handleEditUserInfomationBtnClick={props.handleEditUserInfomationBtnClick} />
-      );
+      return <SuperAdmin handlePage={handlePage} />;
     case "/estimate_list":
       return <EstimateList handlePage={handlePage} />;
     case "/estimate_form":
