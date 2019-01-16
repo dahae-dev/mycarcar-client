@@ -47,12 +47,12 @@ export default class Rental extends Component<{}, IRentalStates> {
   handleSelectNumber = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
     const numericValue = Number(value);
-    this.setState({ ...this.state, radioState: { ...this.state.radioState, [id]: numericValue } });
+    this.setState({ ...this.state, rentalTermsState: { ...this.state.rentalTermsState, [id]: numericValue } });
   };
 
   handleSelectString = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
-    this.setState({ ...this.state, [id]: value });
+    this.setState({ ...this.state, rentalTermsState: { ...this.state.rentalTermsState, [id]: value } });
   };
 
   handleModal = (e: MouseEvent<HTMLInputElement>) => {
