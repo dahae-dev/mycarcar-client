@@ -2,7 +2,7 @@ import "./EstimateFormMain.css";
 
 import React from "react";
 
-interface IEstimateInfo {
+export interface IEstimateInfo {
   at_date: string;
   capital: string;
   car_advance_pay: number;

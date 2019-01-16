@@ -91,6 +91,7 @@ export interface IRentalStates {
   capitalInfoState: ICapitalInfoState;
   radioState: IRadioState;
   displayState: IDisplayState;
+  error: string;
 }
 
 export interface ISelectMessages {
@@ -101,4 +102,33 @@ export interface ISelectMessages {
   grade: string;
   option: string;
   [key: string]: string;
+}
+
+export interface IBrandListData {
+  brandList: IBrand[];
+}
+
+export interface ISeriesListData {
+  seriesList: ISeries[];
+}
+
+export interface IModelListData {
+  modelList: IModel[];
+}
+
+export interface IDetailListData {
+  detailList: IDetail[];
+}
+
+export interface IGradeListData {
+  gradeList: IGrade[];
+}
+
+export interface IOptionListData {
+  car_price: number;
+  optionList: IOption[];
+}
+
+export interface ICapitalListData {
+  capitalList: ICapitalList[];
 }

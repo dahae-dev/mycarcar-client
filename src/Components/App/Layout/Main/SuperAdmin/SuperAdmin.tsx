@@ -5,13 +5,13 @@ import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 import { MainHeader } from "../MainHeader/MainHeader";
 
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 interface ISuperAdminProps {
   handlePage: IHandlePage;
 }
 
-interface IMemberList {
+interface IUserList {
   id: string;
   name: string;
   email: string;
@@ -24,10 +24,19 @@ interface IMemberList {
 }
 
 interface ISuperAdminStates {
-  userList: IMemberList[];
+  userList: IUserList[];
   totalCount: number;
   pageCount: number;
   loading: boolean;
+  error: string;
+}
+
+interface ITotalCountData {
+  totalCount: number;
+}
+
+interface IUserListData {
+  userList: IUserList[];
 }
 
 export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminStates> {
@@ -51,7 +60,8 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
       totalCount: 1,
       pageCount: 1,
 
-      loading: false
+      loading: false,
+      error: ""
     };
   }
 
@@ -62,21 +72,37 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    const totalCount = await axios
+    const totalCountResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list`, axiosOption)
-      .then((res) => {
-        return res.data.totalCount;
-      })
-      .catch((err: Error) => console.error(err.message));
+      .then((res: AxiosResponse<ITotalCountData>) => ({
+        totalCount: res.data.totalCount,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        totalCount: 1,
+        error: (error.response as AxiosResponse).statusText
+      }));
 
-    const pageCount = Math.ceil(totalCount / 10);
+    const pageCount = Math.ceil(totalCountResult.totalCount / 10);
 
-    const userList = await axios
+    const userListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list/1`, axiosOption)
-      .then((res) => res.data.userList)
-      .catch((err: Error) => console.error(err.message));
+      .then((res: AxiosResponse<IUserListData>) => ({
+        userList: res.data.userList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        userList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
 
-    this.setState({ totalCount, pageCount, userList, loading: false });
+    this.setState({
+      userList: userListResult.userList,
+      totalCount: totalCountResult.totalCount,
+      pageCount,
+      loading: false,
+      error: totalCountResult.error || userListResult.error
+    });
   }
 
   handlePagination = async (e: MouseEvent<HTMLDivElement>) => {
@@ -86,12 +112,18 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    const userList = await axios
+    const userListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list/${page}`, axiosOption)
-      .then((res) => res.data.userList)
-      .catch((err: Error) => console.error(err.message));
+      .then((res: AxiosResponse<IUserListData>) => ({
+        userList: res.data.userList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        userList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
 
-    this.setState({ userList });
+    this.setState({ userList: userListResult.userList });
   };
 
   handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -107,7 +139,7 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
     });
   };
 
-  handleEditClick = (e: MouseEvent<HTMLDivElement>) => {
+  handleEditClick = async (e: MouseEvent<HTMLDivElement>) => {
     const index = parseInt(e.currentTarget.dataset.index || "-1", 10);
     const editUserInfo = this.state.userList[index];
 
@@ -115,16 +147,24 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    axios
+    const result = await axios
       .patch(`${process.env.REACT_APP_API_URL}/api/admin/user-list/update`, editUserInfo, axiosOption)
-      .then(() => alert("회원정보가 정상적으로 수정되었습니다."))
-      .catch((err) => console.log(err.message));
+      .then(() => {
+        alert("회원정보가 정상적으로 수정되었습니다.");
+        return { error: "" };
+      })
+      .catch((error: AxiosError) => ({
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({ error: result.error });
   };
 
   render() {
     const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
+    const { userList, loading, error } = this.state;
 
-    if (this.state.loading) {
+    if (loading) {
       return (
         <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
           <div className="super-admin-loader-container">
@@ -151,7 +191,9 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
               <div className="super-admin-list-element">수정</div>
             </div>
 
-            {this.state.userList.map((member, idx) => (
+            {error ? <div className="list-error-msg">{error}</div> : <div />}
+
+            {userList.map((member, idx) => (
               <div className="super-admin-list-content" key={member.id}>
                 <div className="super-admin-list-element">{member.id}</div>
                 <div className="super-admin-list-element">{member.name}</div>

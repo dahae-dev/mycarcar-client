@@ -1,7 +1,7 @@
 import "./LoginForm.css";
 
 import React, { Component, FormEvent } from "react";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
@@ -17,6 +17,10 @@ interface ILoginFormState {
   loading: boolean;
   error: string;
   [key: string]: string | boolean;
+}
+
+interface ILoginData {
+  level: number;
 }
 
 export default class LoginForm extends Component<ILoginFormProps, ILoginFormState> {
@@ -36,30 +40,36 @@ export default class LoginForm extends Component<ILoginFormProps, ILoginFormStat
     this.setState({ [id]: value });
   };
 
-  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { id, pw } = this.state;
 
     this.setState({ loading: true });
 
-    axios
+    const result = await axios
       .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
-      .then((res) => {
+      .then((res: AxiosResponse<ILoginData>) => {
         localStorage.setItem("x-access-token", res.headers["x-access-token"]);
         localStorage.setItem("isSignedIn", JSON.stringify(true));
         localStorage.setItem("signedInLevel", JSON.stringify(res.data.level));
-
-        setTimeout(() => {
-          this.props.handlePage("/");
-        }, 500);
+        return {
+          loading: true,
+          error: ""
+        };
       })
-      .catch(() => {
-        this.setState({
-          loading: false,
-          error: "아이디 또는 패스워드가 일치하지 않습니다."
-        });
-      });
+      .catch((error: AxiosError) => ({
+        loading: false,
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    if (result.error === "") {
+      setTimeout(() => {
+        this.props.handlePage("/");
+      }, 500);
+    }
+
+    this.setState({ loading: result.loading, error: result.error });
   };
 
   render() {

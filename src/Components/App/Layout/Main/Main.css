@@ -22,6 +22,13 @@
   display: none;
 }
 
+.list-error-msg {
+  padding: 10% 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media only screen and (max-width: 1280px) {
   .background-bottom {
     display: inline-block;

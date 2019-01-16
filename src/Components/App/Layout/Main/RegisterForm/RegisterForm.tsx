@@ -1,7 +1,7 @@
 import "./RegisterForm.css";
 
 import React, { FormEvent, ChangeEvent } from "react";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
@@ -13,22 +13,37 @@ interface IRegisterFormProps {
 
 interface IRegisterFormState {
   checkedValue: string;
-  pwdcheck: string;
-  id: string;
-  pw: string;
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  fax: string;
+  userData: IUserData;
   loading: boolean;
   error: string;
-  [key: string]: string | boolean;
+  [key: string]: string | boolean | IUserData;
 }
 
 interface IPostRegister {
   (endpoint: string, data: object): void;
 }
+
+interface IUserData {
+  company: string;
+  id: string;
+  pw: string;
+  pwdcheck: string;
+  name: string;
+  email: string;
+  phone: string;
+  fax: string;
+}
+
+const INITIAL_USER_DATA = {
+  company: "",
+  id: "",
+  pw: "",
+  pwdcheck: "",
+  name: "",
+  email: "",
+  phone: "",
+  fax: ""
+};
 
 export default class RegisterForm extends React.Component<IRegisterFormProps, IRegisterFormState> {
   constructor(props: IRegisterFormProps) {
@@ -36,14 +51,7 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
 
     this.state = {
       checkedValue: "개인",
-      company: "",
-      id: "",
-      pw: "",
-      pwdcheck: "",
-      name: "",
-      email: "",
-      phone: "",
-      fax: "",
+      userData: INITIAL_USER_DATA,
       loading: false,
       error: ""
     };
@@ -56,37 +64,44 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
 
   handleChange = (e: FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
-    this.setState({ [id]: value });
+    this.setState({ ...this.state, userData: { ...this.state.userData, [id]: value } });
   };
   handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
-    this.setState({ company: value });
+    this.setState({ ...this.state, userData: { ...this.state.userData, company: value } });
   };
 
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;
+    const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state.userData;
 
     if (pw !== pwdcheck) {
-      this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
-      return;
+      return this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
     }
 
     this.setState({ loading: true });
 
-    const postRegister: IPostRegister = (endpoint, data) => {
-      axios
+    const postRegister: IPostRegister = async (endpoint, data) => {
+      const result = await axios
         .post(`${process.env.REACT_APP_API_URL}/api/register/${endpoint}`, data)
         .then(() => {
           alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
-          setTimeout(() => {
-            this.props.handlePage("/user/login");
-          }, 1000);
+          return {
+            loading: false,
+            error: ""
+          };
         })
-        .catch(() => {
-          this.setState({ loading: false, error: "이미 가입된 회원입니다." });
-        });
+        .catch((error: AxiosError) => ({
+          loading: false,
+          error: (error.response as AxiosResponse).statusText
+        }));
+
+      this.setState({ loading: false, error: result.error });
+
+      if (result.error === "") {
+        this.props.handlePage("/user/login");
+      }
     };
 
     if (this.state.checkedValue === "개인") {
@@ -99,7 +114,8 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
   };
 
   render() {
-    const { checkedValue, company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;
+    const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state.userData;
+    const { checkedValue, loading, error } = this.state;
     const isSidebarOpen = localStorage.getItem("isSidebarOpen") || "true";
 
     if (loading) {

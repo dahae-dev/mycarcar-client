@@ -36,9 +36,9 @@ export default class RegisterTerms extends Component<IRegisterTermsProps, IRegis
     e.preventDefault();
 
     if (!this.state.isCheckedFst || !this.state.isCheckedSnd) {
-      alert("회원가입약관 및 개인정보처리방침에 동의해야 회원가입이 가능합니다.");
-      return;
+      return alert("회원가입약관 및 개인정보처리방침에 동의해야 회원가입이 가능합니다.");
     }
+
     this.props.handlePage("/user/register");
   };
 

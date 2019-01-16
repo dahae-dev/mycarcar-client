@@ -1,7 +1,7 @@
 import "./EditForm.css";
 
 import React, { Component, FormEvent } from "react";
-import axios from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
@@ -12,6 +12,17 @@ interface IEditFormProps {
 }
 
 interface IEditFormState {
+  userData: IUserData;
+  loading: boolean;
+  error: string;
+  [key: string]: string | boolean | IUserData;
+}
+
+interface IPatchEdit {
+  (endpoint: string, data: object): void;
+}
+
+interface IUserData {
   company: string;
   id: string;
   pw: string;
@@ -20,67 +31,74 @@ interface IEditFormState {
   email: string;
   phone: string;
   fax: string;
-  loading: boolean;
-  error: string;
-  [key: string]: string | boolean;
 }
 
-interface IPatchEdit {
-  (endpoint: string, data: object): void;
-}
+const INITIAL_USER_DATA = {
+  company: "",
+  id: "",
+  pw: "",
+  pwdcheck: "",
+  name: "",
+  email: "",
+  phone: "",
+  fax: ""
+};
 
 export default class EditForm extends Component<IEditFormProps, IEditFormState> {
   constructor(props: IEditFormProps) {
     super(props);
 
     this.state = {
-      company: "",
-      id: "",
-      pw: "",
-      pwdcheck: "",
-      name: "",
-      email: "",
-      phone: "",
-      fax: "",
+      userData: INITIAL_USER_DATA,
       loading: false,
       error: ""
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const config = {
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
     this.setState({ loading: true });
 
-    axios
+    const userDataResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
-      .then((res) => {
-        const data = res.data;
-        this.setState({ ...data, loading: false });
-      })
-      .catch(() => {
-        alert("재로그인 한 후 사용 가능합니다.");
+      .then((res: AxiosResponse<IUserData>) => ({
+        userData: res.data,
+        loading: false,
+        error: ""
+      }))
+      .catch((error: AxiosError) => {
         localStorage.removeItem("isSignedIn");
         localStorage.removeItem("x-access-token");
-        this.props.handlePage("/user/login");
+        alert("재로그인 한 후 사용 가능합니다.");
+        return {
+          userData: INITIAL_USER_DATA,
+          loading: true,
+          error: (error.response as AxiosResponse).statusText
+        };
       });
+
+    if (userDataResult.error !== "") {
+      this.props.handlePage("/user/login");
+    }
+
+    this.setState({ userData: userDataResult.userData, loading: userDataResult.loading, error: userDataResult.error });
   }
 
   handleChange = (e: FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
-    this.setState({ [id]: value });
+    this.setState({ ...this.state, userData: { ...this.state.userData, [id]: value } });
   };
 
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state;
+    const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state.userData;
 
     if (pw !== pwdcheck) {
-      this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
-      return;
+      return this.setState({ error: "재입력한 비밀번호가 일치하지 않습니다." });
     }
 
     this.setState({ loading: true });
@@ -89,16 +107,26 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    const patchEdit: IPatchEdit = (endpoint, data) => {
-      axios
+    const patchEdit: IPatchEdit = async (endpoint, data) => {
+      const result = await axios
         .patch(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
-        .then((res) => {
+        .then(() => {
           alert("회원정보가 정상적으로 수정되었습니다.");
-          this.props.handlePage("/");
+          return {
+            loading: false,
+            error: ""
+          };
         })
-        .catch((err: Error) => {
-          this.setState({ loading: false, error: err.message });
-        });
+        .catch((error: AxiosError) => ({
+          loading: false,
+          error: (error.response as AxiosResponse).statusText
+        }));
+
+      if (result.error === "") {
+        this.props.handlePage("/");
+      }
+
+      this.setState({ loading: result.loading, error: result.error });
     };
 
     if (this.state.company === null) {
@@ -111,7 +139,8 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
   };
 
   render() {
-    const { company, id, pw, pwdcheck, name, email, phone, fax, loading, error } = this.state;
+    const { company, id, pw, pwdcheck, name, email, phone, fax } = this.state.userData;
+    const { loading, error } = this.state;
     const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
 
     if (loading) {
