@@ -94,5 +94,11 @@ export interface IRentalStates {
 }
 
 export interface ISelectMessages {
+  none: string;
+  series: string;
+  model: string;
+  detail: string;
+  grade: string;
+  option: string;
   [key: string]: string;
 }
