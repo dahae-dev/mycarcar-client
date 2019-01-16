@@ -7,17 +7,8 @@ import Origin from "./Origin/Origin";
 import { Capital } from "./Capital/Capital";
 import { Modal } from "./Modal/Modal";
 import { MainHeader } from "../MainHeader/MainHeader";
-import { RENTAL_INITIAL_STATE } from "./RentalInitialState";
-import { IRentalStates, ISelectMessages, IBrand, ISeries, IModel, IDetail, IGrade, IOption } from "./IRental";
-
-export const selectMessages: ISelectMessages = {
-  none: "정보없음",
-  series: "제조사를 선택해주세요.",
-  model: "시리즈를 선택해주세요.",
-  detail: "모델을 선택해주세요.",
-  grade: "상세모델을 선택해주세요.",
-  option: "등급을 선택해주세요."
-};
+import { RENTAL_INITIAL_STATE, selectMessages } from "./RentalInitialState";
+import { IRentalStates, IBrand, ISeries, IModel, IDetail, IGrade, IOption } from "./IRental";
 
 function isInvaildItem(item: string): boolean {
   for (const msg in selectMessages) {

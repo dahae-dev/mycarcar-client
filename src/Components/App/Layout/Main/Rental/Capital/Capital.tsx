@@ -2,7 +2,8 @@ import "./Capital.css";
 
 import React, { MouseEvent } from "react";
 
-import { ICapitalList, ABOVE21, ABOVE26 } from "../Rental";
+import { ABOVE21, ABOVE26 } from "../Rental";
+import { ICapitalList } from "../IRental";
 
 interface ICapitalProps {
   totalPrice: number;

@@ -1,5 +1,13 @@
-import { selectMessages } from "./Rental";
-import { IRentalStates } from "./IRental";
+import { IRentalStates, ISelectMessages } from "./IRental";
+
+export const selectMessages: ISelectMessages = {
+  none: "정보없음",
+  series: "제조사를 선택해주세요.",
+  model: "시리즈를 선택해주세요.",
+  detail: "모델을 선택해주세요.",
+  grade: "상세모델을 선택해주세요.",
+  option: "등급을 선택해주세요."
+};
 
 const carInfoState = {
   origin: "korea",
