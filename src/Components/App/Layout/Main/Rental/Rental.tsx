@@ -1,14 +1,23 @@
 import "./Rental.css";
 
 import React, { Component, MouseEvent, FormEvent, ChangeEvent } from "react";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import Origin from "./Origin/Origin";
 import { Capital } from "./Capital/Capital";
 import { Modal } from "./Modal/Modal";
 import { MainHeader } from "../MainHeader/MainHeader";
 import { RENTAL_INITIAL_STATE, selectMessages } from "./RentalInitialState";
-import { IRentalStates, IBrand, ISeries, IModel, IDetail, IGrade, IOption } from "./IRental";
+import {
+  IRentalStates,
+  IBrandListData,
+  ISeriesListData,
+  IModelListData,
+  IDetailListData,
+  IGradeListData,
+  IOptionListData,
+  ICapitalListData
+} from "./IRental";
 
 function isInvaildItem(item: string): boolean {
   for (const msg in selectMessages) {
@@ -56,7 +65,7 @@ export default class Rental extends Component<{}, IRentalStates> {
     });
   };
 
-  handleSave = () => {
+  handleSave = async () => {
     const body = {
       origin: this.state.carInfoState.origin,
       brand: this.state.carInfoState.brand,
@@ -85,44 +94,58 @@ export default class Rental extends Component<{}, IRentalStates> {
       headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
 
-    axios
+    await axios
       .post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config)
-      .then((res) => {
-        this.setState({ ...this.state, displayState: { ...this.state.displayState, detailClicked: false } });
+      .then(() => {
         alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.");
       })
-      .catch((err) => alert(err.message));
-  };
-
-  handleOriginClick = (origin: string) => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
-      .then((res) => {
-        const brandList: IBrand[] = res.data.brandList;
-        this.setState({
-          ...this.state,
-          carInfoState: {
-            ...this.state.carInfoState,
-            brandList,
-            origin,
-            seriesList: [{ car_series: selectMessages.series }],
-            modelList: [{ car_model: selectMessages.model }],
-            detailList: [{ car_detail: selectMessages.detail }],
-            gradeList: [{ car_grade: selectMessages.grade }],
-            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-            price: 0,
-            optionPrice: 0,
-            totalPrice: 0,
-            listClicked: false
-          }
-        });
-      })
-      .catch((err: Error) => {
-        alert(err.message);
+      .catch((error: AxiosError) => {
+        alert((error.response as AxiosResponse).statusText);
       });
+
+    this.setState({ ...this.state, displayState: { ...this.state.displayState, detailClicked: false } });
   };
 
-  handleBrandClick = (e: MouseEvent<HTMLLIElement>) => {
+  handleOriginClick = async (origin: string) => {
+    const brandListResult = await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
+      .then((res: AxiosResponse<IBrandListData>) => {
+        return {
+          brandList: res.data.brandList,
+          error: ""
+        };
+      })
+      .catch((error: AxiosError) => ({
+        brandList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        origin,
+        brandList: brandListResult.brandList,
+        seriesList: [{ car_series: selectMessages.series }],
+        modelList: [{ car_model: selectMessages.model }],
+        detailList: [{ car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: brandListResult.error
+    });
+  };
+
+  handleBrandClick = async (e: MouseEvent<HTMLLIElement>) => {
     const brand = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(brand)) {
       return;
@@ -131,34 +154,44 @@ export default class Rental extends Component<{}, IRentalStates> {
     const origin = this.state.carInfoState.origin;
     const encodedBrand = encodeURI(brand);
 
-    axios
+    const seriesListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}`)
-      .then((res) => {
-        const seriesList: ISeries[] = res.data.seriesList;
-
-        this.setState({
-          ...this.state,
-          carInfoState: {
-            ...this.state.carInfoState,
-            seriesList,
-            brand,
-            modelList: [{ car_model: selectMessages.model }],
-            detailList: [{ car_detail: selectMessages.detail }],
-            gradeList: [{ car_grade: selectMessages.grade }],
-            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-            price: 0,
-            optionPrice: 0,
-            totalPrice: 0,
-            listClicked: false
-          }
-        });
+      .then((res: AxiosResponse<ISeriesListData>) => {
+        return {
+          seriesList: res.data.seriesList,
+          error: ""
+        };
       })
-      .catch((err: Error) => {
-        alert(err.message);
-      });
+      .catch((error: AxiosError) => ({
+        seriesList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        brand,
+        seriesList: seriesListResult.seriesList,
+        modelList: [{ car_model: selectMessages.model }],
+        detailList: [{ car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: seriesListResult.error
+    });
   };
 
-  handleSeriesClick = (e: MouseEvent<HTMLLIElement>) => {
+  handleSeriesClick = async (e: MouseEvent<HTMLLIElement>) => {
     const series = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(series)) {
       return;
@@ -170,32 +203,36 @@ export default class Rental extends Component<{}, IRentalStates> {
     const encodedBrand = encodeURI(brand);
     const encodedSeries = encodeURI(series);
 
-    axios
+    const modelListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}`)
-      .then((res) => {
-        const modelList: IModel[] = res.data.modelList;
-        this.setState({
-          ...this.state,
-          carInfoState: {
-            ...this.state.carInfoState,
-            modelList,
-            series,
-            detailList: [{ car_detail: selectMessages.detail }],
-            gradeList: [{ car_grade: selectMessages.grade }],
-            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-            price: 0,
-            optionPrice: 0,
-            totalPrice: 0,
-            listClicked: false
-          }
-        });
-      })
-      .catch((err: Error) => {
-        alert(err.message);
-      });
+      .then((res: AxiosResponse<IModelListData>) => ({
+        modelList: res.data.modelList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        modelList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        series,
+        modelList: modelListResult.modelList,
+        detailList: [{ car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: modelListResult.error
+    });
   };
 
-  handleModelClick = (e: MouseEvent<HTMLLIElement>) => {
+  handleModelClick = async (e: MouseEvent<HTMLLIElement>) => {
     const model = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(model)) {
       return;
@@ -209,31 +246,40 @@ export default class Rental extends Component<{}, IRentalStates> {
     const encodedSeries = encodeURI(series);
     const encodedModel = encodeURI(model);
 
-    axios
+    const detailListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}`)
-      .then((res) => {
-        const detailList: IDetail[] = res.data.detailList;
-        this.setState({
-          ...this.state,
-          carInfoState: {
-            ...this.state.carInfoState,
-            detailList,
-            model,
-            gradeList: [{ car_grade: selectMessages.grade }],
-            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-            price: 0,
-            optionPrice: 0,
-            totalPrice: 0,
-            listClicked: false
-          }
-        });
-      })
-      .catch((err: Error) => {
-        alert(err.message);
-      });
+      .then((res: AxiosResponse<IDetailListData>) => ({
+        detailList: res.data.detailList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        detailList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        model,
+        detailList: detailListResult.detailList,
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: detailListResult.error
+    });
   };
 
-  handleDetailClick = (e: MouseEvent<HTMLLIElement>) => {
+  handleDetailClick = async (e: MouseEvent<HTMLLIElement>) => {
     const detail = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(detail)) {
       return;
@@ -249,34 +295,43 @@ export default class Rental extends Component<{}, IRentalStates> {
     const encodedModel = encodeURI(model);
     const encodedDetail = encodeURI(detail);
 
-    axios
+    const gradeListResult = await axios
       .get(
         `${
           process.env.REACT_APP_API_URL
         }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`
       )
-      .then((res) => {
-        const gradeList: IGrade[] = res.data.gradeList;
-        this.setState({
-          ...this.state,
-          carInfoState: {
-            ...this.state.carInfoState,
-            gradeList,
-            detail,
-            optionList: [{ car_option: selectMessages.option, car_option_price: 0 }],
-            price: 0,
-            optionPrice: 0,
-            totalPrice: 0,
-            listClicked: false
-          }
-        });
-      })
-      .catch((err: Error) => {
-        alert(err.message);
-      });
+      .then((res: AxiosResponse<IGradeListData>) => ({
+        gradeList: res.data.gradeList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        gradeList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        detail,
+        gradeList: gradeListResult.gradeList,
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: gradeListResult.error
+    });
   };
 
-  handleGradeClick = (e: MouseEvent<HTMLLIElement>) => {
+  handleGradeClick = async (e: MouseEvent<HTMLLIElement>) => {
     const grade = e.currentTarget.textContent || selectMessages.none;
     if (isInvaildItem(grade)) {
       return;
@@ -294,37 +349,41 @@ export default class Rental extends Component<{}, IRentalStates> {
     const encodedDetail = encodeURI(detail);
     const encodedGrade = encodeURI(grade);
 
-    axios
+    const optionListResult = await axios
       .get(
         `${
           process.env.REACT_APP_API_URL
         }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`
       )
-      .then((res) => {
-        const price = res.data.car_price;
-        const optionList: IOption[] = res.data.optionList;
-        this.setState({
-          ...this.state,
-          carInfoState: {
-            ...this.state.carInfoState,
-            optionList,
-            grade
-          },
-          priceInfoState: {
-            ...this.state.priceInfoState,
-            price,
-            optionPrice: 0,
-            totalPrice: price
-          },
-          displayState: {
-            ...this.state.displayState,
-            listClicked: false
-          }
-        });
-      })
-      .catch((err: Error) => {
-        alert(err.message);
-      });
+      .then((res: AxiosResponse<IOptionListData>) => ({
+        price: res.data.car_price,
+        optionList: res.data.optionList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        price: 0,
+        optionList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        grade,
+        optionList: optionListResult.optionList
+      },
+      priceInfoState: {
+        price: optionListResult.price,
+        optionPrice: 0,
+        totalPrice: optionListResult.price
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: optionListResult.error
+    });
   };
 
   handleOptionClick = (e: MouseEvent<HTMLLIElement>) => {
@@ -363,47 +422,58 @@ export default class Rental extends Component<{}, IRentalStates> {
     });
   };
 
-  handleEstimate = () => {
+  handleEstimate = async () => {
     const { price } = this.state.priceInfoState;
     const { rentalPeriod, insurancePlan } = this.state.rentalTermsState;
     if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
       return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
     }
 
-    axios
+    const capitalListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/capital-profit`)
-      .then((res) => {
-        this.setState({
-          ...this.state,
-          capitalInfoState: {
-            ...this.state.capitalInfoState,
-            capitalList: res.data.capitalList
-          },
-          displayState: {
-            ...this.state.displayState,
-            listClicked: true
-          }
-        });
-      })
-      .catch((err) => alert(err.message));
+      .then((res: AxiosResponse<ICapitalListData>) => ({
+        capitalList: res.data.capitalList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        capitalList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      capitalInfoState: {
+        ...this.state.capitalInfoState,
+        capitalList: capitalListResult.capitalList
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: true
+      },
+      error: capitalListResult.error
+    });
   };
 
-  componentDidMount() {
-    axios
+  async componentDidMount() {
+    const brandListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/rental/korea`)
-      .then((res) => {
-        const brandList: IBrand[] = res.data.brandList;
-        this.setState({
-          ...this.state,
-          carInfoState: {
-            ...this.state.carInfoState,
-            brandList
-          }
-        });
-      })
-      .catch((err: Error) => {
-        alert(err.message);
-      });
+      .then((res: AxiosResponse<IBrandListData>) => ({
+        brandList: res.data.brandList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        brandList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        brandList: brandListResult.brandList
+      },
+      error: brandListResult.error
+    });
 
     const modal = document.getElementById("my-modal");
     window.onclick = (e) => {
@@ -425,6 +495,7 @@ export default class Rental extends Component<{}, IRentalStates> {
     const { capitalList } = this.state.capitalInfoState;
     const { rentalPeriod, insurancePlan, deposit, advancePay } = this.state.rentalTermsState;
     const { listClicked, detailClicked } = this.state.displayState;
+    const { error } = this.state;
 
     return (
       <div id="my-main" className={isSidebarOpen ? "" : "my-main-margin-left"}>
@@ -649,6 +720,8 @@ export default class Rental extends Component<{}, IRentalStates> {
               </div>
             </div>
           </div>
+
+          {error ? <div className="list-error-msg">{error}</div> : <div />}
 
           <div className="btn-container">
             <input type="button" value="견적 확인" disabled={listClicked} onClick={this.handleEstimate} />

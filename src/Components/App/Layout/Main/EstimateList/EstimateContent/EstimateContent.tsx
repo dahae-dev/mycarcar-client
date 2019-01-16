@@ -2,8 +2,9 @@ import "./EstimateContent.css";
 
 import React, { Component, MouseEvent } from "react";
 
-import axios from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { IHandlePage } from "../../../../App";
+import { IEstimateInfo } from "../../EstimateForm/EstimateFormMain/EstimateFormMain";
 
 interface IEstimateContentProps {
   handlePage: IHandlePage;
@@ -23,6 +24,19 @@ interface IEstimateList {
 
 interface IEstimateContentState {
   estimateList: IEstimateList[];
+  error: string;
+}
+
+interface IEstimateListData {
+  estimateList: IEstimateList[];
+  status: number; //
+  statusText: string; //
+}
+
+interface IEstimateInfoData {
+  estimateInfo: IEstimateInfo;
+  status: number; //
+  statusText: string; //
 }
 
 export default class EstimateContent extends Component<IEstimateContentProps, IEstimateContentState> {
@@ -42,24 +56,28 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
           car_option: "",
           at_date: ""
         }
-      ]
+      ],
+      error: ""
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const axiosOption = {
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    axios
+    const estimateListResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/estimate/list`, axiosOption)
-      .then((res) => {
-        const estimateList = res.data.estimateList;
-        this.setState({
-          estimateList
-        });
-      })
-      .catch(() => console.error("Fail : Getting estimate list"));
+      .then((res: AxiosResponse<IEstimateListData>) => ({
+        estimateList: res.data.estimateList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        estimateList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({ estimateList: estimateListResult.estimateList, error: estimateListResult.error });
   }
 
   handleViewBtnClick = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -69,18 +87,24 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
       headers: { "x-access-token": localStorage.getItem("x-access-token") }
     };
 
-    await axios
+    const estimateInfoResult = await axios
       .get(`${process.env.REACT_APP_API_URL}/api/estimate/${estimateNo}`, axiosOption)
-      .then((res) => {
+      .then((res: AxiosResponse<IEstimateInfoData>) => {
         const estimateInfo = res.data.estimateInfo;
         sessionStorage.setItem("estimateInfo", JSON.stringify(estimateInfo));
+        return { error: "" };
       })
-      .catch(() => console.error("Fail : Getting estimate infomation"));
+      .catch((error: AxiosError) => ({
+        error: (error.response as AxiosResponse).statusText
+      }));
 
+    this.setState({ error: estimateInfoResult.error });
     this.props.handlePage("/estimate/form");
   };
 
   render() {
+    const { estimateList, error } = this.state;
+
     return (
       <div className="estimate_list_container">
         <div className="estimate_list">
@@ -95,7 +119,9 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
             <div>보기</div>
           </div>
 
-          {this.state.estimateList.map((estimate) => {
+          {error ? <div className="list-error-msg">{error}</div> : <div />}
+
+          {estimateList.map((estimate) => {
             const carInfo = `${estimate.car_brand} ${estimate.car_series} ${estimate.car_model} ${
               estimate.car_detail
             } ${estimate.car_grade} ${estimate.car_option}`;

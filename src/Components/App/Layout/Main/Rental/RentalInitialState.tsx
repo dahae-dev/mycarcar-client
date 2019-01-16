@@ -70,5 +70,6 @@ export const RENTAL_INITIAL_STATE: IRentalStates = {
   rentalTermsState,
   capitalInfoState,
   radioState,
-  displayState
+  displayState,
+  error: ""
 };
