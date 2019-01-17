@@ -102,6 +102,10 @@ export default class Rental extends Component<{}, IRentalStates> {
         optionPrice: 0,
         totalPrice: 0
       },
+      radioState: {
+        ...this.state.radioState,
+        checkedBrand: ""
+      },
       displayState: {
         ...this.state.displayState,
         listClicked: false
@@ -149,7 +153,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       },
       radioState: {
         ...this.state.radioState,
-        [name]: value
+        [name]: value,
+        checkedSeries: ""
       },
       displayState: {
         ...this.state.displayState,
@@ -195,7 +200,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       },
       radioState: {
         ...this.state.radioState,
-        [name]: value
+        [name]: value,
+        checkedModel: ""
       },
       displayState: {
         ...this.state.displayState,
@@ -247,7 +253,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       },
       radioState: {
         ...this.state.radioState,
-        [name]: value
+        [name]: value,
+        checkedDetail: ""
       },
       displayState: {
         ...this.state.displayState,
@@ -304,7 +311,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       },
       radioState: {
         ...this.state.radioState,
-        [name]: value
+        [name]: value,
+        checkedGrade: ""
       },
       displayState: {
         ...this.state.displayState,
@@ -364,7 +372,8 @@ export default class Rental extends Component<{}, IRentalStates> {
       },
       radioState: {
         ...this.state.radioState,
-        [name]: value
+        [name]: value,
+        checkedOption: ""
       },
       displayState: {
         ...this.state.displayState,
