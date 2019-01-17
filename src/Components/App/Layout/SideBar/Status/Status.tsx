@@ -5,6 +5,7 @@ import React from "react";
 import LoginButtons from "./LoginButtons/LoginButtons";
 import RegisterButtons from "./RegisterButtons/RegisterButtons";
 import { IHandlePage } from "../../../App";
+import parseJwt, { INVALID_JWT } from "../../../../../util/Auth/parseJwt";
 
 interface IStatusProps {
   handlePage: IHandlePage;
@@ -12,8 +13,11 @@ interface IStatusProps {
 }
 
 const Status = (props: IStatusProps) => {
-  const isSignedIn = localStorage.getItem("isSignedIn");
-  if (isSignedIn) {
+  const userToken = localStorage.getItem("x-access-token") || "";
+  const decodedToken = userToken === "" ? INVALID_JWT : parseJwt(userToken);
+  const level = decodedToken.level;
+
+  if (level) {
     return (
       <div className="status">
         <LoginButtons title="로그아웃" handlePage={props.handlePage} handleSidebar={props.handleSidebar} />
