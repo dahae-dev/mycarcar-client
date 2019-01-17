@@ -5,7 +5,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
-import { IHandlePage } from "../../../App";
+import { IHandlePage } from "../../../../App";
 
 interface ILoginFormProps {
   handlePage: IHandlePage;

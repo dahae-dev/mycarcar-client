@@ -3,8 +3,8 @@ import "./RegisterTerms.css";
 import React, { Component, FormEvent } from "react";
 
 import logo from "assets/img/logo_basic.png";
-import * as termsContent from "../../../../../util/Terms/terms";
-import { IHandlePage } from "../../../App";
+import * as termsContent from "../../../../../../util/Terms/terms";
+import { IHandlePage } from "../../../../App";
 
 interface IRegisterTermsProps {
   handlePage: IHandlePage;

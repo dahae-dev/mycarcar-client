@@ -2,7 +2,7 @@ import "./EstimateForm.css";
 
 import React from "react";
 import { EstimateFormMain } from "./EstimateFormMain/EstimateFormMain";
-import { MainHeader } from "../MainHeader/MainHeader";
+import { MainHeader } from "../../MainHeader/MainHeader";
 
 export const EstimateForm = () => {
   const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");

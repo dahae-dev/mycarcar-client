@@ -5,7 +5,8 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
-import { IHandlePage } from "../../../App";
+import { IHandlePage } from "../../../../App";
+import { INITIAL_USER_DATA, IUserData } from "../UserInitialState";
 
 interface IEditFormProps {
   handlePage: IHandlePage;
@@ -21,28 +22,6 @@ interface IEditFormState {
 interface IPatchEdit {
   (endpoint: string, data: object): void;
 }
-
-interface IUserData {
-  company: string;
-  id: string;
-  pw: string;
-  pwdcheck: string;
-  name: string;
-  email: string;
-  phone: string;
-  fax: string;
-}
-
-const INITIAL_USER_DATA = {
-  company: "",
-  id: "",
-  pw: "",
-  pwdcheck: "",
-  name: "",
-  email: "",
-  phone: "",
-  fax: ""
-};
 
 export default class EditForm extends Component<IEditFormProps, IEditFormState> {
   constructor(props: IEditFormProps) {
