@@ -6,7 +6,7 @@ import Origin from "./Origin/Origin";
 import { Capital } from "./Capital/Capital";
 import { Modal } from "./Modal/Modal";
 import { MainHeader } from "../MainHeader/MainHeader";
-import { RENTAL_INITIAL_STATE, selectMessages } from "./RentalInitialState";
+import { RENTAL_INITIAL_STATE, LIST_INITIAL_STATE, selectMessages } from "./RentalInitialState";
 import { IRentalStates } from "./IRental";
 import { RequestHandler, IConfig } from "../../../../../util/RequestHandler";
 
@@ -38,7 +38,10 @@ export default class Rental extends Component<{}, IRentalStates> {
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
-        brandList: result.data.brandList
+        list: {
+          ...LIST_INITIAL_STATE,
+          brandList: result.data.brandList
+        }
       },
       error: result.error
     });
@@ -69,12 +72,11 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         origin,
-        brandList: result.data.brandList,
-        seriesList: [{ car_series_id: -1, car_series: selectMessages.series }],
-        modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
-        detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
-        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+
+        list: {
+          ...LIST_INITIAL_STATE,
+          brandList: result.data.brandList
+        }
       },
       priceInfoState: {
         price: 0,
@@ -110,11 +112,11 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         brand,
-        seriesList: result.data.seriesList,
-        modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
-        detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
-        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+        list: {
+          ...LIST_INITIAL_STATE,
+          brandList: this.state.carInfoState.list.brandList,
+          seriesList: result.data.seriesList
+        }
       },
       priceInfoState: {
         price: 0,
@@ -151,10 +153,12 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         series,
-        modelList: result.data.modelList,
-        detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
-        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+        list: {
+          ...LIST_INITIAL_STATE,
+          brandList: this.state.carInfoState.list.brandList,
+          seriesList: this.state.carInfoState.list.seriesList,
+          modelList: result.data.modelList
+        }
       },
       radioState: {
         ...this.state.radioState,
@@ -186,9 +190,13 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         model,
-        detailList: result.data.detailList,
-        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
-        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+        list: {
+          ...LIST_INITIAL_STATE,
+          brandList: this.state.carInfoState.list.brandList,
+          seriesList: this.state.carInfoState.list.seriesList,
+          modelList: this.state.carInfoState.list.modelList,
+          detailList: result.data.detailList
+        }
       },
       priceInfoState: {
         price: 0,
@@ -225,8 +233,14 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         detail,
-        gradeList: result.data.gradeList,
-        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+        list: {
+          ...LIST_INITIAL_STATE,
+          brandList: this.state.carInfoState.list.brandList,
+          seriesList: this.state.carInfoState.list.seriesList,
+          modelList: this.state.carInfoState.list.modelList,
+          detailList: this.state.carInfoState.list.detailList,
+          gradeList: result.data.gradeList
+        }
       },
       priceInfoState: {
         price: 0,
@@ -263,7 +277,10 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         grade,
-        optionList: result.data.optionList
+        list: {
+          ...this.state.carInfoState.list,
+          optionList: result.data.optionList
+        }
       },
       priceInfoState: {
         price: result.data.car_price,
@@ -286,7 +303,7 @@ export default class Rental extends Component<{}, IRentalStates> {
   handleOptionClick = (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
     const option = value || selectMessages.none;
-    const optionInfo = this.state.carInfoState.optionList.reduce(
+    const optionInfo = this.state.carInfoState.list.optionList.reduce(
       (accu, curr) => {
         return curr.car_option === option ? curr : accu;
       },
@@ -431,7 +448,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <Origin handleOriginClick={this.handleOriginClick} />
               </div>
               <ul className="list_group">
-                {this.state.carInfoState.brandList.map((v) => (
+                {this.state.carInfoState.list.brandList.map((v) => (
                   <li className="list-group-item" key={v.car_brand}>
                     <input
                       type="radio"
@@ -453,7 +470,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">시리즈</div>
               </div>
               <ul className="list_group">
-                {this.state.carInfoState.seriesList.map((v) => (
+                {this.state.carInfoState.list.seriesList.map((v) => (
                   <li className="list-group-item" key={v.car_series}>
                     <input
                       type="radio"
@@ -475,7 +492,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">모델명</div>
               </div>
               <ul className="list_group">
-                {this.state.carInfoState.modelList.map((v) => (
+                {this.state.carInfoState.list.modelList.map((v) => (
                   <li className="list-group-item" key={v.car_model}>
                     <input
                       type="radio"
@@ -497,7 +514,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">상세모델</div>
               </div>
               <ul className="list_group">
-                {this.state.carInfoState.detailList.map((v) => (
+                {this.state.carInfoState.list.detailList.map((v) => (
                   <li className="list-group-item" key={v.car_detail}>
                     <input
                       type="radio"
@@ -519,7 +536,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">등급</div>
               </div>
               <ul className="list_group">
-                {this.state.carInfoState.gradeList.map((v) => (
+                {this.state.carInfoState.list.gradeList.map((v) => (
                   <li className="list-group-item" key={v.car_grade}>
                     <input
                       type="radio"
@@ -543,7 +560,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                 <div className="item_list_title">옵션</div>
               </div>
               <ul className="list_group">
-                {this.state.carInfoState.optionList.map((v) => (
+                {this.state.carInfoState.list.optionList.map((v) => (
                   <li className="list-group-item apply_display_flex_sb" key={v.car_option}>
                     <input
                       type="radio"

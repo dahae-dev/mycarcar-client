@@ -35,26 +35,37 @@ export interface ICapitalList {
   capital_profit: number;
 }
 
+export interface IListState {
+  brandList: IBrand[];
+  seriesList: ISeries[];
+  modelList: IModel[];
+  detailList: IDetail[];
+  gradeList: IGrade[];
+  optionList: IOption[];
+}
+
 interface ICarInfoState {
   origin: string;
 
   brand: string;
-  brandList: IBrand[];
+  // brandList: IBrand[];
 
   series: string;
-  seriesList: ISeries[];
+  // seriesList: ISeries[];
 
   model: string;
-  modelList: IModel[];
+  // modelList: IModel[];
 
   detail: string;
-  detailList: IDetail[];
+  // detailList: IDetail[];
 
   grade: string;
-  gradeList: IGrade[];
+  // gradeList: IGrade[];
 
   option: string;
-  optionList: IOption[];
+  // optionList: IOption[];
+
+  list: IListState;
 }
 
 interface IPriceInfoState {

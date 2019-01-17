@@ -1,4 +1,4 @@
-import { IRentalStates, ISelectMessages } from "./IRental";
+import { IRentalStates, ISelectMessages, IListState } from "./IRental";
 
 export const selectMessages: ISelectMessages = {
   none: "정보없음",
@@ -9,26 +9,37 @@ export const selectMessages: ISelectMessages = {
   option: "등급을 선택해주세요."
 };
 
+export const LIST_INITIAL_STATE: IListState = {
+  brandList: [{ car_brand_id: -1, car_brand: "" }],
+  seriesList: [{ car_series_id: -1, car_series: selectMessages.series }],
+  modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
+  detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
+  gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
+  optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+};
+
 const carInfoState = {
   origin: "korea",
 
   brand: "",
-  brandList: [{ car_brand_id: -1, car_brand: "" }],
+  // brandList: [{ car_brand_id: -1, car_brand: "" }],
 
   series: "",
-  seriesList: [{ car_series_id: -1, car_series: selectMessages.series }],
+  // seriesList: [{ car_series_id: -1, car_series: selectMessages.series }],
 
   model: "",
-  modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
+  // modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
 
   detail: "",
-  detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
+  // detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
 
   grade: "",
-  gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
+  // gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
 
   option: "",
-  optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+  // optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
+
+  list: LIST_INITIAL_STATE
 };
 
 const priceInfoState = {
