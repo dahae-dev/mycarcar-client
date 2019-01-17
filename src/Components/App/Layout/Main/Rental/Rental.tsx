@@ -1,23 +1,14 @@
 import "./Rental.css";
 
 import React, { Component, MouseEvent, FormEvent, ChangeEvent } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
 
 import Origin from "./Origin/Origin";
 import { Capital } from "./Capital/Capital";
 import { Modal } from "./Modal/Modal";
 import { MainHeader } from "../MainHeader/MainHeader";
 import { RENTAL_INITIAL_STATE, selectMessages } from "./RentalInitialState";
-import {
-  IRentalStates,
-  IBrandListData,
-  ISeriesListData,
-  IModelListData,
-  IDetailListData,
-  IGradeListData,
-  IOptionListData,
-  ICapitalListData
-} from "./IRental";
+import { IRentalStates } from "./IRental";
+import { RequestHandler, IConfig } from "../../../../../util/RequestHandler";
 
 function isInvaildItem(item: string): boolean {
   for (const msg in selectMessages) {
@@ -39,24 +30,17 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   async componentDidMount() {
-    const brandListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/brand/0`)
-      .then((res: AxiosResponse<IBrandListData>) => ({
-        brandList: res.data.brandList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        brandList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/brand/0`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
-        brandList: brandListResult.brandList
+        brandList: result.data.brandList
       },
-      error: brandListResult.error
+      error: result.error
     });
 
     const modal = document.getElementById("my-modal");
@@ -76,23 +60,16 @@ export default class Rental extends Component<{}, IRentalStates> {
   handleOriginClick = async (origin: string) => {
     const originId = origin === "korea" ? 0 : 1;
 
-    const brandListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/brand/${originId}`)
-      .then((res: AxiosResponse<IBrandListData>) => ({
-        brandList: res.data.brandList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        brandList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/brand/${originId}`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
         origin,
-        brandList: brandListResult.brandList,
+        brandList: result.data.brandList,
         seriesList: [{ car_series_id: -1, car_series: selectMessages.series }],
         modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
         detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
@@ -112,7 +89,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.displayState,
         listClicked: false
       },
-      error: brandListResult.error
+      error: result.error
     });
   };
 
@@ -124,23 +101,16 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const seriesListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/series/${brandId}`)
-      .then((res: AxiosResponse<ISeriesListData>) => ({
-        seriesList: res.data.seriesList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        seriesList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/series/${brandId}`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
         brand,
-        seriesList: seriesListResult.seriesList,
+        seriesList: result.data.seriesList,
         modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
         detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
         gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
@@ -160,7 +130,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.displayState,
         listClicked: false
       },
-      error: seriesListResult.error
+      error: result.error
     });
   };
 
@@ -172,23 +142,16 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const modelListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/model/${seriesId}`)
-      .then((res: AxiosResponse<IModelListData>) => ({
-        modelList: res.data.modelList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        modelList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/model/${seriesId}`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
         series,
-        modelList: modelListResult.modelList,
+        modelList: result.data.modelList,
         detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
         gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
         optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
@@ -202,7 +165,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.displayState,
         listClicked: false
       },
-      error: modelListResult.error
+      error: result.error
     });
   };
 
@@ -214,23 +177,16 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const detailListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/detail/${modelId}`)
-      .then((res: AxiosResponse<IDetailListData>) => ({
-        detailList: res.data.detailList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        detailList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/detail/${modelId}`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
         model,
-        detailList: detailListResult.detailList,
+        detailList: result.data.detailList,
         gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
         optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
       },
@@ -248,7 +204,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.displayState,
         listClicked: false
       },
-      error: detailListResult.error
+      error: result.error
     });
   };
 
@@ -260,23 +216,16 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const gradeListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/grade/${detailId}`)
-      .then((res: AxiosResponse<IGradeListData>) => ({
-        gradeList: res.data.gradeList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        gradeList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/grade/${detailId}`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
         detail,
-        gradeList: gradeListResult.gradeList,
+        gradeList: result.data.gradeList,
         optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
       },
       priceInfoState: {
@@ -293,7 +242,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.displayState,
         listClicked: false
       },
-      error: gradeListResult.error
+      error: result.error
     });
   };
 
@@ -305,30 +254,21 @@ export default class Rental extends Component<{}, IRentalStates> {
       return;
     }
 
-    const optionListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/option/${gradeId}`)
-      .then((res: AxiosResponse<IOptionListData>) => ({
-        price: res.data.car_price,
-        optionList: res.data.optionList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        price: 0,
-        optionList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/option/${gradeId}`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       carInfoState: {
         ...this.state.carInfoState,
         grade,
-        optionList: optionListResult.optionList
+        optionList: result.data.optionList
       },
       priceInfoState: {
-        price: optionListResult.price,
+        price: result.data.car_price,
         optionPrice: 0,
-        totalPrice: optionListResult.price
+        totalPrice: result.data.car_price
       },
       radioState: {
         ...this.state.radioState,
@@ -339,7 +279,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.displayState,
         listClicked: false
       },
-      error: optionListResult.error
+      error: result.error
     });
   };
 
@@ -391,28 +331,21 @@ export default class Rental extends Component<{}, IRentalStates> {
       return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
     }
 
-    const capitalListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/capital-profit`)
-      .then((res: AxiosResponse<ICapitalListData>) => ({
-        capitalList: res.data.capitalList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        capitalList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/capital-profit`;
+    const result = await requestHandler.get(uri);
 
     this.setState({
       ...this.state,
       capitalInfoState: {
         ...this.state.capitalInfoState,
-        capitalList: capitalListResult.capitalList
+        capitalList: result.data.capitalList
       },
       displayState: {
         ...this.state.displayState,
         listClicked: true
       },
-      error: capitalListResult.error
+      error: result.error
     });
   };
 
@@ -462,20 +395,19 @@ export default class Rental extends Component<{}, IRentalStates> {
       advancePay: this.state.rentalTermsState.advancePay
     };
 
-    const config = {
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/rental/estimate`;
+    const config: IConfig = {
       headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
+    const result = await requestHandler.post(uri, body, config);
 
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}/api/rental/estimate`, body, config)
-      .then(() => {
-        alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.");
-      })
-      .catch((error: AxiosError) => {
-        alert((error.response as AxiosResponse).statusText);
-      });
+    result.error === "" ? alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.") : alert(result.error);
 
-    this.setState({ ...this.state, displayState: { ...this.state.displayState, detailClicked: false } });
+    this.setState({
+      ...this.state,
+      displayState: { ...this.state.displayState, detailClicked: false }
+    });
   };
 
   render() {
@@ -712,7 +644,7 @@ export default class Rental extends Component<{}, IRentalStates> {
             </div>
           </div>
 
-          {error ? <div className="list-error-msg">{error}</div> : <div />}
+          {error ? <div className="rental-error-msg">{error}</div> : <div />}
 
           <div className="btn-container">
             <input type="button" value="견적 확인" disabled={listClicked} onClick={this.handleEstimate} />

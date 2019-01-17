@@ -1,12 +1,12 @@
 import "./RegisterForm.css";
 
 import React, { FormEvent, ChangeEvent } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../../App";
 import { INITIAL_USER_DATA, IUserData } from "../UserInitialState";
+import { RequestHandler } from "../../../../../../util/RequestHandler";
 
 interface IRegisterFormProps {
   handlePage: IHandlePage;
@@ -61,24 +61,15 @@ export default class RegisterForm extends React.Component<IRegisterFormProps, IR
 
     this.setState({ loading: true });
 
-    const postRegister: IPostRegister = async (endpoint, data) => {
-      const result = await axios
-        .post(`${process.env.REACT_APP_API_URL}/api/register/${endpoint}`, data)
-        .then(() => {
-          alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
-          return {
-            loading: false,
-            error: ""
-          };
-        })
-        .catch((error: AxiosError) => ({
-          loading: false,
-          error: (error.response as AxiosResponse).statusText
-        }));
+    const postRegister: IPostRegister = async (endpoint, body) => {
+      const requestHandler = new RequestHandler();
+      const uri = `${process.env.REACT_APP_API_URL}/api/register/${endpoint}`;
+      const result = await requestHandler.post(uri, body);
 
       this.setState({ loading: false, error: result.error });
 
       if (result.error === "") {
+        alert("회원가입이 정상적으로 처리되었습니다. 로그인 후 사용 가능합니다.");
         this.props.handlePage("/user/login");
       }
     };

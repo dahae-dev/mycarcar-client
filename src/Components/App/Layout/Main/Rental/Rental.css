@@ -138,6 +138,13 @@ label {
 }
 /* bootstrap 중복값 변경 - end */
 
+.rental-error-msg {
+  padding: 3% 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn-container {
   display: flex;
   justify-content: center;

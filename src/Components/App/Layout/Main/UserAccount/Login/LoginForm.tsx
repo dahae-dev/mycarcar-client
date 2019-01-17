@@ -1,11 +1,11 @@
 import "./LoginForm.css";
 
 import React, { Component, FormEvent } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../../App";
+import { RequestHandler } from "../../../../../../util/RequestHandler";
 
 interface ILoginFormProps {
   handlePage: IHandlePage;
@@ -47,29 +47,19 @@ export default class LoginForm extends Component<ILoginFormProps, ILoginFormStat
 
     this.setState({ loading: true });
 
-    const result = await axios
-      .post(`${process.env.REACT_APP_API_URL}/api/login`, { id, pw })
-      .then((res: AxiosResponse<ILoginData>) => {
-        localStorage.setItem("x-access-token", res.headers["x-access-token"]);
-        localStorage.setItem("isSignedIn", JSON.stringify(true));
-        localStorage.setItem("signedInLevel", JSON.stringify(res.data.level));
-        return {
-          loading: true,
-          error: ""
-        };
-      })
-      .catch((error: AxiosError) => ({
-        loading: false,
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/login`;
+    const body = { id, pw };
+    const result = await requestHandler.post(uri, body);
 
     if (result.error === "") {
+      localStorage.setItem("x-access-token", result.data);
       setTimeout(() => {
         this.props.handlePage("/");
       }, 500);
     }
 
-    this.setState({ loading: result.loading, error: result.error });
+    this.setState({ loading: result.error === "" ? true : false, error: result.error });
   };
 
   render() {

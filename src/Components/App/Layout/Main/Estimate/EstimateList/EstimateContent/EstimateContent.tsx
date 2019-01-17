@@ -2,9 +2,9 @@ import "./EstimateContent.css";
 
 import React, { Component, MouseEvent } from "react";
 
-import axios, { AxiosResponse, AxiosError } from "axios";
 import { IHandlePage } from "../../../../../App";
 import { IEstimateInfo } from "../../EstimateForm/EstimateFormMain/EstimateFormMain";
+import { RequestHandler, IConfig } from "../../../../../../../util/RequestHandler";
 
 interface IEstimateContentProps {
   handlePage: IHandlePage;
@@ -62,43 +62,28 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
   }
 
   async componentDidMount() {
-    const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/estimate/list`;
+    const config: IConfig = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
+    const result = await requestHandler.get(uri, config);
 
-    const estimateListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/estimate/list`, axiosOption)
-      .then((res: AxiosResponse<IEstimateListData>) => ({
-        estimateList: res.data.estimateList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        estimateList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({ estimateList: estimateListResult.estimateList, error: estimateListResult.error });
+    this.setState({ estimateList: result.data.estimateList, error: result.error });
   }
 
   handleViewBtnClick = async (e: MouseEvent<HTMLButtonElement>) => {
     const estimateNo = e.currentTarget.dataset.estimateNo || "0";
 
-    const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/estimate/${estimateNo}`;
+    const config: IConfig = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
+    const result = await requestHandler.get(uri, config);
 
-    const estimateInfoResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/estimate/${estimateNo}`, axiosOption)
-      .then((res: AxiosResponse<IEstimateInfoData>) => {
-        const estimateInfo = res.data.estimateInfo;
-        sessionStorage.setItem("estimateInfo", JSON.stringify(estimateInfo));
-        return { error: "" };
-      })
-      .catch((error: AxiosError) => ({
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({ error: estimateInfoResult.error });
+    sessionStorage.setItem("estimateInfo", JSON.stringify(result.data.estimateInfo));
+    this.setState({ error: result.error });
     this.props.handlePage("/estimate/form");
   };
 
