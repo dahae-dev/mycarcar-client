@@ -4,10 +4,6 @@ export interface IMenus {
   path: string;
 }
 
-interface IGetMenus {
-  (signedInLevel: number): IMenus[];
-}
-
 const guestUserMenu = [
   { icon: "home", content: "홈으로 가기", path: "/" },
   { icon: "cab", content: "장기렌트", path: "/rental" }
@@ -19,23 +15,23 @@ const capitalUserMenu = [...nomalUserMenu];
 
 const superAdminMenu = [...capitalUserMenu, { icon: "television", content: "회원정보관리", path: "/admin/edit" }];
 
-export const getMenus: IGetMenus = (signedInLevel) => {
-  const isGuestUser = signedInLevel === 0;
+export const getMenus = (level: number) => {
+  const isGuestUser = level === 0;
   if (isGuestUser) {
     return guestUserMenu;
   }
 
-  const isNomalUser = signedInLevel < 2;
+  const isNomalUser = level < 2;
   if (isNomalUser) {
     return nomalUserMenu;
   }
 
-  const isCapitalUser = signedInLevel === 5;
+  const isCapitalUser = level === 5;
   if (isCapitalUser) {
     return capitalUserMenu;
   }
 
-  const isSuperAdmin = signedInLevel === 10;
+  const isSuperAdmin = level === 10;
   if (isSuperAdmin) {
     return superAdminMenu;
   }

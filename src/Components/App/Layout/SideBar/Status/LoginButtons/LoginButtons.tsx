@@ -23,8 +23,6 @@ export default class LoginButton extends Component<ILoginButtonsProps, {}> {
     }
 
     localStorage.removeItem("x-access-token");
-    localStorage.removeItem("isSignedIn");
-    localStorage.setItem("signedInLevel", JSON.stringify(0));
 
     this.props.handlePage("/");
   };
