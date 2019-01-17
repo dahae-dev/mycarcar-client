@@ -40,7 +40,7 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   async componentDidMount() {
     const brandListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/korea`)
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/brand/0`)
       .then((res: AxiosResponse<IBrandListData>) => ({
         brandList: res.data.brandList,
         error: ""
@@ -74,8 +74,10 @@ export default class Rental extends Component<{}, IRentalStates> {
   }
 
   handleOriginClick = async (origin: string) => {
+    const originId = origin === "korea" ? 0 : 1;
+
     const brandListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/brand/${originId}`)
       .then((res: AxiosResponse<IBrandListData>) => ({
         brandList: res.data.brandList,
         error: ""
@@ -91,11 +93,11 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.carInfoState,
         origin,
         brandList: brandListResult.brandList,
-        seriesList: [{ car_series: selectMessages.series }],
-        modelList: [{ car_model: selectMessages.model }],
-        detailList: [{ car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+        seriesList: [{ car_series_id: -1, car_series: selectMessages.series }],
+        modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
+        detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
+        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
       },
       priceInfoState: {
         price: 0,
@@ -116,16 +118,14 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   handleBrandClick = async (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
+    const brandId = parseInt(e.currentTarget.dataset.id || "-1", 10);
     const brand = value || selectMessages.none;
     if (isInvaildItem(brand)) {
       return;
     }
 
-    const origin = this.state.carInfoState.origin;
-    const encodedBrand = encodeURI(brand);
-
     const seriesListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/series/${brandId}`)
       .then((res: AxiosResponse<ISeriesListData>) => ({
         seriesList: res.data.seriesList,
         error: ""
@@ -141,10 +141,10 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.carInfoState,
         brand,
         seriesList: seriesListResult.seriesList,
-        modelList: [{ car_model: selectMessages.model }],
-        detailList: [{ car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+        modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
+        detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
+        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
       },
       priceInfoState: {
         price: 0,
@@ -166,19 +166,14 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   handleSeriesClick = async (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
+    const seriesId = parseInt(e.currentTarget.dataset.id || "-1", 10);
     const series = value || selectMessages.none;
     if (isInvaildItem(series)) {
       return;
     }
 
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-
     const modelListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/model/${seriesId}`)
       .then((res: AxiosResponse<IModelListData>) => ({
         modelList: res.data.modelList,
         error: ""
@@ -194,9 +189,9 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.carInfoState,
         series,
         modelList: modelListResult.modelList,
-        detailList: [{ car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+        detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
+        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
       },
       radioState: {
         ...this.state.radioState,
@@ -213,21 +208,14 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   handleModelClick = async (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
+    const modelId = parseInt(e.currentTarget.dataset.id || "-1", 10);
     const model = value || selectMessages.none;
     if (isInvaildItem(model)) {
       return;
     }
 
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-    const series = this.state.carInfoState.series;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-    const encodedModel = encodeURI(model);
-
     const detailListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/detail/${modelId}`)
       .then((res: AxiosResponse<IDetailListData>) => ({
         detailList: res.data.detailList,
         error: ""
@@ -243,8 +231,8 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.carInfoState,
         model,
         detailList: detailListResult.detailList,
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+        gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
+        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
       },
       priceInfoState: {
         price: 0,
@@ -266,27 +254,14 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   handleDetailClick = async (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
+    const detailId = parseInt(e.currentTarget.dataset.id || "-1", 10);
     const detail = value || selectMessages.none;
     if (isInvaildItem(detail)) {
       return;
     }
 
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-    const series = this.state.carInfoState.series;
-    const model = this.state.carInfoState.model;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-    const encodedModel = encodeURI(model);
-    const encodedDetail = encodeURI(detail);
-
     const gradeListResult = await axios
-      .get(
-        `${
-          process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`
-      )
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/grade/${detailId}`)
       .then((res: AxiosResponse<IGradeListData>) => ({
         gradeList: res.data.gradeList,
         error: ""
@@ -302,7 +277,7 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.carInfoState,
         detail,
         gradeList: gradeListResult.gradeList,
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+        optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
       },
       priceInfoState: {
         price: 0,
@@ -324,29 +299,14 @@ export default class Rental extends Component<{}, IRentalStates> {
 
   handleGradeClick = async (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
+    const gradeId = parseInt(e.currentTarget.dataset.id || "-1", 10);
     const grade = value || selectMessages.none;
     if (isInvaildItem(grade)) {
       return;
     }
 
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-    const series = this.state.carInfoState.series;
-    const model = this.state.carInfoState.model;
-    const detail = this.state.carInfoState.detail;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-    const encodedModel = encodeURI(model);
-    const encodedDetail = encodeURI(detail);
-    const encodedGrade = encodeURI(grade);
-
     const optionListResult = await axios
-      .get(
-        `${
-          process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`
-      )
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/option/${gradeId}`)
       .then((res: AxiosResponse<IOptionListData>) => ({
         price: res.data.car_price,
         optionList: res.data.optionList,
@@ -545,6 +505,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                       type="radio"
                       name="checkedBrand"
                       id={v.car_brand}
+                      data-id={v.car_brand_id}
                       value={v.car_brand}
                       checked={this.state.radioState.checkedBrand === v.car_brand}
                       onChange={this.handleBrandClick}
@@ -566,6 +527,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                       type="radio"
                       name="checkedSeries"
                       id={v.car_series}
+                      data-id={v.car_series_id}
                       value={v.car_series}
                       checked={this.state.radioState.checkedSeries === v.car_series}
                       onChange={this.handleSeriesClick}
@@ -587,6 +549,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                       type="radio"
                       name="checkedModel"
                       id={v.car_model}
+                      data-id={v.car_model_id}
                       value={v.car_model}
                       checked={this.state.radioState.checkedModel === v.car_model}
                       onChange={this.handleModelClick}
@@ -608,6 +571,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                       type="radio"
                       name="checkedDetail"
                       id={v.car_detail}
+                      data-id={v.car_detail_id}
                       value={v.car_detail}
                       checked={this.state.radioState.checkedDetail === v.car_detail}
                       onChange={this.handleDetailClick}
@@ -629,6 +593,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                       type="radio"
                       name="checkedGrade"
                       id={v.car_grade}
+                      data-id={v.car_grade_id}
                       value={v.car_grade}
                       checked={this.state.radioState.checkedGrade === v.car_grade}
                       onChange={this.handleGradeClick}
@@ -652,6 +617,7 @@ export default class Rental extends Component<{}, IRentalStates> {
                       type="radio"
                       name="checkedOption"
                       id={v.car_option}
+                      data-id={v.car_option_id}
                       value={v.car_option}
                       checked={this.state.radioState.checkedOption === v.car_option}
                       onChange={this.handleOptionClick}

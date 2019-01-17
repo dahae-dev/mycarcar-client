@@ -1,24 +1,30 @@
 export interface IBrand {
+  car_brand_id: number;
   car_brand: string;
 }
 
 export interface ISeries {
+  car_series_id: number;
   car_series: string;
 }
 
 export interface IModel {
+  car_model_id: number;
   car_model: string;
 }
 
 export interface IDetail {
+  car_detail_id: number;
   car_detail: string;
 }
 
 export interface IGrade {
+  car_grade_id: number;
   car_grade: string;
 }
 
 export interface IOption {
+  car_option_id: number;
   car_option: string;
   car_option_price: number;
 }
