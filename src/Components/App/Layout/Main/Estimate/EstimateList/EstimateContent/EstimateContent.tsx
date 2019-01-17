@@ -3,7 +3,7 @@ import "./EstimateContent.css";
 import React, { Component, MouseEvent } from "react";
 
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { IHandlePage } from "../../../../App";
+import { IHandlePage } from "../../../../../App";
 import { IEstimateInfo } from "../../EstimateForm/EstimateFormMain/EstimateFormMain";
 
 interface IEstimateContentProps {
