@@ -1,11 +1,12 @@
 import "./EditForm.css";
 
 import React, { Component, FormEvent } from "react";
-import axios, { AxiosResponse, AxiosError } from "axios";
 
 import logo from "assets/img/logo_basic.png";
 import loader from "assets/preloader/Spinner.gif";
-import { IHandlePage } from "../../../App";
+import { IHandlePage } from "../../../../App";
+import { INITIAL_USER_DATA, IUserData } from "../UserInitialState";
+import { RequestHandler, IConfig } from "../../../../../../util/RequestHandler";
 
 interface IEditFormProps {
   handlePage: IHandlePage;
@@ -22,28 +23,6 @@ interface IPatchEdit {
   (endpoint: string, data: object): void;
 }
 
-interface IUserData {
-  company: string;
-  id: string;
-  pw: string;
-  pwdcheck: string;
-  name: string;
-  email: string;
-  phone: string;
-  fax: string;
-}
-
-const INITIAL_USER_DATA = {
-  company: "",
-  id: "",
-  pw: "",
-  pwdcheck: "",
-  name: "",
-  email: "",
-  phone: "",
-  fax: ""
-};
-
 export default class EditForm extends Component<IEditFormProps, IEditFormState> {
   constructor(props: IEditFormProps) {
     super(props);
@@ -56,35 +35,20 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
   }
 
   async componentDidMount() {
-    const config = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
-    };
-
     this.setState({ loading: true });
 
-    const userDataResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/edit_account`, config)
-      .then((res: AxiosResponse<IUserData>) => ({
-        userData: res.data,
-        loading: false,
-        error: ""
-      }))
-      .catch((error: AxiosError) => {
-        localStorage.removeItem("isSignedIn");
-        localStorage.removeItem("x-access-token");
-        alert("재로그인 한 후 사용 가능합니다.");
-        return {
-          userData: INITIAL_USER_DATA,
-          loading: true,
-          error: (error.response as AxiosResponse).statusText
-        };
-      });
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/edit_account`;
+    const config: IConfig = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
+    };
+    const result = await requestHandler.get(uri, config);
 
-    if (userDataResult.error !== "") {
+    if (result.error !== "") {
       this.props.handlePage("/user/login");
     }
 
-    this.setState({ userData: userDataResult.userData, loading: userDataResult.loading, error: userDataResult.error });
+    this.setState({ userData: result.data, loading: result.error !== "" ? true : false, error: result.error });
   }
 
   handleChange = (e: FormEvent<HTMLInputElement>) => {
@@ -103,30 +67,20 @@ export default class EditForm extends Component<IEditFormProps, IEditFormState> 
 
     this.setState({ loading: true });
 
-    const config = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
-    };
-
-    const patchEdit: IPatchEdit = async (endpoint, data) => {
-      const result = await axios
-        .patch(`${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`, data, config)
-        .then(() => {
-          alert("회원정보가 정상적으로 수정되었습니다.");
-          return {
-            loading: false,
-            error: ""
-          };
-        })
-        .catch((error: AxiosError) => ({
-          loading: false,
-          error: (error.response as AxiosResponse).statusText
-        }));
+    const patchEdit: IPatchEdit = async (endpoint, body) => {
+      const requestHandler = new RequestHandler();
+      const uri = `${process.env.REACT_APP_API_URL}/api/edit_account/${endpoint}`;
+      const config: IConfig = {
+        headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
+      };
+      const result = await requestHandler.patch(uri, body, config);
 
       if (result.error === "") {
+        alert("회원정보가 정상적으로 수정되었습니다.");
         this.props.handlePage("/");
       }
 
-      this.setState({ loading: result.loading, error: result.error });
+      this.setState({ loading: false, error: result.error });
     };
 
     if (this.state.company === null) {

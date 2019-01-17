@@ -1,8 +1,8 @@
 import React from "react";
 
-import { MainHeader } from "../MainHeader/MainHeader";
+import { MainHeader } from "../../MainHeader/MainHeader";
 import EstimateContent from "./EstimateContent/EstimateContent";
-import { IHandlePage } from "../../../App";
+import { IHandlePage } from "../../../../App";
 
 interface IEstimateListProps {
   handlePage: IHandlePage;

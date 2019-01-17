@@ -4,8 +4,7 @@ import React, { Component, MouseEvent, ChangeEvent } from "react";
 import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 import { MainHeader } from "../MainHeader/MainHeader";
-
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { RequestHandler, IConfig } from "../../../../../util/RequestHandler";
 
 interface ISuperAdminProps {
   handlePage: IHandlePage;
@@ -68,62 +67,39 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
   async componentDidMount() {
     this.setState({ loading: true });
 
-    const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    const requestHandler = new RequestHandler();
+    let uri = `${process.env.REACT_APP_API_URL}/api/admin/user-list`;
+    const config: IConfig = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
+    const totalCountResult = await requestHandler.get(uri, config);
 
-    const totalCountResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list`, axiosOption)
-      .then((res: AxiosResponse<ITotalCountData>) => ({
-        totalCount: res.data.totalCount,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        totalCount: 1,
-        error: (error.response as AxiosResponse).statusText
-      }));
+    const totalCount = totalCountResult.data.totalCount;
+    const pageCount = Math.ceil(totalCount / 10);
 
-    const pageCount = Math.ceil(totalCountResult.totalCount / 10);
-
-    const userListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list/1`, axiosOption)
-      .then((res: AxiosResponse<IUserListData>) => ({
-        userList: res.data.userList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        userList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
+    uri = `${process.env.REACT_APP_API_URL}/api/admin/user-list/1`;
+    const result = await requestHandler.get(uri, config);
 
     this.setState({
-      userList: userListResult.userList,
-      totalCount: totalCountResult.totalCount,
+      userList: result.data.userList,
+      totalCount,
       pageCount,
       loading: false,
-      error: totalCountResult.error || userListResult.error
+      error: result.error
     });
   }
 
   handlePagination = async (e: MouseEvent<HTMLDivElement>) => {
     const page = e.currentTarget.textContent || "-1";
 
-    const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/admin/user-list/${page}`;
+    const config: IConfig = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
+    const result = await requestHandler.get(uri, config);
 
-    const userListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/admin/user-list/${page}`, axiosOption)
-      .then((res: AxiosResponse<IUserListData>) => ({
-        userList: res.data.userList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        userList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({ userList: userListResult.userList });
+    this.setState({ userList: result.data.userList });
   };
 
   handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -141,21 +117,18 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
 
   handleEditClick = async (e: MouseEvent<HTMLDivElement>) => {
     const index = parseInt(e.currentTarget.dataset.index || "-1", 10);
-    const editUserInfo = this.state.userList[index];
 
-    const axiosOption = {
-      headers: { "x-access-token": localStorage.getItem("x-access-token") }
+    const requestHandler = new RequestHandler();
+    const uri = `${process.env.REACT_APP_API_URL}/api/admin/user-list/update`;
+    const body = this.state.userList[index];
+    const config: IConfig = {
+      headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
+    const result = await requestHandler.patch(uri, body, config);
 
-    const result = await axios
-      .patch(`${process.env.REACT_APP_API_URL}/api/admin/user-list/update`, editUserInfo, axiosOption)
-      .then(() => {
-        alert("회원정보가 정상적으로 수정되었습니다.");
-        return { error: "" };
-      })
-      .catch((error: AxiosError) => ({
-        error: (error.response as AxiosResponse).statusText
-      }));
+    if (result.error === "") {
+      alert("회원정보가 정상적으로 수정되었습니다.");
+    }
 
     this.setState({ error: result.error });
   };
