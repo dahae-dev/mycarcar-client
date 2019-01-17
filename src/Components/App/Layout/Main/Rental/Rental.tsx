@@ -25,7 +25,6 @@ function isInvaildItem(item: string): boolean {
       return true;
     }
   }
-
   return false;
 }
 
@@ -39,9 +38,413 @@ export default class Rental extends Component<{}, IRentalStates> {
     this.state = RENTAL_INITIAL_STATE;
   }
 
-  handleCheck = (e: FormEvent<HTMLInputElement>) => {
+  async componentDidMount() {
+    const brandListResult = await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/korea`)
+      .then((res: AxiosResponse<IBrandListData>) => ({
+        brandList: res.data.brandList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        brandList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        brandList: brandListResult.brandList
+      },
+      error: brandListResult.error
+    });
+
+    const modal = document.getElementById("my-modal");
+    window.onclick = (e) => {
+      if (e.target === modal) {
+        this.setState({
+          ...this.state,
+          displayState: {
+            ...this.state.displayState,
+            detailClicked: false
+          }
+        });
+      }
+    };
+  }
+
+  handleOriginClick = async (origin: string) => {
+    const brandListResult = await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
+      .then((res: AxiosResponse<IBrandListData>) => ({
+        brandList: res.data.brandList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        brandList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        origin,
+        brandList: brandListResult.brandList,
+        seriesList: [{ car_series: selectMessages.series }],
+        modelList: [{ car_model: selectMessages.model }],
+        detailList: [{ car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: brandListResult.error
+    });
+  };
+
+  handleBrandClick = async (e: FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
-    this.setState({ ...this.state, radioState: { ...this.state.radioState, [name]: value } });
+    const brand = value || selectMessages.none;
+    if (isInvaildItem(brand)) {
+      return;
+    }
+
+    const origin = this.state.carInfoState.origin;
+    const encodedBrand = encodeURI(brand);
+
+    const seriesListResult = await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}`)
+      .then((res: AxiosResponse<ISeriesListData>) => ({
+        seriesList: res.data.seriesList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        seriesList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        brand,
+        seriesList: seriesListResult.seriesList,
+        modelList: [{ car_model: selectMessages.model }],
+        detailList: [{ car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      radioState: {
+        ...this.state.radioState,
+        [name]: value
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: seriesListResult.error
+    });
+  };
+
+  handleSeriesClick = async (e: FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    const series = value || selectMessages.none;
+    if (isInvaildItem(series)) {
+      return;
+    }
+
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
+
+    const encodedBrand = encodeURI(brand);
+    const encodedSeries = encodeURI(series);
+
+    const modelListResult = await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}`)
+      .then((res: AxiosResponse<IModelListData>) => ({
+        modelList: res.data.modelList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        modelList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        series,
+        modelList: modelListResult.modelList,
+        detailList: [{ car_detail: selectMessages.detail }],
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      radioState: {
+        ...this.state.radioState,
+        [name]: value
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: modelListResult.error
+    });
+  };
+
+  handleModelClick = async (e: FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    const model = value || selectMessages.none;
+    if (isInvaildItem(model)) {
+      return;
+    }
+
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
+    const series = this.state.carInfoState.series;
+
+    const encodedBrand = encodeURI(brand);
+    const encodedSeries = encodeURI(series);
+    const encodedModel = encodeURI(model);
+
+    const detailListResult = await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}`)
+      .then((res: AxiosResponse<IDetailListData>) => ({
+        detailList: res.data.detailList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        detailList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        model,
+        detailList: detailListResult.detailList,
+        gradeList: [{ car_grade: selectMessages.grade }],
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      radioState: {
+        ...this.state.radioState,
+        [name]: value
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: detailListResult.error
+    });
+  };
+
+  handleDetailClick = async (e: FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    const detail = value || selectMessages.none;
+    if (isInvaildItem(detail)) {
+      return;
+    }
+
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
+    const series = this.state.carInfoState.series;
+    const model = this.state.carInfoState.model;
+
+    const encodedBrand = encodeURI(brand);
+    const encodedSeries = encodeURI(series);
+    const encodedModel = encodeURI(model);
+    const encodedDetail = encodeURI(detail);
+
+    const gradeListResult = await axios
+      .get(
+        `${
+          process.env.REACT_APP_API_URL
+        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`
+      )
+      .then((res: AxiosResponse<IGradeListData>) => ({
+        gradeList: res.data.gradeList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        gradeList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        detail,
+        gradeList: gradeListResult.gradeList,
+        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
+      },
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
+      },
+      radioState: {
+        ...this.state.radioState,
+        [name]: value
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: gradeListResult.error
+    });
+  };
+
+  handleGradeClick = async (e: FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    const grade = value || selectMessages.none;
+    if (isInvaildItem(grade)) {
+      return;
+    }
+
+    const origin = this.state.carInfoState.origin;
+    const brand = this.state.carInfoState.brand;
+    const series = this.state.carInfoState.series;
+    const model = this.state.carInfoState.model;
+    const detail = this.state.carInfoState.detail;
+
+    const encodedBrand = encodeURI(brand);
+    const encodedSeries = encodeURI(series);
+    const encodedModel = encodeURI(model);
+    const encodedDetail = encodeURI(detail);
+    const encodedGrade = encodeURI(grade);
+
+    const optionListResult = await axios
+      .get(
+        `${
+          process.env.REACT_APP_API_URL
+        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`
+      )
+      .then((res: AxiosResponse<IOptionListData>) => ({
+        price: res.data.car_price,
+        optionList: res.data.optionList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        price: 0,
+        optionList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        grade,
+        optionList: optionListResult.optionList
+      },
+      priceInfoState: {
+        price: optionListResult.price,
+        optionPrice: 0,
+        totalPrice: optionListResult.price
+      },
+      radioState: {
+        ...this.state.radioState,
+        [name]: value
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      },
+      error: optionListResult.error
+    });
+  };
+
+  handleOptionClick = (e: FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    const option = value || selectMessages.none;
+    const optionInfo = this.state.carInfoState.optionList.reduce(
+      (accu, curr) => {
+        return curr.car_option === option ? curr : accu;
+      },
+      {
+        car_option: selectMessages.none,
+        car_option_price: 0
+      }
+    );
+
+    const optionPrice = optionInfo.car_option_price;
+
+    if (isInvaildItem(option)) {
+      return;
+    }
+
+    this.setState({
+      ...this.state,
+      carInfoState: {
+        ...this.state.carInfoState,
+        option
+      },
+      priceInfoState: {
+        ...this.state.priceInfoState,
+        optionPrice,
+        totalPrice: this.state.priceInfoState.price + optionPrice
+      },
+      radioState: {
+        ...this.state.radioState,
+        [name]: value
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: false
+      }
+    });
+  };
+
+  handleEstimate = async () => {
+    const { price } = this.state.priceInfoState;
+    const { rentalPeriod, insurancePlan } = this.state.rentalTermsState;
+    if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
+      return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
+    }
+
+    const capitalListResult = await axios
+      .get(`${process.env.REACT_APP_API_URL}/api/rental/capital-profit`)
+      .then((res: AxiosResponse<ICapitalListData>) => ({
+        capitalList: res.data.capitalList,
+        error: ""
+      }))
+      .catch((error: AxiosError) => ({
+        capitalList: [],
+        error: (error.response as AxiosResponse).statusText
+      }));
+
+    this.setState({
+      ...this.state,
+      capitalInfoState: {
+        ...this.state.capitalInfoState,
+        capitalList: capitalListResult.capitalList
+      },
+      displayState: {
+        ...this.state.displayState,
+        listClicked: true
+      },
+      error: capitalListResult.error
+    });
   };
 
   handleSelectNumber = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -106,389 +509,6 @@ export default class Rental extends Component<{}, IRentalStates> {
     this.setState({ ...this.state, displayState: { ...this.state.displayState, detailClicked: false } });
   };
 
-  handleOriginClick = async (origin: string) => {
-    const brandListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}`)
-      .then((res: AxiosResponse<IBrandListData>) => {
-        return {
-          brandList: res.data.brandList,
-          error: ""
-        };
-      })
-      .catch((error: AxiosError) => ({
-        brandList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        origin,
-        brandList: brandListResult.brandList,
-        seriesList: [{ car_series: selectMessages.series }],
-        modelList: [{ car_model: selectMessages.model }],
-        detailList: [{ car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
-      },
-      priceInfoState: {
-        price: 0,
-        optionPrice: 0,
-        totalPrice: 0
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: false
-      },
-      error: brandListResult.error
-    });
-  };
-
-  handleBrandClick = async (e: MouseEvent<HTMLLIElement>) => {
-    const brand = e.currentTarget.textContent || selectMessages.none;
-    if (isInvaildItem(brand)) {
-      return;
-    }
-
-    const origin = this.state.carInfoState.origin;
-    const encodedBrand = encodeURI(brand);
-
-    const seriesListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}`)
-      .then((res: AxiosResponse<ISeriesListData>) => {
-        return {
-          seriesList: res.data.seriesList,
-          error: ""
-        };
-      })
-      .catch((error: AxiosError) => ({
-        seriesList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        brand,
-        seriesList: seriesListResult.seriesList,
-        modelList: [{ car_model: selectMessages.model }],
-        detailList: [{ car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
-      },
-      priceInfoState: {
-        price: 0,
-        optionPrice: 0,
-        totalPrice: 0
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: false
-      },
-      error: seriesListResult.error
-    });
-  };
-
-  handleSeriesClick = async (e: MouseEvent<HTMLLIElement>) => {
-    const series = e.currentTarget.textContent || selectMessages.none;
-    if (isInvaildItem(series)) {
-      return;
-    }
-
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-
-    const modelListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}`)
-      .then((res: AxiosResponse<IModelListData>) => ({
-        modelList: res.data.modelList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        modelList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        series,
-        modelList: modelListResult.modelList,
-        detailList: [{ car_detail: selectMessages.detail }],
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: false
-      },
-      error: modelListResult.error
-    });
-  };
-
-  handleModelClick = async (e: MouseEvent<HTMLLIElement>) => {
-    const model = e.currentTarget.textContent || selectMessages.none;
-    if (isInvaildItem(model)) {
-      return;
-    }
-
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-    const series = this.state.carInfoState.series;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-    const encodedModel = encodeURI(model);
-
-    const detailListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}`)
-      .then((res: AxiosResponse<IDetailListData>) => ({
-        detailList: res.data.detailList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        detailList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        model,
-        detailList: detailListResult.detailList,
-        gradeList: [{ car_grade: selectMessages.grade }],
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
-      },
-      priceInfoState: {
-        price: 0,
-        optionPrice: 0,
-        totalPrice: 0
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: false
-      },
-      error: detailListResult.error
-    });
-  };
-
-  handleDetailClick = async (e: MouseEvent<HTMLLIElement>) => {
-    const detail = e.currentTarget.textContent || selectMessages.none;
-    if (isInvaildItem(detail)) {
-      return;
-    }
-
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-    const series = this.state.carInfoState.series;
-    const model = this.state.carInfoState.model;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-    const encodedModel = encodeURI(model);
-    const encodedDetail = encodeURI(detail);
-
-    const gradeListResult = await axios
-      .get(
-        `${
-          process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}`
-      )
-      .then((res: AxiosResponse<IGradeListData>) => ({
-        gradeList: res.data.gradeList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        gradeList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        detail,
-        gradeList: gradeListResult.gradeList,
-        optionList: [{ car_option: selectMessages.option, car_option_price: 0 }]
-      },
-      priceInfoState: {
-        price: 0,
-        optionPrice: 0,
-        totalPrice: 0
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: false
-      },
-      error: gradeListResult.error
-    });
-  };
-
-  handleGradeClick = async (e: MouseEvent<HTMLLIElement>) => {
-    const grade = e.currentTarget.textContent || selectMessages.none;
-    if (isInvaildItem(grade)) {
-      return;
-    }
-
-    const origin = this.state.carInfoState.origin;
-    const brand = this.state.carInfoState.brand;
-    const series = this.state.carInfoState.series;
-    const model = this.state.carInfoState.model;
-    const detail = this.state.carInfoState.detail;
-
-    const encodedBrand = encodeURI(brand);
-    const encodedSeries = encodeURI(series);
-    const encodedModel = encodeURI(model);
-    const encodedDetail = encodeURI(detail);
-    const encodedGrade = encodeURI(grade);
-
-    const optionListResult = await axios
-      .get(
-        `${
-          process.env.REACT_APP_API_URL
-        }/api/rental/${origin}/${encodedBrand}/${encodedSeries}/${encodedModel}/${encodedDetail}/${encodedGrade}`
-      )
-      .then((res: AxiosResponse<IOptionListData>) => ({
-        price: res.data.car_price,
-        optionList: res.data.optionList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        price: 0,
-        optionList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        grade,
-        optionList: optionListResult.optionList
-      },
-      priceInfoState: {
-        price: optionListResult.price,
-        optionPrice: 0,
-        totalPrice: optionListResult.price
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: false
-      },
-      error: optionListResult.error
-    });
-  };
-
-  handleOptionClick = (e: MouseEvent<HTMLLIElement>) => {
-    const option = e.currentTarget.children[1].children[0].textContent || selectMessages.none;
-    const optionInfo = this.state.carInfoState.optionList.reduce(
-      (accu, curr) => {
-        return curr.car_option === option ? curr : accu;
-      },
-      {
-        car_option: selectMessages.none,
-        car_option_price: 0
-      }
-    );
-
-    const optionPrice = optionInfo.car_option_price;
-
-    if (isInvaildItem(option)) {
-      return;
-    }
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        option
-      },
-      priceInfoState: {
-        ...this.state.priceInfoState,
-        optionPrice,
-        totalPrice: this.state.priceInfoState.price + optionPrice
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: false
-      }
-    });
-  };
-
-  handleEstimate = async () => {
-    const { price } = this.state.priceInfoState;
-    const { rentalPeriod, insurancePlan } = this.state.rentalTermsState;
-    if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
-      return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
-    }
-
-    const capitalListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/capital-profit`)
-      .then((res: AxiosResponse<ICapitalListData>) => ({
-        capitalList: res.data.capitalList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        capitalList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      capitalInfoState: {
-        ...this.state.capitalInfoState,
-        capitalList: capitalListResult.capitalList
-      },
-      displayState: {
-        ...this.state.displayState,
-        listClicked: true
-      },
-      error: capitalListResult.error
-    });
-  };
-
-  async componentDidMount() {
-    const brandListResult = await axios
-      .get(`${process.env.REACT_APP_API_URL}/api/rental/korea`)
-      .then((res: AxiosResponse<IBrandListData>) => ({
-        brandList: res.data.brandList,
-        error: ""
-      }))
-      .catch((error: AxiosError) => ({
-        brandList: [],
-        error: (error.response as AxiosResponse).statusText
-      }));
-
-    this.setState({
-      ...this.state,
-      carInfoState: {
-        ...this.state.carInfoState,
-        brandList: brandListResult.brandList
-      },
-      error: brandListResult.error
-    });
-
-    const modal = document.getElementById("my-modal");
-    window.onclick = (e) => {
-      if (e.target === modal) {
-        this.setState({
-          ...this.state,
-          displayState: {
-            ...this.state.displayState,
-            detailClicked: false
-          }
-        });
-      }
-    };
-  }
-
   render() {
     const isSidebarOpen = JSON.parse(localStorage.getItem("isSidebarOpen") || "true");
     const { price, optionPrice, totalPrice } = this.state.priceInfoState;
@@ -511,14 +531,14 @@ export default class Rental extends Component<{}, IRentalStates> {
               </div>
               <ul className="list_group">
                 {this.state.carInfoState.brandList.map((v) => (
-                  <li className="list-group-item" onClick={this.handleBrandClick} key={v.car_brand}>
+                  <li className="list-group-item" key={v.car_brand}>
                     <input
                       type="radio"
                       name="checkedBrand"
                       id={v.car_brand}
                       value={v.car_brand}
                       checked={this.state.radioState.checkedBrand === v.car_brand}
-                      onChange={this.handleCheck}
+                      onChange={this.handleBrandClick}
                     />
                     <label htmlFor={v.car_brand}>{v.car_brand}</label>
                   </li>
@@ -532,14 +552,14 @@ export default class Rental extends Component<{}, IRentalStates> {
               </div>
               <ul className="list_group">
                 {this.state.carInfoState.seriesList.map((v) => (
-                  <li className="list-group-item" onClick={this.handleSeriesClick} key={v.car_series}>
+                  <li className="list-group-item" key={v.car_series}>
                     <input
                       type="radio"
                       name="checkedSeries"
                       id={v.car_series}
                       value={v.car_series}
                       checked={this.state.radioState.checkedSeries === v.car_series}
-                      onChange={this.handleCheck}
+                      onChange={this.handleSeriesClick}
                     />
                     <label htmlFor={v.car_series}>{v.car_series}</label>
                   </li>
@@ -553,14 +573,14 @@ export default class Rental extends Component<{}, IRentalStates> {
               </div>
               <ul className="list_group">
                 {this.state.carInfoState.modelList.map((v) => (
-                  <li className="list-group-item" onClick={this.handleModelClick} key={v.car_model}>
+                  <li className="list-group-item" key={v.car_model}>
                     <input
                       type="radio"
                       name="checkedModel"
                       id={v.car_model}
                       value={v.car_model}
                       checked={this.state.radioState.checkedModel === v.car_model}
-                      onChange={this.handleCheck}
+                      onChange={this.handleModelClick}
                     />
                     <label htmlFor={v.car_model}>{v.car_model}</label>
                   </li>
@@ -574,14 +594,14 @@ export default class Rental extends Component<{}, IRentalStates> {
               </div>
               <ul className="list_group">
                 {this.state.carInfoState.detailList.map((v) => (
-                  <li className="list-group-item" onClick={this.handleDetailClick} key={v.car_detail}>
+                  <li className="list-group-item" key={v.car_detail}>
                     <input
                       type="radio"
                       name="checkedDetail"
                       id={v.car_detail}
                       value={v.car_detail}
                       checked={this.state.radioState.checkedDetail === v.car_detail}
-                      onChange={this.handleCheck}
+                      onChange={this.handleDetailClick}
                     />
                     <label htmlFor={v.car_detail}>{v.car_detail}</label>
                   </li>
@@ -595,14 +615,14 @@ export default class Rental extends Component<{}, IRentalStates> {
               </div>
               <ul className="list_group">
                 {this.state.carInfoState.gradeList.map((v) => (
-                  <li className="list-group-item" onClick={this.handleGradeClick} key={v.car_grade}>
+                  <li className="list-group-item" key={v.car_grade}>
                     <input
                       type="radio"
                       name="checkedGrade"
                       id={v.car_grade}
                       value={v.car_grade}
                       checked={this.state.radioState.checkedGrade === v.car_grade}
-                      onChange={this.handleCheck}
+                      onChange={this.handleGradeClick}
                     />
                     <label htmlFor={v.car_grade}>{v.car_grade}</label>
                   </li>
@@ -618,18 +638,14 @@ export default class Rental extends Component<{}, IRentalStates> {
               </div>
               <ul className="list_group">
                 {this.state.carInfoState.optionList.map((v) => (
-                  <li
-                    className="list-group-item apply_display_flex_sb"
-                    onClick={this.handleOptionClick}
-                    key={v.car_option}
-                  >
+                  <li className="list-group-item apply_display_flex_sb" key={v.car_option}>
                     <input
                       type="radio"
                       name="checkedOption"
                       id={v.car_option}
                       value={v.car_option}
                       checked={this.state.radioState.checkedOption === v.car_option}
-                      onChange={this.handleCheck}
+                      onChange={this.handleOptionClick}
                     />
                     <label htmlFor={v.car_option}>
                       <span>{v.car_option}</span>
