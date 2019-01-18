@@ -72,7 +72,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         origin,
-
+        brand: "",
         list: {
           ...LIST_INITIAL_STATE,
           brandList: result.data.brandList
@@ -83,10 +83,6 @@ export default class Rental extends Component<{}, IRentalStates> {
         optionPrice: 0,
         totalPrice: 0
       },
-      radioState: {
-        ...this.state.radioState,
-        checkedBrand: ""
-      },
       displayState: {
         ...this.state.displayState,
         listClicked: false
@@ -96,9 +92,8 @@ export default class Rental extends Component<{}, IRentalStates> {
   };
 
   handleBrandClick = async (e: FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
     const brandId = parseInt(e.currentTarget.dataset.id || "-1", 10);
-    const brand = value || selectMessages.none;
+    const brand = e.currentTarget.value || selectMessages.none;
     if (isInvaildItem(brand)) {
       return;
     }
@@ -112,6 +107,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         brand,
+        series: "",
         list: {
           ...LIST_INITIAL_STATE,
           brandList: this.state.carInfoState.list.brandList,
@@ -123,11 +119,6 @@ export default class Rental extends Component<{}, IRentalStates> {
         optionPrice: 0,
         totalPrice: 0
       },
-      radioState: {
-        ...this.state.radioState,
-        [name]: value,
-        checkedSeries: ""
-      },
       displayState: {
         ...this.state.displayState,
         listClicked: false
@@ -137,9 +128,8 @@ export default class Rental extends Component<{}, IRentalStates> {
   };
 
   handleSeriesClick = async (e: FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
     const seriesId = parseInt(e.currentTarget.dataset.id || "-1", 10);
-    const series = value || selectMessages.none;
+    const series = e.currentTarget.value || selectMessages.none;
     if (isInvaildItem(series)) {
       return;
     }
@@ -153,6 +143,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         series,
+        model: "",
         list: {
           ...LIST_INITIAL_STATE,
           brandList: this.state.carInfoState.list.brandList,
@@ -160,10 +151,10 @@ export default class Rental extends Component<{}, IRentalStates> {
           modelList: result.data.modelList
         }
       },
-      radioState: {
-        ...this.state.radioState,
-        [name]: value,
-        checkedModel: ""
+      priceInfoState: {
+        price: 0,
+        optionPrice: 0,
+        totalPrice: 0
       },
       displayState: {
         ...this.state.displayState,
@@ -174,9 +165,8 @@ export default class Rental extends Component<{}, IRentalStates> {
   };
 
   handleModelClick = async (e: FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
     const modelId = parseInt(e.currentTarget.dataset.id || "-1", 10);
-    const model = value || selectMessages.none;
+    const model = e.currentTarget.value || selectMessages.none;
     if (isInvaildItem(model)) {
       return;
     }
@@ -190,6 +180,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         model,
+        detail: "",
         list: {
           ...LIST_INITIAL_STATE,
           brandList: this.state.carInfoState.list.brandList,
@@ -203,11 +194,6 @@ export default class Rental extends Component<{}, IRentalStates> {
         optionPrice: 0,
         totalPrice: 0
       },
-      radioState: {
-        ...this.state.radioState,
-        [name]: value,
-        checkedDetail: ""
-      },
       displayState: {
         ...this.state.displayState,
         listClicked: false
@@ -217,9 +203,8 @@ export default class Rental extends Component<{}, IRentalStates> {
   };
 
   handleDetailClick = async (e: FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
     const detailId = parseInt(e.currentTarget.dataset.id || "-1", 10);
-    const detail = value || selectMessages.none;
+    const detail = e.currentTarget.value || selectMessages.none;
     if (isInvaildItem(detail)) {
       return;
     }
@@ -233,6 +218,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         detail,
+        grade: "",
         list: {
           ...LIST_INITIAL_STATE,
           brandList: this.state.carInfoState.list.brandList,
@@ -247,11 +233,6 @@ export default class Rental extends Component<{}, IRentalStates> {
         optionPrice: 0,
         totalPrice: 0
       },
-      radioState: {
-        ...this.state.radioState,
-        [name]: value,
-        checkedGrade: ""
-      },
       displayState: {
         ...this.state.displayState,
         listClicked: false
@@ -261,9 +242,8 @@ export default class Rental extends Component<{}, IRentalStates> {
   };
 
   handleGradeClick = async (e: FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
     const gradeId = parseInt(e.currentTarget.dataset.id || "-1", 10);
-    const grade = value || selectMessages.none;
+    const grade = e.currentTarget.value || selectMessages.none;
     if (isInvaildItem(grade)) {
       return;
     }
@@ -277,6 +257,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       carInfoState: {
         ...this.state.carInfoState,
         grade,
+        option: "",
         list: {
           ...this.state.carInfoState.list,
           optionList: result.data.optionList
@@ -287,11 +268,6 @@ export default class Rental extends Component<{}, IRentalStates> {
         optionPrice: 0,
         totalPrice: result.data.car_price
       },
-      radioState: {
-        ...this.state.radioState,
-        [name]: value,
-        checkedOption: ""
-      },
       displayState: {
         ...this.state.displayState,
         listClicked: false
@@ -301,8 +277,7 @@ export default class Rental extends Component<{}, IRentalStates> {
   };
 
   handleOptionClick = (e: FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
-    const option = value || selectMessages.none;
+    const option = e.currentTarget.value || selectMessages.none;
     const optionInfo = this.state.carInfoState.list.optionList.reduce(
       (accu, curr) => {
         return curr.car_option === option ? curr : accu;
@@ -329,10 +304,6 @@ export default class Rental extends Component<{}, IRentalStates> {
         ...this.state.priceInfoState,
         optionPrice,
         totalPrice: this.state.priceInfoState.price + optionPrice
-      },
-      radioState: {
-        ...this.state.radioState,
-        [name]: value
       },
       displayState: {
         ...this.state.displayState,
@@ -388,28 +359,27 @@ export default class Rental extends Component<{}, IRentalStates> {
   };
 
   handleSave = async () => {
+    const { origin, brand, series, model, detail, grade, option } = this.state.carInfoState;
+    const { price, optionPrice, totalPrice } = this.state.priceInfoState;
+    const { capital, profit } = this.state.capitalInfoState;
+    const { insurancePlan, rentalPeriod, deposit, advancePay } = this.state.rentalTermsState;
+
     const body = {
-      origin: this.state.carInfoState.origin,
-      brand: this.state.carInfoState.brand,
-      series: this.state.carInfoState.series,
-      model: this.state.carInfoState.model,
-      detail: this.state.carInfoState.detail,
-      grade: this.state.carInfoState.grade,
-      option: this.state.carInfoState.option,
-
-      carPrice: this.state.priceInfoState.price,
-      carOptionPrice: this.state.priceInfoState.optionPrice,
-
-      capital: this.state.capitalInfoState.capital,
-      carFinalPrice: Math.floor(
-        this.state.priceInfoState.totalPrice * (1 + this.state.capitalInfoState.profit / 100) +
-          (this.state.rentalTermsState.insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26)
-      ),
-
-      rentalPeriod: this.state.rentalTermsState.rentalPeriod,
-      insurancePlan: this.state.rentalTermsState.insurancePlan,
-      deposit: this.state.rentalTermsState.deposit,
-      advancePay: this.state.rentalTermsState.advancePay
+      origin,
+      brand,
+      series,
+      model,
+      detail,
+      grade,
+      option,
+      carPrice: price,
+      carOptionPrice: optionPrice,
+      capital,
+      carFinalPrice: Math.floor(totalPrice * (1 + profit / 100) + (insurancePlan === "21세 이상" ? ABOVE21 : ABOVE26)),
+      rentalPeriod,
+      insurancePlan,
+      deposit,
+      advancePay
     };
 
     const requestHandler = new RequestHandler();
@@ -452,11 +422,10 @@ export default class Rental extends Component<{}, IRentalStates> {
                   <li className="list-group-item" key={v.car_brand}>
                     <input
                       type="radio"
-                      name="checkedBrand"
                       id={v.car_brand}
                       data-id={v.car_brand_id}
                       value={v.car_brand}
-                      checked={this.state.radioState.checkedBrand === v.car_brand}
+                      checked={this.state.carInfoState.brand === v.car_brand}
                       onChange={this.handleBrandClick}
                     />
                     <label htmlFor={v.car_brand}>{v.car_brand}</label>
@@ -474,11 +443,10 @@ export default class Rental extends Component<{}, IRentalStates> {
                   <li className="list-group-item" key={v.car_series}>
                     <input
                       type="radio"
-                      name="checkedSeries"
                       id={v.car_series}
                       data-id={v.car_series_id}
                       value={v.car_series}
-                      checked={this.state.radioState.checkedSeries === v.car_series}
+                      checked={this.state.carInfoState.series === v.car_series}
                       onChange={this.handleSeriesClick}
                     />
                     <label htmlFor={v.car_series}>{v.car_series}</label>
@@ -496,11 +464,10 @@ export default class Rental extends Component<{}, IRentalStates> {
                   <li className="list-group-item" key={v.car_model}>
                     <input
                       type="radio"
-                      name="checkedModel"
                       id={v.car_model}
                       data-id={v.car_model_id}
                       value={v.car_model}
-                      checked={this.state.radioState.checkedModel === v.car_model}
+                      checked={this.state.carInfoState.model === v.car_model}
                       onChange={this.handleModelClick}
                     />
                     <label htmlFor={v.car_model}>{v.car_model}</label>
@@ -518,11 +485,10 @@ export default class Rental extends Component<{}, IRentalStates> {
                   <li className="list-group-item" key={v.car_detail}>
                     <input
                       type="radio"
-                      name="checkedDetail"
                       id={v.car_detail}
                       data-id={v.car_detail_id}
                       value={v.car_detail}
-                      checked={this.state.radioState.checkedDetail === v.car_detail}
+                      checked={this.state.carInfoState.detail === v.car_detail}
                       onChange={this.handleDetailClick}
                     />
                     <label htmlFor={v.car_detail}>{v.car_detail}</label>
@@ -540,11 +506,10 @@ export default class Rental extends Component<{}, IRentalStates> {
                   <li className="list-group-item" key={v.car_grade}>
                     <input
                       type="radio"
-                      name="checkedGrade"
                       id={v.car_grade}
                       data-id={v.car_grade_id}
                       value={v.car_grade}
-                      checked={this.state.radioState.checkedGrade === v.car_grade}
+                      checked={this.state.carInfoState.grade === v.car_grade}
                       onChange={this.handleGradeClick}
                     />
                     <label htmlFor={v.car_grade}>{v.car_grade}</label>
@@ -564,11 +529,10 @@ export default class Rental extends Component<{}, IRentalStates> {
                   <li className="list-group-item apply_display_flex_sb" key={v.car_option}>
                     <input
                       type="radio"
-                      name="checkedOption"
                       id={v.car_option}
                       data-id={v.car_option_id}
                       value={v.car_option}
-                      checked={this.state.radioState.checkedOption === v.car_option}
+                      checked={this.state.carInfoState.option === v.car_option}
                       onChange={this.handleOptionClick}
                     />
                     <label htmlFor={v.car_option}>

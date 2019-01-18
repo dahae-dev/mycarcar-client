@@ -46,25 +46,12 @@ export interface IListState {
 
 interface ICarInfoState {
   origin: string;
-
   brand: string;
-  // brandList: IBrand[];
-
   series: string;
-  // seriesList: ISeries[];
-
   model: string;
-  // modelList: IModel[];
-
   detail: string;
-  // detailList: IDetail[];
-
   grade: string;
-  // gradeList: IGrade[];
-
   option: string;
-  // optionList: IOption[];
-
   list: IListState;
 }
 
@@ -87,15 +74,6 @@ interface ICapitalInfoState {
   profit: number;
 }
 
-interface IRadioState {
-  checkedBrand: string;
-  checkedSeries: string;
-  checkedModel: string;
-  checkedDetail: string;
-  checkedGrade: string;
-  checkedOption: string;
-}
-
 interface IDisplayState {
   listClicked: boolean;
   detailClicked: boolean;
@@ -106,7 +84,6 @@ export interface IRentalStates {
   priceInfoState: IPriceInfoState;
   rentalTermsState: IRentalTermsState;
   capitalInfoState: ICapitalInfoState;
-  radioState: IRadioState;
   displayState: IDisplayState;
   error: string;
 }

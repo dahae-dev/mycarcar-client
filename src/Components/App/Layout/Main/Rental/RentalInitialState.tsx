@@ -20,25 +20,12 @@ export const LIST_INITIAL_STATE: IListState = {
 
 const carInfoState = {
   origin: "korea",
-
   brand: "",
-  // brandList: [{ car_brand_id: -1, car_brand: "" }],
-
   series: "",
-  // seriesList: [{ car_series_id: -1, car_series: selectMessages.series }],
-
   model: "",
-  // modelList: [{ car_model_id: -1, car_model: selectMessages.model }],
-
   detail: "",
-  // detailList: [{ car_detail_id: -1, car_detail: selectMessages.detail }],
-
   grade: "",
-  // gradeList: [{ car_grade_id: -1, car_grade: selectMessages.grade }],
-
   option: "",
-  // optionList: [{ car_option_id: -1, car_option: selectMessages.option, car_option_price: 0 }]
-
   list: LIST_INITIAL_STATE
 };
 
@@ -61,15 +48,6 @@ const capitalInfoState = {
   profit: 0
 };
 
-const radioState = {
-  checkedBrand: "",
-  checkedSeries: "",
-  checkedModel: "",
-  checkedDetail: "",
-  checkedGrade: "",
-  checkedOption: ""
-};
-
 const displayState = {
   listClicked: false,
   detailClicked: false
@@ -80,7 +58,6 @@ export const RENTAL_INITIAL_STATE: IRentalStates = {
   priceInfoState,
   rentalTermsState,
   capitalInfoState,
-  radioState,
   displayState,
   error: ""
 };
