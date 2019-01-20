@@ -16,6 +16,9 @@ export default class MenuList extends Component<IMenuListProps> {
   }
 
   handleMenuClick = (e: MouseEvent<HTMLLIElement>) => {
+    if (window.innerWidth <= 768) {
+      localStorage.setItem("isSidebarOpen", "false");
+    }
     const pathname = e.currentTarget.dataset.path || "/";
     this.props.handlePage(pathname);
   };
