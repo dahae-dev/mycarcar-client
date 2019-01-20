@@ -139,10 +139,11 @@ label {
 /* bootstrap 중복값 변경 - end */
 
 .rental-error-msg {
-  padding: 3% 0;
+  padding: 1% 0 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: red;
 }
 
 .btn-container {
@@ -178,4 +179,13 @@ label {
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
   padding: 4% 0;
+}
+
+@media only screen and (max-width: 1024px) {
+  .item_lists,
+  .option_and_price {
+    flex-direction: column;
+    justify-content: initial;
+    overflow-y: auto;
+  }
 }

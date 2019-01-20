@@ -16,6 +16,9 @@ export default class MenuList extends Component<IMenuListProps> {
   }
 
   handleMenuClick = (e: MouseEvent<HTMLLIElement>) => {
+    if (window.innerWidth <= 768) {
+      localStorage.setItem("isSidebarOpen", "false");
+    }
     const pathname = e.currentTarget.dataset.path || "/";
     this.props.handlePage(pathname);
   };
@@ -24,7 +27,6 @@ export default class MenuList extends Component<IMenuListProps> {
     const userToken = localStorage.getItem("x-access-token") || "";
     const decodedToken = userToken === "" ? INVALID_JWT : parseJwt(userToken);
     const level = decodedToken.level;
-    console.log(level);
 
     return (
       <div className="menu-wrapper">
