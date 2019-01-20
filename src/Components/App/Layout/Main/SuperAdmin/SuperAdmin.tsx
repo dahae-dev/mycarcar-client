@@ -106,12 +106,8 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
     const { value } = e.currentTarget;
     const index = parseInt(e.currentTarget.dataset.index || "-1", 10);
 
-    this.setState((state) => {
-      const userList = state.userList.map((user, i) =>
-        i === index ? Object.assign({}, user, { level: value }) : user
-      );
-
-      return { userList };
+    this.setState({
+      userList: this.state.userList.map((user, i) => (i === index ? Object.assign({}, user, { level: value }) : user))
     });
   };
 
