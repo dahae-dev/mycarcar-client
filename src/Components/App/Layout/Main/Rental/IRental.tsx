@@ -1,3 +1,5 @@
+import { Record } from "immutable";
+
 export interface IBrand {
   car_brand_id: number;
   car_brand: string;
@@ -29,22 +31,7 @@ export interface IOption {
   car_option_price: number;
 }
 
-export interface ICapitalList {
-  capital_id: number;
-  capital_name: string;
-  capital_profit: number;
-}
-
-export interface IListState {
-  brandList: IBrand[];
-  seriesList: ISeries[];
-  modelList: IModel[];
-  detailList: IDetail[];
-  gradeList: IGrade[];
-  optionList: IOption[];
-}
-
-interface ICarInfoState {
+export interface ICurrentItem {
   origin: string;
   brand: string;
   series: string;
@@ -52,43 +39,58 @@ interface ICarInfoState {
   detail: string;
   grade: string;
   option: string;
-  list: IListState;
 }
 
-interface IPriceInfoState {
+export interface ICurrentList {
+  brandList: IBrand[];
+  seriesList: ISeries[];
+  modelList: IModel[];
+  detailList: IDetail[];
+  gradeList: IGrade[];
+  optionList: IOption[];
+}
+
+export interface ICurrentPrice {
   price: number;
   optionPrice: number;
   totalPrice: number;
 }
 
-interface IRentalTermsState {
+export interface ICurrentTerms {
   rentalPeriod: number;
   insurancePlan: string;
   deposit: number;
   advancePay: number;
 }
 
-interface ICapitalInfoState {
-  capitalList: ICapitalList[];
+export interface ICapitalList {
+  capital_id: number;
+  capital_name: string;
+  capital_profit: number;
+}
+
+export interface ICurrentCapital {
   capital: string;
   profit: number;
 }
 
-interface IDisplayState {
+export interface IDisplayState {
   listClicked: boolean;
   detailClicked: boolean;
 }
 
 export interface IRentalStates {
-  carInfoState: ICarInfoState;
-  priceInfoState: IPriceInfoState;
-  rentalTermsState: IRentalTermsState;
-  capitalInfoState: ICapitalInfoState;
-  displayState: IDisplayState;
+  currentItem: Record<ICurrentItem>;
+  currentList: Record<ICurrentList>;
+  currentPrice: Record<ICurrentPrice>;
+  currentTerms: Record<ICurrentTerms>;
+  capitalList: ICapitalList[];
+  currentCapital: Record<ICurrentCapital>;
+  displayState: Record<IDisplayState>;
   error: string;
 }
 
-export interface ISelectMessages {
+export interface IDefaultValue {
   none: string;
   series: string;
   model: string;
@@ -96,33 +98,4 @@ export interface ISelectMessages {
   grade: string;
   option: string;
   [key: string]: string;
-}
-
-export interface IBrandListData {
-  brandList: IBrand[];
-}
-
-export interface ISeriesListData {
-  seriesList: ISeries[];
-}
-
-export interface IModelListData {
-  modelList: IModel[];
-}
-
-export interface IDetailListData {
-  detailList: IDetail[];
-}
-
-export interface IGradeListData {
-  gradeList: IGrade[];
-}
-
-export interface IOptionListData {
-  car_price: number;
-  optionList: IOption[];
-}
-
-export interface ICapitalListData {
-  capitalList: ICapitalList[];
 }
