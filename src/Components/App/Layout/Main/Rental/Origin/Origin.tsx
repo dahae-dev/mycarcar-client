@@ -19,6 +19,10 @@ export default class Origin extends Component<IOriginProps, IOriginStates> {
     };
   }
 
+  shouldComponentUpdate(nextProps: IOriginProps, nextState: IOriginStates) {
+    return nextState.isKorea !== this.state.isKorea;
+  }
+
   handleKoreaClick = (e: MouseEvent<HTMLDivElement>) => {
     this.props.handleOriginClick("korea");
     this.setState({
