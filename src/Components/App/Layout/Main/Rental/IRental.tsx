@@ -77,6 +77,7 @@ export interface ICurrentCapital {
 export interface IDisplayState {
   listClicked: boolean;
   detailClicked: boolean;
+  saveClicked: boolean;
 }
 
 export interface IRentalStates {

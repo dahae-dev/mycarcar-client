@@ -66,7 +66,8 @@ export const CurrentCapital = Record({
 
 export const DisplayState = Record({
   listClicked: false,
-  detailClicked: false
+  detailClicked: false,
+  saveClicked: false
 });
 
 export const DEFAULT_RENTAL_STATE = {

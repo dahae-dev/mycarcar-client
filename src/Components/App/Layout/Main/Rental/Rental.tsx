@@ -5,8 +5,9 @@ import React, { Component, MouseEvent, FormEvent, ChangeEvent } from "react";
 import Origin from "./Origin/Origin";
 import Capital from "./Capital/Capital";
 import Modal from "./Modal/Modal";
+import AlertModal from "../Alert/AlertModal";
 import { MainHeader } from "../MainHeader/MainHeader";
-import { DEFAULT_RENTAL_STATE, DEFAULT_VALUE, DEFAULT_PRICE, DEFAULT_LIST } from "./RentalInitialState";
+import { DEFAULT_RENTAL_STATE, DEFAULT_VALUE, DEFAULT_PRICE, DEFAULT_LIST, DisplayState } from "./RentalInitialState";
 import { IRentalStates, IBrand, ISeries, IModel, IDetail, IGrade, IOption } from "./IRental";
 import { RequestHandler, IConfig } from "../../../../../util/RequestHandler";
 
@@ -299,11 +300,20 @@ export default class Rental extends Component<{}, IRentalStates> {
     };
     const result = await requestHandler.post(uri, reqBody, config);
 
-    result.error === "" ? alert("저장된 견적서는 견적내역보기에서 확인할 수 있습니다.") : alert(result.error);
+    if (result.error !== "") {
+      alert(result.error);
+    }
 
     const { displayState } = this.state;
     this.setState({
-      displayState: displayState.set("detailClicked", false)
+      displayState: displayState.set("saveClicked", true)
+    });
+  };
+
+  handleDismiss = () => {
+    const { displayState } = this.state;
+    this.setState({
+      displayState: displayState.set("saveClicked", false).set("detailClicked", false)
     });
   };
 
@@ -314,7 +324,7 @@ export default class Rental extends Component<{}, IRentalStates> {
     const { price, optionPrice, totalPrice } = this.state.currentPrice.toObject();
     const { capitalList } = this.state;
     const { rentalPeriod, insurancePlan, deposit, advancePay } = this.state.currentTerms.toObject();
-    const { listClicked, detailClicked } = this.state.displayState.toObject();
+    const { listClicked, detailClicked, saveClicked } = this.state.displayState.toObject();
     const { error } = this.state;
 
     return (
@@ -536,8 +546,12 @@ export default class Rental extends Component<{}, IRentalStates> {
             />
           </div>
 
-          <div id="my-modal" className={detailClicked ? "show-my-modal" : "display-none"}>
+          <div id="my-modal" className={detailClicked ? "show-modal" : "display-none"}>
             <Modal handleSave={this.handleSave} rentalData={this.state} detailClicked={detailClicked} />
+          </div>
+
+          <div id="alert-modal" className={saveClicked ? "show-modal" : "display-none"}>
+            <AlertModal handleDismiss={this.handleDismiss} saveClicked={saveClicked} />
           </div>
         </div>
       </div>
