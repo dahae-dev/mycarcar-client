@@ -1,5 +1,5 @@
-import { Record } from "immutable";
-import { IDefaultValue } from "./IRental";
+import { Record, List } from "immutable";
+import { IDefaultValue, IRentalStates } from "./IRental";
 
 export const DEFAULT_VALUE: IDefaultValue = {
   none: "정보없음",
@@ -57,7 +57,7 @@ export const CurrentTerms = Record({
   advancePay: 0
 });
 
-export const CapitalList = [];
+export const CapitalList = List();
 
 export const CurrentCapital = Record({
   capital: "",
@@ -66,7 +66,8 @@ export const CurrentCapital = Record({
 
 export const DisplayState = Record({
   listClicked: false,
-  detailClicked: false
+  detailClicked: false,
+  saveClicked: false
 });
 
 export const DEFAULT_RENTAL_STATE = {
@@ -74,7 +75,7 @@ export const DEFAULT_RENTAL_STATE = {
   currentList: CurrentList(),
   currentPrice: CurrentPrice(),
   currentTerms: CurrentTerms(),
-  capitalList: [],
+  capitalList: CapitalList,
   currentCapital: CurrentCapital(),
   displayState: DisplayState(),
   error: ""

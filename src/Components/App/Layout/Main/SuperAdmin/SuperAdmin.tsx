@@ -30,14 +30,6 @@ interface ISuperAdminStates {
   error: string;
 }
 
-interface ITotalCountData {
-  totalCount: number;
-}
-
-interface IUserListData {
-  userList: IUserList[];
-}
-
 export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminStates> {
   constructor(props: ISuperAdminProps) {
     super(props);
