@@ -1,0 +1,25 @@
+.alert-modal-content {
+  border-radius: 4px;
+  width: 30%;
+  margin: auto;
+  color: #31708f;
+  background-color: white;
+  text-align: center;
+  margin: auto 3% auto 42%;
+  padding: 2% 2%;
+}
+
+.alert-modal-content > * {
+  justify-content: center;
+  margin: 2% 0;
+}
+
+.alert-modal-content input[type="button"] {
+  width: 30%;
+  color: #fff;
+  font-weight: 700;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
