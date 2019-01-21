@@ -215,7 +215,7 @@ export default class Rental extends Component<{}, IRentalStates> {
       currentItem: currentItem.set("option", option),
       currentPrice: currentPrice
         .set("optionPrice", optionPrice)
-        .set("totalPrice", currentPrice.toObject().price + optionPrice),
+        .set("totalPrice", currentPrice.get("price") + optionPrice),
       displayState: displayState.set("listClicked", false)
     });
   };

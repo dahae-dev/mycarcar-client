@@ -4,10 +4,11 @@ import React, { MouseEvent, Component } from "react";
 
 import { ABOVE21, ABOVE26 } from "../Rental";
 import { ICapitalList } from "../IRental";
+import { List } from "immutable";
 
 interface ICapitalProps {
   totalPrice: number;
-  capitalList: ICapitalList[];
+  capitalList: List<ICapitalList>;
   rentalPeriod: number;
   insurancePlan: string;
   deposit: number;

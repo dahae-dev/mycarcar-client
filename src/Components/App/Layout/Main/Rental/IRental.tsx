@@ -1,4 +1,4 @@
-import { Record } from "immutable";
+import { Record, List } from "immutable";
 
 export interface IBrand {
   car_brand_id: number;
@@ -84,7 +84,7 @@ export interface IRentalStates {
   currentList: Record<ICurrentList>;
   currentPrice: Record<ICurrentPrice>;
   currentTerms: Record<ICurrentTerms>;
-  capitalList: ICapitalList[];
+  capitalList: List<ICapitalList>;
   currentCapital: Record<ICurrentCapital>;
   displayState: Record<IDisplayState>;
   error: string;
