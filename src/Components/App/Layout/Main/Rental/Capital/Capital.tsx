@@ -43,13 +43,13 @@ export default class Capital extends Component<ICapitalProps> {
           .sort((a, b) => (a.capital_profit > b.capital_profit ? 1 : b.capital_profit > a.capital_profit ? -1 : 0))
           .map((capital) => {
             const finalRent = totalPrice * (1 + capital.capital_profit / 100) + insurancePrice;
-            const monthlyRend = (finalRent - (finalRent * deposit + finalRent * advancePay)) / rentalPeriod;
+            const monthlyRent = (finalRent - (finalRent * deposit + finalRent * advancePay)) / rentalPeriod;
 
             return (
               <div className="capital-list-content" key={capital.capital_name}>
                 <div>{capital.capital_name}</div>
                 <div>{`${Math.floor(finalRent).toLocaleString()}원`}</div>
-                <div>{`${Math.floor(monthlyRend).toLocaleString()}원`}</div>
+                <div>{`${Math.floor(monthlyRent).toLocaleString()}원`}</div>
                 <div>
                   <input
                     type="button"
