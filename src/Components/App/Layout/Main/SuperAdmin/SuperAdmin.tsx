@@ -5,6 +5,7 @@ import loader from "assets/preloader/Spinner.gif";
 import { IHandlePage } from "../../../App";
 import { MainHeader } from "../MainHeader/MainHeader";
 import { RequestHandler, IConfig } from "../../../../../util/RequestHandler";
+import { List, Record, fromJS } from "immutable";
 
 interface ISuperAdminProps {
   handlePage: IHandlePage;
@@ -23,7 +24,7 @@ interface IUserList {
 }
 
 interface ISuperAdminStates {
-  userList: IUserList[];
+  userList: List<Record<IUserList>>;
   totalCount: number;
   pageCount: number;
   loading: boolean;
@@ -35,8 +36,8 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
     super(props);
 
     this.state = {
-      userList: [
-        {
+      userList: List([
+        Record({
           id: "정보없음",
           name: "정보없음",
           email: "정보없음@codestates.com",
@@ -45,8 +46,8 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
           company: "정보없음",
           fax: "000-000-0000",
           registerDate: "정보없음"
-        }
-      ],
+        })()
+      ]),
 
       totalCount: 1,
       pageCount: 1,
@@ -73,7 +74,7 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
     const result = await requestHandler.get(uri, config);
 
     this.setState({
-      userList: result.data.userList,
+      userList: fromJS(result.data.userList),
       totalCount,
       pageCount,
       loading: false,
@@ -91,7 +92,7 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
     };
     const result = await requestHandler.get(uri, config);
 
-    this.setState({ userList: result.data.userList });
+    this.setState({ userList: fromJS(result.data.userList) });
   };
 
   handleLevelChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -99,7 +100,7 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
     const index = parseInt(e.currentTarget.dataset.index || "-1", 10);
 
     this.setState({
-      userList: this.state.userList.map((user, i) => (i === index ? Object.assign({}, user, { level: value }) : user))
+      userList: this.state.userList.setIn([index, "level"], value)
     });
   };
 
@@ -108,7 +109,7 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
 
     const requestHandler = new RequestHandler();
     const uri = `${process.env.REACT_APP_API_URL}/api/admin/user-list/update`;
-    const body = this.state.userList[index];
+    const body = this.state.userList.get(index);
     const config: IConfig = {
       headers: { "x-access-token": localStorage.getItem("x-access-token") || "" }
     };
@@ -155,21 +156,21 @@ export default class SuperAdmin extends Component<ISuperAdminProps, ISuperAdminS
             {error ? <div className="list-error-msg">{error}</div> : <div />}
 
             {userList.map((member, idx) => (
-              <div className="super-admin-list-content" key={member.id}>
-                <div className="super-admin-list-element">{member.id}</div>
-                <div className="super-admin-list-element">{member.name}</div>
-                <div className="super-admin-list-element">{member.email}</div>
-                <div className="super-admin-list-element">{member.phone}</div>
-                <div className="super-admin-list-element">{member.company}</div>
-                <div className="super-admin-list-element">{member.fax}</div>
+              <div className="super-admin-list-content" key={member.toObject().id}>
+                <div className="super-admin-list-element">{member.toObject().id}</div>
+                <div className="super-admin-list-element">{member.toObject().name}</div>
+                <div className="super-admin-list-element">{member.toObject().email}</div>
+                <div className="super-admin-list-element">{member.toObject().phone}</div>
+                <div className="super-admin-list-element">{member.toObject().company}</div>
+                <div className="super-admin-list-element">{member.toObject().fax}</div>
                 <div className="super-admin-list-element">
-                  <select value={member.level} data-index={idx} onChange={this.handleLevelChange} required>
+                  <select value={member.toObject().level} data-index={idx} onChange={this.handleLevelChange} required>
                     <option value="1">1</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                   </select>
                 </div>
-                <div className="super-admin-list-element">{member.registerDate.slice(0, 10)}</div>
+                <div className="super-admin-list-element">{member.toObject().registerDate.slice(0, 10)}</div>
                 <div className="super-admin-list-element">
                   <input type="button" onClick={this.handleEditClick} data-index={idx} value="수정" />
                 </div>
