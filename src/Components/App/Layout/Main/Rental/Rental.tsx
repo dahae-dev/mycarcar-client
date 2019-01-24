@@ -7,7 +7,7 @@ import Capital from "./Capital/Capital";
 import Modal from "./Modal/Modal";
 import AlertModal from "../Alert/AlertModal";
 import { MainHeader } from "../MainHeader/MainHeader";
-import { DEFAULT_RENTAL_STATE, DEFAULT_VALUE, DEFAULT_PRICE, DEFAULT_LIST, DisplayState } from "./RentalInitialState";
+import { DEFAULT_RENTAL_STATE, DEFAULT_VALUE, DisplayState } from "./RentalInitialState";
 import { IRentalStates, IBrand, ISeries, IModel, IDetail, IGrade, IOption } from "./IRental";
 import { RequestHandler, IConfig } from "../../../../../util/RequestHandler";
 
@@ -62,11 +62,20 @@ export default class Rental extends Component<{}, IRentalStates> {
     const uri = `${process.env.REACT_APP_API_URL}/api/rental/brand/${originId}`;
     const result = await requestHandler.get(uri);
 
-    const { currentItem, currentList, displayState } = this.state;
+    const { currentItem, currentList, currentPrice, displayState } = this.state;
     this.setState({
       currentItem: currentItem.set("origin", origin).set("brand", ""),
-      currentList: currentList.set("brandList", result.data.brandList),
-      currentPrice: DEFAULT_PRICE,
+      currentList: currentList
+        .set("brandList", result.data.brandList)
+        .remove("seriesList")
+        .remove("modelList")
+        .remove("detailList")
+        .remove("gradeList")
+        .remove("optionList"),
+      currentPrice: currentPrice
+        .remove("price")
+        .remove("optionPrice")
+        .remove("totalPrice"),
       displayState: displayState.set("listClicked", false),
       error: result.error
     });
@@ -83,14 +92,20 @@ export default class Rental extends Component<{}, IRentalStates> {
     const uri = `${process.env.REACT_APP_API_URL}/api/rental/series/${brandId}`;
     const result = await requestHandler.get(uri);
 
-    const { currentItem, currentList, displayState } = this.state;
+    const { currentItem, currentList, currentPrice, displayState } = this.state;
     this.setState({
       currentItem: currentItem.set("brand", brand).set("series", ""),
-      currentList: DEFAULT_LIST.set("seriesList", result.data.seriesList).set(
-        "brandList",
-        currentList.get("brandList")
-      ),
-      currentPrice: DEFAULT_PRICE,
+      currentList: currentList
+        .set("brandList", currentList.get("brandList"))
+        .set("seriesList", result.data.seriesList)
+        .remove("modelList")
+        .remove("detailList")
+        .remove("gradeList")
+        .remove("optionList"),
+      currentPrice: currentPrice
+        .remove("price")
+        .remove("optionPrice")
+        .remove("totalPrice"),
       displayState: displayState.set("listClicked", false),
       error: result.error
     });
@@ -107,13 +122,20 @@ export default class Rental extends Component<{}, IRentalStates> {
     const uri = `${process.env.REACT_APP_API_URL}/api/rental/model/${seriesId}`;
     const result = await requestHandler.get(uri);
 
-    const { currentItem, currentList, displayState } = this.state;
+    const { currentItem, currentList, currentPrice, displayState } = this.state;
     this.setState({
       currentItem: currentItem.set("series", series).set("model", ""),
-      currentList: DEFAULT_LIST.set("modelList", result.data.modelList)
+      currentList: currentList
+        .remove("detailList")
+        .remove("gradeList")
+        .remove("optionList")
+        .set("modelList", result.data.modelList)
         .set("brandList", currentList.get("brandList"))
         .set("seriesList", currentList.get("seriesList")),
-      currentPrice: DEFAULT_PRICE,
+      currentPrice: currentPrice
+        .remove("price")
+        .remove("optionPrice")
+        .remove("totalPrice"),
       displayState: displayState.set("listClicked", false),
       error: result.error
     });
@@ -130,14 +152,20 @@ export default class Rental extends Component<{}, IRentalStates> {
     const uri = `${process.env.REACT_APP_API_URL}/api/rental/detail/${modelId}`;
     const result = await requestHandler.get(uri);
 
-    const { currentItem, currentList, displayState } = this.state;
+    const { currentItem, currentList, currentPrice, displayState } = this.state;
     this.setState({
       currentItem: currentItem.set("model", model).set("detail", ""),
-      currentList: DEFAULT_LIST.set("detailList", result.data.detailList)
+      currentList: currentList
+        .remove("gradeList")
+        .remove("optionList")
+        .set("detailList", result.data.detailList)
         .set("brandList", currentList.get("brandList"))
         .set("seriesList", currentList.get("seriesList"))
         .set("modelList", currentList.get("modelList")),
-      currentPrice: DEFAULT_PRICE,
+      currentPrice: currentPrice
+        .remove("price")
+        .remove("optionPrice")
+        .remove("totalPrice"),
       displayState: displayState.set("listClicked", false),
       error: result.error
     });
@@ -154,15 +182,20 @@ export default class Rental extends Component<{}, IRentalStates> {
     const uri = `${process.env.REACT_APP_API_URL}/api/rental/grade/${detailId}`;
     const result = await requestHandler.get(uri);
 
-    const { currentItem, currentList, displayState } = this.state;
+    const { currentItem, currentList, currentPrice, displayState } = this.state;
     this.setState({
       currentItem: currentItem.set("detail", detail).set("grade", ""),
-      currentList: DEFAULT_LIST.set("gradeList", result.data.gradeList)
+      currentList: currentList
+        .remove("optionList")
+        .set("gradeList", result.data.gradeList)
         .set("brandList", currentList.get("brandList"))
         .set("seriesList", currentList.get("seriesList"))
         .set("modelList", currentList.get("modelList"))
         .set("detailList", currentList.get("detailList")),
-      currentPrice: DEFAULT_PRICE,
+      currentPrice: currentPrice
+        .remove("price")
+        .remove("optionPrice")
+        .remove("totalPrice"),
       displayState: displayState.set("listClicked", false),
       error: result.error
     });
@@ -225,7 +258,7 @@ export default class Rental extends Component<{}, IRentalStates> {
     const { price } = this.state.currentPrice.toObject();
     const { rentalPeriod, insurancePlan } = this.state.currentTerms.toObject();
     if (price === 0 || rentalPeriod === 0 || insurancePlan === "") {
-      return alert("차량 및 조건 선택 후 견적 확인이 가능합니다.");
+      return this.setState({ error: "차량 및 조건 선택 후 견적 확인이 가능합니다." });
     }
 
     const requestHandler = new RequestHandler();
@@ -243,14 +276,20 @@ export default class Rental extends Component<{}, IRentalStates> {
   handleSelectNumber = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
     const numericValue = Number(value);
-    const { currentTerms } = this.state;
-    this.setState({ currentTerms: currentTerms.merge({ [id]: numericValue }) });
+    const { currentTerms, displayState } = this.state;
+    this.setState({
+      currentTerms: currentTerms.merge({ [id]: numericValue }),
+      displayState: displayState.set("listClicked", false)
+    });
   };
 
   handleSelectString = (e: ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.currentTarget;
-    const { currentTerms } = this.state;
-    this.setState({ currentTerms: currentTerms.merge({ [id]: value }) });
+    const { currentTerms, displayState } = this.state;
+    this.setState({
+      currentTerms: currentTerms.merge({ [id]: value }),
+      displayState: displayState.set("listClicked", false)
+    });
   };
 
   handleModal = (e: MouseEvent<HTMLInputElement>) => {
