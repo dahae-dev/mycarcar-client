@@ -29,14 +29,14 @@ interface IEstimateContentState {
 
 interface IEstimateListData {
   estimateList: IEstimateList[];
-  status: number; //
-  statusText: string; //
+  status: number;
+  statusText: string;
 }
 
 interface IEstimateInfoData {
   estimateInfo: IEstimateInfo;
-  status: number; //
-  statusText: string; //
+  status: number;
+  statusText: string;
 }
 
 export default class EstimateContent extends Component<IEstimateContentProps, IEstimateContentState> {
@@ -106,27 +106,29 @@ export default class EstimateContent extends Component<IEstimateContentProps, IE
 
           {error ? <div className="list-error-msg">{error}</div> : <div />}
 
-          {estimateList.map((estimate) => {
-            const carInfo = `${estimate.car_brand} ${estimate.car_series} ${estimate.car_model} ${
-              estimate.car_detail
-            } ${estimate.car_grade} ${estimate.car_option}`;
+          {error
+            ? null
+            : estimateList.map((estimate) => {
+                const carInfo = `${estimate.car_brand} ${estimate.car_series} ${estimate.car_model} ${
+                  estimate.car_detail
+                } ${estimate.car_grade} ${estimate.car_option}`;
 
-            const atDate = new Date(estimate.at_date);
-            const parseDate = `${atDate.getFullYear()} / ${atDate.getMonth() + 1} / ${atDate.getDate()}`;
+                const atDate = new Date(estimate.at_date);
+                const parseDate = `${atDate.getFullYear()} / ${atDate.getMonth() + 1} / ${atDate.getDate()}`;
 
-            return (
-              <div className="estimate_list_row" key={estimate.at_date}>
-                <div>{parseDate}</div>
-                <div>{estimate.capital}</div>
-                <div>{carInfo}</div>
-                <div>
-                  <button onClick={this.handleViewBtnClick} data-estimate-no={estimate.car_estimate_no}>
-                    견적서 보기
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+                return (
+                  <div className="estimate_list_row" key={estimate.at_date}>
+                    <div>{parseDate}</div>
+                    <div>{estimate.capital}</div>
+                    <div>{carInfo}</div>
+                    <div>
+                      <button onClick={this.handleViewBtnClick} data-estimate-no={estimate.car_estimate_no}>
+                        견적서 보기
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
         </div>
       </div>
     );
